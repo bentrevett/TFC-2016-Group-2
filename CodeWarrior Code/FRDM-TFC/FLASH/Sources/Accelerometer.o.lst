@@ -1,0 +1,829 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Accelerometer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MCU_Init,"ax",%progbits
+  18              		.align	2
+  19              		.global	MCU_Init
+  20              		.code	16
+  21              		.thumb_func
+  23              	MCU_Init:
+  24              	.LFB1:
+  25              		.file 1 "../Sources/Accelerometer.c"
+   1:../Sources/Accelerometer.c **** /*
+   2:../Sources/Accelerometer.c ****  * Accelerometer.c
+   3:../Sources/Accelerometer.c ****  *
+   4:../Sources/Accelerometer.c ****  *  Created on: Nov 18, 2015
+   5:../Sources/Accelerometer.c ****  *      Author: bentr_000
+   6:../Sources/Accelerometer.c ****  */
+   7:../Sources/Accelerometer.c **** 
+   8:../Sources/Accelerometer.c **** /******************************************************************************
+   9:../Sources/Accelerometer.c **** *
+  10:../Sources/Accelerometer.c **** * This code has been written for the Freescale FRDM-KL25Z board and 
+  11:../Sources/Accelerometer.c **** * demonstrates how to read the acceleration data from the MMA8451Q 
+  12:../Sources/Accelerometer.c **** * using an interrupt technique.
+  13:../Sources/Accelerometer.c **** * 
+  14:../Sources/Accelerometer.c **** * The MMA8451Q is set to achieve the best noise performance: 
+  15:../Sources/Accelerometer.c **** * ODR = 1.56Hz, High Resolution Mode, LNOISE bit set 
+  16:../Sources/Accelerometer.c **** * 
+  17:../Sources/Accelerometer.c **** * The calculated values can be also watched in the FreeMASTER application.
+  18:../Sources/Accelerometer.c **** *     
+  19:../Sources/Accelerometer.c **** * Author: Tomas Vaverka
+  20:../Sources/Accelerometer.c **** * Version: 1.0
+  21:../Sources/Accelerometer.c **** *
+  22:../Sources/Accelerometer.c **** ******************************************************************************/
+  23:../Sources/Accelerometer.c **** 
+  24:../Sources/Accelerometer.c **** #include "derivative.h" 				// Include peripheral declarations 
+  25:../Sources/Accelerometer.c **** #include "I2C.h"
+  26:../Sources/Accelerometer.c **** 
+  27:../Sources/Accelerometer.c **** /******************************************************************************
+  28:../Sources/Accelerometer.c **** * Constants and macros
+  29:../Sources/Accelerometer.c **** ******************************************************************************/
+  30:../Sources/Accelerometer.c **** 
+  31:../Sources/Accelerometer.c **** //MMA8451Q Registers
+  32:../Sources/Accelerometer.c **** 
+  33:../Sources/Accelerometer.c **** #define STATUS_REG            0x00		// STATUS Register 
+  34:../Sources/Accelerometer.c **** 
+  35:../Sources/Accelerometer.c **** #define OUT_X_MSB_REG         0x01		// [7:0] are 8 MSBs of the 14-bit X-axis sample
+  36:../Sources/Accelerometer.c **** #define OUT_X_LSB_REG         0x02		// [7:2] are the 6 LSB of 14-bit X-axis sample
+  37:../Sources/Accelerometer.c **** #define OUT_Y_MSB_REG         0x03		// [7:0] are 8 MSBs of the 14-bit Y-axis sample
+  38:../Sources/Accelerometer.c **** #define OUT_Y_LSB_REG         0x04		// [7:2] are the 6 LSB of 14-bit Y-axis sample
+  39:../Sources/Accelerometer.c **** #define OUT_Z_MSB_REG         0x05		// [7:0] are 8 MSBs of the 14-bit Z-axis sample
+  40:../Sources/Accelerometer.c **** #define OUT_Z_LSB_REG         0x06		// [7:2] are the 6 LSB of 14-bit Z-axis sample
+  41:../Sources/Accelerometer.c **** 
+  42:../Sources/Accelerometer.c **** #define F_SETUP_REG           0x09    	// F_SETUP FIFO Setup Register 
+  43:../Sources/Accelerometer.c **** #define TRIG_CFG_REG          0x0A    	// TRIG_CFG Map of FIFO data capture events 
+  44:../Sources/Accelerometer.c **** #define SYSMOD_REG            0x0B    	// SYSMOD System Mode Register 
+  45:../Sources/Accelerometer.c **** #define INT_SOURCE_REG        0x0C    	// INT_SOURCE System Interrupt Status Register 
+  46:../Sources/Accelerometer.c **** #define WHO_AM_I_REG          0x0D    	// WHO_AM_I Device ID Register 
+  47:../Sources/Accelerometer.c **** #define XYZ_DATA_CFG_REG      0x0E    	// XYZ_DATA_CFG Sensor Data Configuration Register 
+  48:../Sources/Accelerometer.c **** #define HP_FILTER_CUTOFF_REG  0x0F    	// HP_FILTER_CUTOFF High Pass Filter Register 
+  49:../Sources/Accelerometer.c **** 
+  50:../Sources/Accelerometer.c **** #define PL_STATUS_REG         0x10    	// PL_STATUS Portrait/Landscape Status Register 
+  51:../Sources/Accelerometer.c **** #define PL_CFG_REG            0x11    	// PL_CFG Portrait/Landscape Configuration Register 
+  52:../Sources/Accelerometer.c **** #define PL_COUNT_REG          0x12    	// PL_COUNT Portrait/Landscape Debounce Register 
+  53:../Sources/Accelerometer.c **** #define PL_BF_ZCOMP_REG       0x13    	// PL_BF_ZCOMP Back/Front and Z Compensation Register 
+  54:../Sources/Accelerometer.c **** #define P_L_THS_REG           0x14    	// P_L_THS Portrait to Landscape Threshold Register 
+  55:../Sources/Accelerometer.c **** 
+  56:../Sources/Accelerometer.c **** #define FF_MT_CFG_REG         0x15    	// FF_MT_CFG Freefall and Motion Configuration Register 
+  57:../Sources/Accelerometer.c **** #define FF_MT_SRC_REG         0x16    	// FF_MT_SRC Freefall and Motion Source Register 
+  58:../Sources/Accelerometer.c **** #define FT_MT_THS_REG         0x17    	// FF_MT_THS Freefall and Motion Threshold Register 
+  59:../Sources/Accelerometer.c **** #define FF_MT_COUNT_REG       0x18    	// FF_MT_COUNT Freefall Motion Count Register 
+  60:../Sources/Accelerometer.c **** 
+  61:../Sources/Accelerometer.c **** #define TRANSIENT_CFG_REG     0x1D    	// TRANSIENT_CFG Transient Configuration Register 
+  62:../Sources/Accelerometer.c **** #define TRANSIENT_SRC_REG     0x1E    	// TRANSIENT_SRC Transient Source Register 
+  63:../Sources/Accelerometer.c **** #define TRANSIENT_THS_REG     0x1F    	// TRANSIENT_THS Transient Threshold Register 
+  64:../Sources/Accelerometer.c **** #define TRANSIENT_COUNT_REG   0x20    	// TRANSIENT_COUNT Transient Debounce Counter Register 
+  65:../Sources/Accelerometer.c **** 
+  66:../Sources/Accelerometer.c **** #define PULSE_CFG_REG         0x21    	// PULSE_CFG Pulse Configuration Register 
+  67:../Sources/Accelerometer.c **** #define PULSE_SRC_REG         0x22    	// PULSE_SRC Pulse Source Register 
+  68:../Sources/Accelerometer.c **** #define PULSE_THSX_REG        0x23    	// PULSE_THS XYZ Pulse Threshold Registers 
+  69:../Sources/Accelerometer.c **** #define PULSE_THSY_REG        0x24
+  70:../Sources/Accelerometer.c **** #define PULSE_THSZ_REG        0x25
+  71:../Sources/Accelerometer.c **** #define PULSE_TMLT_REG        0x26    	// PULSE_TMLT Pulse Time Window Register 
+  72:../Sources/Accelerometer.c **** #define PULSE_LTCY_REG        0x27    	// PULSE_LTCY Pulse Latency Timer Register 
+  73:../Sources/Accelerometer.c **** #define PULSE_WIND_REG        0x28    	// PULSE_WIND Second Pulse Time Window Register 
+  74:../Sources/Accelerometer.c **** 
+  75:../Sources/Accelerometer.c **** #define ASLP_COUNT_REG        0x29    	// ASLP_COUNT Auto Sleep Inactivity Timer Register 
+  76:../Sources/Accelerometer.c **** 
+  77:../Sources/Accelerometer.c **** #define CTRL_REG1             0x2A    	// CTRL_REG1 System Control 1 Register 
+  78:../Sources/Accelerometer.c **** #define CTRL_REG2             0x2B    	// CTRL_REG2 System Control 2 Register 
+  79:../Sources/Accelerometer.c **** #define CTRL_REG3             0x2C    	// CTRL_REG3 Interrupt Control Register 
+  80:../Sources/Accelerometer.c **** #define CTRL_REG4             0x2D    	// CTRL_REG4 Interrupt Enable Register 
+  81:../Sources/Accelerometer.c **** #define CTRL_REG5             0x2E    	// CTRL_REG5 Interrupt Configuration Register 
+  82:../Sources/Accelerometer.c **** 
+  83:../Sources/Accelerometer.c **** #define OFF_X_REG             0x2F    	// XYZ Offset Correction Registers 
+  84:../Sources/Accelerometer.c **** #define OFF_Y_REG             0x30
+  85:../Sources/Accelerometer.c **** #define OFF_Z_REG             0x31
+  86:../Sources/Accelerometer.c **** 
+  87:../Sources/Accelerometer.c **** //MMA8451Q 7-bit I2C address
+  88:../Sources/Accelerometer.c **** 
+  89:../Sources/Accelerometer.c **** #define MMA845x_I2C_ADDRESS   0x1D		// SA0 pin = 1 -> 7-bit I2C address is 0x1D 
+  90:../Sources/Accelerometer.c **** 
+  91:../Sources/Accelerometer.c **** //MMA8451Q Sensitivity at +/-2g
+  92:../Sources/Accelerometer.c **** 
+  93:../Sources/Accelerometer.c **** #define SENSITIVITY_2G		  4096
+  94:../Sources/Accelerometer.c **** 
+  95:../Sources/Accelerometer.c **** /******************************************************************************
+  96:../Sources/Accelerometer.c **** * Global variables
+  97:../Sources/Accelerometer.c **** ******************************************************************************/
+  98:../Sources/Accelerometer.c **** 
+  99:../Sources/Accelerometer.c **** unsigned char AccData[6];
+ 100:../Sources/Accelerometer.c **** short Xout_14_bit, Yout_14_bit, Zout_14_bit;
+ 101:../Sources/Accelerometer.c **** float Xout_g, Yout_g, Zout_g;
+ 102:../Sources/Accelerometer.c **** char DataReady;
+ 103:../Sources/Accelerometer.c **** char Xoffset, Yoffset, Zoffset;
+ 104:../Sources/Accelerometer.c **** 
+ 105:../Sources/Accelerometer.c **** /******************************************************************************
+ 106:../Sources/Accelerometer.c **** * Functions
+ 107:../Sources/Accelerometer.c **** ******************************************************************************/
+ 108:../Sources/Accelerometer.c **** 
+ 109:../Sources/Accelerometer.c **** void MCU_Init(void);
+ 110:../Sources/Accelerometer.c **** void Accelerometer_Init (void);
+ 111:../Sources/Accelerometer.c **** void Calibrate(void);
+ 112:../Sources/Accelerometer.c **** 
+ 113:../Sources/Accelerometer.c **** /******************************************************************************
+ 114:../Sources/Accelerometer.c **** * Main
+ 115:../Sources/Accelerometer.c **** ******************************************************************************/  
+ 116:../Sources/Accelerometer.c **** 
+ 117:../Sources/Accelerometer.c **** void main (void)
+ 118:../Sources/Accelerometer.c **** {
+ 119:../Sources/Accelerometer.c **** 	DataReady = 0;
+ 120:../Sources/Accelerometer.c **** 	MCU_Init();
+ 121:../Sources/Accelerometer.c ****   	Accelerometer_Init();
+ 122:../Sources/Accelerometer.c ****   	Calibrate();   	
+ 123:../Sources/Accelerometer.c ****   	  	  					
+ 124:../Sources/Accelerometer.c ****   	while(1)
+ 125:../Sources/Accelerometer.c ****     {
+ 126:../Sources/Accelerometer.c **** 		if (DataReady)		// Is a new set of data ready? 
+ 127:../Sources/Accelerometer.c **** 		{  		
+ 128:../Sources/Accelerometer.c **** 			DataReady = 0;
+ 129:../Sources/Accelerometer.c **** 																	
+ 130:../Sources/Accelerometer.c **** 			I2C_ReadMultiRegisters(MMA845x_I2C_ADDRESS, OUT_X_MSB_REG, 6, AccData);		// Read data output reg
+ 131:../Sources/Accelerometer.c ****             
+ 132:../Sources/Accelerometer.c **** 			Xout_14_bit = ((short) (AccData[0]<<8 | AccData[1])) >> 2;		// Compute 14-bit X-axis output valu
+ 133:../Sources/Accelerometer.c **** 			Yout_14_bit = ((short) (AccData[2]<<8 | AccData[3])) >> 2;		// Compute 14-bit Y-axis output valu
+ 134:../Sources/Accelerometer.c **** 			Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output valu
+ 135:../Sources/Accelerometer.c **** 			
+ 136:../Sources/Accelerometer.c **** 			Xout_g = ((float) Xout_14_bit) / SENSITIVITY_2G;		// Compute X-axis output value in g's
+ 137:../Sources/Accelerometer.c **** 			Yout_g = ((float) Yout_14_bit) / SENSITIVITY_2G;		// Compute Y-axis output value in g's
+ 138:../Sources/Accelerometer.c **** 			Zout_g = ((float) Zout_14_bit) / SENSITIVITY_2G;		// Compute Z-axis output value in g's						
+ 139:../Sources/Accelerometer.c **** 		}                      
+ 140:../Sources/Accelerometer.c **** 	}
+ 141:../Sources/Accelerometer.c **** }
+ 142:../Sources/Accelerometer.c **** 
+ 143:../Sources/Accelerometer.c **** /******************************************************************************
+ 144:../Sources/Accelerometer.c **** * MCU initialization function
+ 145:../Sources/Accelerometer.c **** ******************************************************************************/ 
+ 146:../Sources/Accelerometer.c **** 
+ 147:../Sources/Accelerometer.c **** void MCU_Init(void)
+ 148:../Sources/Accelerometer.c **** {
+  26              		.loc 1 148 0
+  27              		.cfi_startproc
+ 149:../Sources/Accelerometer.c **** 	//I2C0 module initialization
+ 150:../Sources/Accelerometer.c **** 	SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;		// Turn on clock to I2C0 module 
+  28              		.loc 1 150 0
+  29 0000 154B     		ldr	r3, .L2
+  30 0002 164A     		ldr	r2, .L2+4
+  31 0004 4021     		mov	r1, #64
+  32 0006 9858     		ldr	r0, [r3, r2]
+ 151:../Sources/Accelerometer.c **** 	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;		// Turn on clock to Port E module 
+ 152:../Sources/Accelerometer.c **** 	PORTE_PCR24 = PORT_PCR_MUX(5);			// PTE24 pin is I2C0 SCL line 
+ 153:../Sources/Accelerometer.c **** 	PORTE_PCR25 = PORT_PCR_MUX(5);			// PTE25 pin is I2C0 SDA line 
+ 154:../Sources/Accelerometer.c **** 	I2C0_F  = 0x14; 						// SDA hold time = 2.125us, SCL start hold time = 4.25us, SCL stop hold time
+ 155:../Sources/Accelerometer.c **** 	I2C0_C1 = I2C_C1_IICEN_MASK;    		// Enable I2C0 module 
+ 156:../Sources/Accelerometer.c **** 	
+ 157:../Sources/Accelerometer.c **** 	//Configure the PTA14 pin (connected to the INT1 of the MMA8451Q) for falling edge interrupts
+ 158:../Sources/Accelerometer.c **** 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;		// Turn on clock to Port A module 
+ 159:../Sources/Accelerometer.c **** 	PORTA_PCR14 |= (0|PORT_PCR_ISF_MASK|	// Clear the interrupt flag 
+ 160:../Sources/Accelerometer.c **** 					  PORT_PCR_MUX(0x1)|	// PTA14 is configured as GPIO 
+ 161:../Sources/Accelerometer.c **** 					  PORT_PCR_IRQC(0xA));	// PTA14 is configured for falling edge interrupts 
+ 162:../Sources/Accelerometer.c **** 	
+ 163:../Sources/Accelerometer.c **** 	//Enable PORTA interrupt on NVIC
+ 164:../Sources/Accelerometer.c **** 	NVIC_ICPR |= 1 << ((INT_PORTA - 16)%32); 
+ 165:../Sources/Accelerometer.c **** 	NVIC_ISER |= 1 << ((INT_PORTA - 16)%32); 
+ 166:../Sources/Accelerometer.c **** }
+  33              		.loc 1 166 0
+  34              		@ sp needed for prologue
+ 150:../Sources/Accelerometer.c **** 	SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;		// Turn on clock to I2C0 module 
+  35              		.loc 1 150 0
+  36 0008 0143     		orr	r1, r0
+  37 000a 9950     		str	r1, [r3, r2]
+ 151:../Sources/Accelerometer.c **** 	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;		// Turn on clock to Port E module 
+  38              		.loc 1 151 0
+  39 000c 144A     		ldr	r2, .L2+8
+  40 000e 8021     		mov	r1, #128
+  41 0010 9858     		ldr	r0, [r3, r2]
+  42 0012 8901     		lsl	r1, r1, #6
+  43 0014 0143     		orr	r1, r0
+  44 0016 9950     		str	r1, [r3, r2]
+ 152:../Sources/Accelerometer.c **** 	PORTE_PCR24 = PORT_PCR_MUX(5);			// PTE24 pin is I2C0 SCL line 
+  45              		.loc 1 152 0
+  46 0018 A020     		mov	r0, #160
+  47 001a 1249     		ldr	r1, .L2+12
+  48 001c C000     		lsl	r0, r0, #3
+  49 001e 0866     		str	r0, [r1, #96]
+ 153:../Sources/Accelerometer.c **** 	PORTE_PCR25 = PORT_PCR_MUX(5);			// PTE25 pin is I2C0 SDA line 
+  50              		.loc 1 153 0
+  51 0020 4866     		str	r0, [r1, #100]
+ 154:../Sources/Accelerometer.c **** 	I2C0_F  = 0x14; 						// SDA hold time = 2.125us, SCL start hold time = 4.25us, SCL stop hold time
+  52              		.loc 1 154 0
+  53 0022 1149     		ldr	r1, .L2+16
+  54 0024 1420     		mov	r0, #20
+  55 0026 4870     		strb	r0, [r1, #1]
+ 155:../Sources/Accelerometer.c **** 	I2C0_C1 = I2C_C1_IICEN_MASK;    		// Enable I2C0 module 
+  56              		.loc 1 155 0
+  57 0028 8020     		mov	r0, #128
+  58 002a 8870     		strb	r0, [r1, #2]
+ 158:../Sources/Accelerometer.c **** 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;		// Turn on clock to Port A module 
+  59              		.loc 1 158 0
+  60 002c 9858     		ldr	r0, [r3, r2]
+  61 002e 8021     		mov	r1, #128
+  62 0030 8900     		lsl	r1, r1, #2
+  63 0032 0143     		orr	r1, r0
+  64 0034 9950     		str	r1, [r3, r2]
+ 159:../Sources/Accelerometer.c **** 	PORTA_PCR14 |= (0|PORT_PCR_ISF_MASK|	// Clear the interrupt flag 
+  65              		.loc 1 159 0
+  66 0036 0D4B     		ldr	r3, .L2+20
+  67 0038 0D48     		ldr	r0, .L2+24
+  68 003a 9A6B     		ldr	r2, [r3, #56]
+ 164:../Sources/Accelerometer.c **** 	NVIC_ICPR |= 1 << ((INT_PORTA - 16)%32); 
+  69              		.loc 1 164 0
+  70 003c C021     		mov	r1, #192
+ 159:../Sources/Accelerometer.c **** 	PORTA_PCR14 |= (0|PORT_PCR_ISF_MASK|	// Clear the interrupt flag 
+  71              		.loc 1 159 0
+  72 003e 0243     		orr	r2, r0
+  73 0040 9A63     		str	r2, [r3, #56]
+ 164:../Sources/Accelerometer.c **** 	NVIC_ICPR |= 1 << ((INT_PORTA - 16)%32); 
+  74              		.loc 1 164 0
+  75 0042 0C4B     		ldr	r3, .L2+28
+  76 0044 4900     		lsl	r1, r1, #1
+  77 0046 5858     		ldr	r0, [r3, r1]
+  78 0048 8022     		mov	r2, #128
+  79 004a D205     		lsl	r2, r2, #23
+  80 004c 1043     		orr	r0, r2
+  81 004e 5850     		str	r0, [r3, r1]
+ 165:../Sources/Accelerometer.c **** 	NVIC_ISER |= 1 << ((INT_PORTA - 16)%32); 
+  82              		.loc 1 165 0
+  83 0050 1968     		ldr	r1, [r3]
+  84 0052 0A43     		orr	r2, r1
+  85 0054 1A60     		str	r2, [r3]
+  86              		.loc 1 166 0
+  87 0056 7047     		bx	lr
+  88              	.L3:
+  89              		.align	2
+  90              	.L2:
+  91 0058 00700440 		.word	1074032640
+  92 005c 34100000 		.word	4148
+  93 0060 38100000 		.word	4152
+  94 0064 00D00440 		.word	1074057216
+  95 0068 00600640 		.word	1074159616
+  96 006c 00900440 		.word	1074040832
+  97 0070 00010A01 		.word	17432832
+  98 0074 00E100E0 		.word	-536813312
+  99              		.cfi_endproc
+ 100              	.LFE1:
+ 102              		.section	.text.Accelerometer_Init,"ax",%progbits
+ 103              		.align	2
+ 104              		.global	Accelerometer_Init
+ 105              		.code	16
+ 106              		.thumb_func
+ 108              	Accelerometer_Init:
+ 109              	.LFB2:
+ 167:../Sources/Accelerometer.c **** 
+ 168:../Sources/Accelerometer.c **** /******************************************************************************
+ 169:../Sources/Accelerometer.c **** * Accelerometer initialization function
+ 170:../Sources/Accelerometer.c **** ******************************************************************************/ 
+ 171:../Sources/Accelerometer.c **** 
+ 172:../Sources/Accelerometer.c **** void Accelerometer_Init (void)
+ 173:../Sources/Accelerometer.c **** {
+ 110              		.loc 1 173 0
+ 111              		.cfi_startproc
+ 112              	.LVL0:
+ 113 0000 10B5     		push	{r4, lr}
+ 114              	.LCFI0:
+ 115              		.cfi_def_cfa_offset 8
+ 116              		.cfi_offset 4, -8
+ 117              		.cfi_offset 14, -4
+ 174:../Sources/Accelerometer.c **** 	unsigned char reg_val = 0;
+ 175:../Sources/Accelerometer.c **** 	
+ 176:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG2, 0x40);		// Reset all registers to POR values
+ 118              		.loc 1 176 0
+ 119 0002 1D20     		mov	r0, #29
+ 120 0004 2B21     		mov	r1, #43
+ 121 0006 4022     		mov	r2, #64
+ 122 0008 FFF7FEFF 		bl	I2C_WriteRegister
+ 123              	.LVL1:
+ 124              	.LBB2:
+ 177:../Sources/Accelerometer.c **** 	
+ 178:../Sources/Accelerometer.c **** 	do		// Wait for the RST bit to clear 
+ 179:../Sources/Accelerometer.c **** 	{
+ 180:../Sources/Accelerometer.c **** 		reg_val = I2C_ReadRegister(MMA845x_I2C_ADDRESS, CTRL_REG2) & 0x40; 
+ 125              		.loc 1 180 0
+ 126 000c 4024     		mov	r4, #64
+ 127              	.LVL2:
+ 128              	.L5:
+ 129              		.loc 1 180 0 is_stmt 0
+ 130 000e 1D20     		mov	r0, #29
+ 131 0010 2B21     		mov	r1, #43
+ 132 0012 FFF7FEFF 		bl	I2C_ReadRegister
+ 133              	.LVL3:
+ 134              	.LBE2:
+ 181:../Sources/Accelerometer.c **** 	} 	while (reg_val);
+ 135              		.loc 1 181 0 is_stmt 1
+ 136 0016 0442     		tst	r4, r0
+ 137 0018 F9D1     		bne	.L5
+ 182:../Sources/Accelerometer.c **** 	
+ 183:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, XYZ_DATA_CFG_REG, 0x00);		// +/-2g range -> 1g = 16384/4 = 
+ 138              		.loc 1 183 0
+ 139 001a 0E21     		mov	r1, #14
+ 140 001c 0022     		mov	r2, #0
+ 141 001e 1D20     		mov	r0, #29
+ 142              	.LVL4:
+ 143 0020 FFF7FEFF 		bl	I2C_WriteRegister
+ 144              	.LVL5:
+ 184:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG2, 0x02);		// High Resolution mode
+ 145              		.loc 1 184 0
+ 146 0024 2B21     		mov	r1, #43
+ 147 0026 0222     		mov	r2, #2
+ 148 0028 1D20     		mov	r0, #29
+ 149 002a FFF7FEFF 		bl	I2C_WriteRegister
+ 150              	.LVL6:
+ 185:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG1, 0x3D);	// ODR = 1.56Hz, Reduced noise, Active mo
+ 151              		.loc 1 185 0
+ 152 002e 2A21     		mov	r1, #42
+ 153 0030 3D22     		mov	r2, #61
+ 154 0032 1D20     		mov	r0, #29
+ 155 0034 FFF7FEFF 		bl	I2C_WriteRegister
+ 156              	.LVL7:
+ 186:../Sources/Accelerometer.c **** }
+ 157              		.loc 1 186 0
+ 158              		@ sp needed for prologue
+ 159 0038 10BD     		pop	{r4, pc}
+ 160              		.cfi_endproc
+ 161              	.LFE2:
+ 163 003a C046     		.section	.text.Calibrate,"ax",%progbits
+ 164              		.align	2
+ 165              		.global	Calibrate
+ 166              		.code	16
+ 167              		.thumb_func
+ 169              	Calibrate:
+ 170              	.LFB3:
+ 187:../Sources/Accelerometer.c **** 
+ 188:../Sources/Accelerometer.c **** /******************************************************************************
+ 189:../Sources/Accelerometer.c **** * Simple offset calibration
+ 190:../Sources/Accelerometer.c **** ******************************************************************************/ 
+ 191:../Sources/Accelerometer.c **** 
+ 192:../Sources/Accelerometer.c **** void Calibrate (void)
+ 193:../Sources/Accelerometer.c **** {
+ 171              		.loc 1 193 0
+ 172              		.cfi_startproc
+ 173              	.LVL8:
+ 174 0000 70B5     		push	{r4, r5, r6, lr}
+ 175              	.LCFI1:
+ 176              		.cfi_def_cfa_offset 16
+ 177              		.cfi_offset 4, -16
+ 178              		.cfi_offset 5, -12
+ 179              		.cfi_offset 6, -8
+ 180              		.cfi_offset 14, -4
+ 181              	.LBB3:
+ 194:../Sources/Accelerometer.c **** 	unsigned char reg_val = 0;
+ 195:../Sources/Accelerometer.c **** 	
+ 196:../Sources/Accelerometer.c **** 	while (!reg_val)		// Wait for a first set of data		 
+ 197:../Sources/Accelerometer.c **** 	{
+ 198:../Sources/Accelerometer.c **** 		reg_val = I2C_ReadRegister(MMA845x_I2C_ADDRESS, STATUS_REG) & 0x08; 
+ 182              		.loc 1 198 0
+ 183 0002 0824     		mov	r4, #8
+ 184              	.LVL9:
+ 185              	.L9:
+ 186 0004 1D20     		mov	r0, #29
+ 187 0006 0021     		mov	r1, #0
+ 188 0008 FFF7FEFF 		bl	I2C_ReadRegister
+ 189              	.LVL10:
+ 190              	.LBE3:
+ 196:../Sources/Accelerometer.c **** 	while (!reg_val)		// Wait for a first set of data		 
+ 191              		.loc 1 196 0
+ 192 000c 0442     		tst	r4, r0
+ 193 000e F9D0     		beq	.L9
+ 199:../Sources/Accelerometer.c **** 	} 	
+ 200:../Sources/Accelerometer.c **** 	  	
+ 201:../Sources/Accelerometer.c **** 	I2C_ReadMultiRegisters(MMA845x_I2C_ADDRESS, OUT_X_MSB_REG, 6, AccData);		// Read data output regis
+ 194              		.loc 1 201 0
+ 195 0010 324D     		ldr	r5, .L14
+ 196 0012 0121     		mov	r1, #1
+ 197 0014 2B1C     		mov	r3, r5
+ 198 0016 0622     		mov	r2, #6
+ 199 0018 1D20     		mov	r0, #29
+ 200              	.LVL11:
+ 201 001a FFF7FEFF 		bl	I2C_ReadMultiRegisters
+ 202              	.LVL12:
+ 202:../Sources/Accelerometer.c **** 	  						
+ 203:../Sources/Accelerometer.c **** 	Xout_14_bit = ((short) (AccData[0]<<8 | AccData[1])) >> 2;		// Compute 14-bit X-axis output value
+ 203              		.loc 1 203 0
+ 204 001e 2978     		ldrb	r1, [r5]
+ 205 0020 6B78     		ldrb	r3, [r5, #1]
+ 206 0022 0802     		lsl	r0, r1, #8
+ 207 0024 1843     		orr	r0, r3
+ 208 0026 02B2     		sxth	r2, r0
+ 209 0028 9610     		asr	r6, r2, #2
+ 210 002a 2D49     		ldr	r1, .L14+4
+ 211 002c B4B2     		uxth	r4, r6
+ 212 002e 0C80     		strh	r4, [r1]
+ 204:../Sources/Accelerometer.c **** 	Yout_14_bit = ((short) (AccData[2]<<8 | AccData[3])) >> 2;		// Compute 14-bit Y-axis output value
+ 213              		.loc 1 204 0
+ 214 0030 A878     		ldrb	r0, [r5, #2]
+ 215 0032 EB78     		ldrb	r3, [r5, #3]
+ 216 0034 0202     		lsl	r2, r0, #8
+ 217 0036 1A43     		orr	r2, r3
+ 218 0038 16B2     		sxth	r6, r2
+ 219 003a B110     		asr	r1, r6, #2
+ 220 003c 2948     		ldr	r0, .L14+8
+ 221 003e 8AB2     		uxth	r2, r1
+ 222 0040 0280     		strh	r2, [r0]
+ 205:../Sources/Accelerometer.c **** 	Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output value
+ 223              		.loc 1 205 0
+ 224 0042 2B79     		ldrb	r3, [r5, #4]
+ 225 0044 6D79     		ldrb	r5, [r5, #5]
+ 226 0046 1E02     		lsl	r6, r3, #8
+ 227 0048 2E43     		orr	r6, r5
+ 206:../Sources/Accelerometer.c **** 	  					
+ 207:../Sources/Accelerometer.c **** 	Xoffset = Xout_14_bit / 8 * (-1);		// Compute X-axis offset correction value
+ 228              		.loc 1 207 0
+ 229 004a 24B2     		sxth	r4, r4
+ 205:../Sources/Accelerometer.c **** 	Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output value
+ 230              		.loc 1 205 0
+ 231 004c 31B2     		sxth	r1, r6
+ 232              		.loc 1 207 0
+ 233 004e E517     		asr	r5, r4, #31
+ 205:../Sources/Accelerometer.c **** 	Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output value
+ 234              		.loc 1 205 0
+ 235 0050 8810     		asr	r0, r1, #2
+ 236 0052 254E     		ldr	r6, .L14+12
+ 237              		.loc 1 207 0
+ 238 0054 690F     		lsr	r1, r5, #29
+ 208:../Sources/Accelerometer.c **** 	Yoffset = Yout_14_bit / 8 * (-1);		// Compute Y-axis offset correction value
+ 239              		.loc 1 208 0
+ 240 0056 12B2     		sxth	r2, r2
+ 205:../Sources/Accelerometer.c **** 	Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output value
+ 241              		.loc 1 205 0
+ 242 0058 83B2     		uxth	r3, r0
+ 207:../Sources/Accelerometer.c **** 	Xoffset = Xout_14_bit / 8 * (-1);		// Compute X-axis offset correction value
+ 243              		.loc 1 207 0
+ 244 005a 0819     		add	r0, r1, r4
+ 245              		.loc 1 208 0
+ 246 005c D117     		asr	r1, r2, #31
+ 205:../Sources/Accelerometer.c **** 	Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output value
+ 247              		.loc 1 205 0
+ 248 005e 3380     		strh	r3, [r6]
+ 207:../Sources/Accelerometer.c **** 	Xoffset = Xout_14_bit / 8 * (-1);		// Compute X-axis offset correction value
+ 249              		.loc 1 207 0
+ 250 0060 C410     		asr	r4, r0, #3
+ 251 0062 224E     		ldr	r6, .L14+16
+ 252              		.loc 1 208 0
+ 253 0064 480F     		lsr	r0, r1, #29
+ 207:../Sources/Accelerometer.c **** 	Xoffset = Xout_14_bit / 8 * (-1);		// Compute X-axis offset correction value
+ 254              		.loc 1 207 0
+ 255 0066 6542     		neg	r5, r4
+ 256              		.loc 1 208 0
+ 257 0068 8418     		add	r4, r0, r2
+ 207:../Sources/Accelerometer.c **** 	Xoffset = Xout_14_bit / 8 * (-1);		// Compute X-axis offset correction value
+ 258              		.loc 1 207 0
+ 259 006a 3570     		strb	r5, [r6]
+ 260              		.loc 1 208 0
+ 261 006c E210     		asr	r2, r4, #3
+ 262 006e 204D     		ldr	r5, .L14+20
+ 209:../Sources/Accelerometer.c **** 	Zoffset = (Zout_14_bit - SENSITIVITY_2G) / 8 * (-1);		// Compute Z-axis offset correction value
+ 263              		.loc 1 209 0
+ 264 0070 2048     		ldr	r0, .L14+24
+ 208:../Sources/Accelerometer.c **** 	Yoffset = Yout_14_bit / 8 * (-1);		// Compute Y-axis offset correction value
+ 265              		.loc 1 208 0
+ 266 0072 5142     		neg	r1, r2
+ 267              		.loc 1 209 0
+ 268 0074 1BB2     		sxth	r3, r3
+ 208:../Sources/Accelerometer.c **** 	Yoffset = Yout_14_bit / 8 * (-1);		// Compute Y-axis offset correction value
+ 269              		.loc 1 208 0
+ 270 0076 2970     		strb	r1, [r5]
+ 271              		.loc 1 209 0
+ 272 0078 1918     		add	r1, r3, r0
+ 273 007a CA17     		asr	r2, r1, #31
+ 274 007c 530F     		lsr	r3, r2, #29
+ 275 007e 5818     		add	r0, r3, r1
+ 276 0080 1D4C     		ldr	r4, .L14+28
+ 277 0082 C110     		asr	r1, r0, #3
+ 278 0084 4A42     		neg	r2, r1
+ 279 0086 2270     		strb	r2, [r4]
+ 210:../Sources/Accelerometer.c **** 	  					
+ 211:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG1, 0x00);		// Standby mode to allow writing to the 
+ 280              		.loc 1 211 0
+ 281 0088 2A21     		mov	r1, #42
+ 282 008a 0022     		mov	r2, #0
+ 283 008c 1D20     		mov	r0, #29
+ 284 008e FFF7FEFF 		bl	I2C_WriteRegister
+ 285              	.LVL13:
+ 212:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, OFF_X_REG, Xoffset);		
+ 286              		.loc 1 212 0
+ 287 0092 3278     		ldrb	r2, [r6]
+ 288 0094 2F21     		mov	r1, #47
+ 289 0096 1D20     		mov	r0, #29
+ 290 0098 FFF7FEFF 		bl	I2C_WriteRegister
+ 291              	.LVL14:
+ 213:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, OFF_Y_REG, Yoffset);	
+ 292              		.loc 1 213 0
+ 293 009c 2A78     		ldrb	r2, [r5]
+ 294 009e 3021     		mov	r1, #48
+ 295 00a0 1D20     		mov	r0, #29
+ 296 00a2 FFF7FEFF 		bl	I2C_WriteRegister
+ 297              	.LVL15:
+ 214:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, OFF_Z_REG, Zoffset);	
+ 298              		.loc 1 214 0
+ 299 00a6 2278     		ldrb	r2, [r4]
+ 300 00a8 3121     		mov	r1, #49
+ 301 00aa 1D20     		mov	r0, #29
+ 302 00ac FFF7FEFF 		bl	I2C_WriteRegister
+ 303              	.LVL16:
+ 215:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG3, 0x00);		// Push-pull, active low interrupt 
+ 304              		.loc 1 215 0
+ 305 00b0 2C21     		mov	r1, #44
+ 306 00b2 0022     		mov	r2, #0
+ 307 00b4 1D20     		mov	r0, #29
+ 308 00b6 FFF7FEFF 		bl	I2C_WriteRegister
+ 309              	.LVL17:
+ 216:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG4, 0x01);		// Enable DRDY interrupt 
+ 310              		.loc 1 216 0
+ 311 00ba 2D21     		mov	r1, #45
+ 312 00bc 0122     		mov	r2, #1
+ 313 00be 1D20     		mov	r0, #29
+ 314 00c0 FFF7FEFF 		bl	I2C_WriteRegister
+ 315              	.LVL18:
+ 217:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG5, 0x01);		// DRDY interrupt routed to INT1 - PTA14
+ 316              		.loc 1 217 0
+ 317 00c4 2E21     		mov	r1, #46
+ 318 00c6 0122     		mov	r2, #1
+ 319 00c8 1D20     		mov	r0, #29
+ 320 00ca FFF7FEFF 		bl	I2C_WriteRegister
+ 321              	.LVL19:
+ 218:../Sources/Accelerometer.c **** 	I2C_WriteRegister(MMA845x_I2C_ADDRESS, CTRL_REG1, 0x3D);		// ODR = 1.56Hz, Reduced noise, Active m
+ 322              		.loc 1 218 0
+ 323 00ce 2A21     		mov	r1, #42
+ 324 00d0 3D22     		mov	r2, #61
+ 325 00d2 1D20     		mov	r0, #29
+ 326 00d4 FFF7FEFF 		bl	I2C_WriteRegister
+ 327              	.LVL20:
+ 219:../Sources/Accelerometer.c **** }
+ 328              		.loc 1 219 0
+ 329              		@ sp needed for prologue
+ 330 00d8 70BD     		pop	{r4, r5, r6, pc}
+ 331              	.L15:
+ 332 00da C046     		.align	2
+ 333              	.L14:
+ 334 00dc 00000000 		.word	AccData
+ 335 00e0 00000000 		.word	Xout_14_bit
+ 336 00e4 00000000 		.word	Yout_14_bit
+ 337 00e8 00000000 		.word	Zout_14_bit
+ 338 00ec 00000000 		.word	Xoffset
+ 339 00f0 00000000 		.word	Yoffset
+ 340 00f4 00F0FFFF 		.word	-4096
+ 341 00f8 00000000 		.word	Zoffset
+ 342              		.cfi_endproc
+ 343              	.LFE3:
+ 345              		.global	__aeabi_i2f
+ 346              		.global	__aeabi_fmul
+ 347              		.section	.text.startup.main,"ax",%progbits
+ 348              		.align	2
+ 349              		.global	main
+ 350              		.code	16
+ 351              		.thumb_func
+ 353              	main:
+ 354              	.LFB0:
+ 118:../Sources/Accelerometer.c **** {
+ 355              		.loc 1 118 0
+ 356              		.cfi_startproc
+ 357 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 358              	.LCFI2:
+ 359              		.cfi_def_cfa_offset 24
+ 360              		.cfi_offset 3, -24
+ 361              		.cfi_offset 4, -20
+ 362              		.cfi_offset 5, -16
+ 363              		.cfi_offset 6, -12
+ 364              		.cfi_offset 7, -8
+ 365              		.cfi_offset 14, -4
+ 366 0002 5F46     		mov	r7, fp
+ 367 0004 4D46     		mov	r5, r9
+ 368 0006 4446     		mov	r4, r8
+ 369 0008 5646     		mov	r6, sl
+ 370 000a F0B4     		push	{r4, r5, r6, r7}
+ 371              	.LCFI3:
+ 372              		.cfi_def_cfa_offset 40
+ 373              		.cfi_offset 8, -40
+ 374              		.cfi_offset 9, -36
+ 375              		.cfi_offset 10, -32
+ 376              		.cfi_offset 11, -28
+ 119:../Sources/Accelerometer.c **** 	DataReady = 0;
+ 377              		.loc 1 119 0
+ 378 000c 2A4F     		ldr	r7, .L20
+ 379 000e 0023     		mov	r3, #0
+ 380 0010 3B70     		strb	r3, [r7]
+ 120:../Sources/Accelerometer.c **** 	MCU_Init();
+ 381              		.loc 1 120 0
+ 382 0012 FFF7FEFF 		bl	MCU_Init
+ 383              	.LVL21:
+ 121:../Sources/Accelerometer.c ****   	Accelerometer_Init();
+ 384              		.loc 1 121 0
+ 385 0016 FFF7FEFF 		bl	Accelerometer_Init
+ 386              	.LVL22:
+ 122:../Sources/Accelerometer.c ****   	Calibrate();   	
+ 387              		.loc 1 122 0
+ 388 001a FFF7FEFF 		bl	Calibrate
+ 389              	.LVL23:
+ 390 001e 2748     		ldr	r0, .L20+4
+ 391 0020 2749     		ldr	r1, .L20+8
+ 392 0022 284A     		ldr	r2, .L20+12
+ 393 0024 284D     		ldr	r5, .L20+16
+ 394 0026 294C     		ldr	r4, .L20+20
+ 395 0028 8346     		mov	fp, r0
+ 396 002a 8A46     		mov	sl, r1
+ 397 002c 9146     		mov	r9, r2
+ 398 002e A846     		mov	r8, r5
+ 399              	.L19:
+ 400 0030 3E78     		ldrb	r6, [r7]
+ 401 0032 002E     		cmp	r6, #0
+ 402 0034 00D1     		bne	.L17
+ 403              	.L18:
+ 404 0036 FEE7     		b	.L18
+ 405              	.L17:
+ 406              	.LBB4:
+ 128:../Sources/Accelerometer.c **** 			DataReady = 0;
+ 407              		.loc 1 128 0
+ 408 0038 0023     		mov	r3, #0
+ 409 003a 3B70     		strb	r3, [r7]
+ 130:../Sources/Accelerometer.c **** 			I2C_ReadMultiRegisters(MMA845x_I2C_ADDRESS, OUT_X_MSB_REG, 6, AccData);		// Read data output reg
+ 410              		.loc 1 130 0
+ 411 003c 0121     		mov	r1, #1
+ 412 003e 0622     		mov	r2, #6
+ 413 0040 231C     		mov	r3, r4
+ 414 0042 1D20     		mov	r0, #29
+ 415 0044 FFF7FEFF 		bl	I2C_ReadMultiRegisters
+ 416              	.LVL24:
+ 132:../Sources/Accelerometer.c **** 			Xout_14_bit = ((short) (AccData[0]<<8 | AccData[1])) >> 2;		// Compute 14-bit X-axis output valu
+ 417              		.loc 1 132 0
+ 418 0048 2078     		ldrb	r0, [r4]
+ 419 004a 6278     		ldrb	r2, [r4, #1]
+ 420 004c 0102     		lsl	r1, r0, #8
+ 421 004e 1143     		orr	r1, r2
+ 422 0050 0DB2     		sxth	r5, r1
+ 423 0052 AE10     		asr	r6, r5, #2
+ 424 0054 B0B2     		uxth	r0, r6
+ 425 0056 5B46     		mov	r3, fp
+ 426 0058 1880     		strh	r0, [r3]
+ 133:../Sources/Accelerometer.c **** 			Yout_14_bit = ((short) (AccData[2]<<8 | AccData[3])) >> 2;		// Compute 14-bit Y-axis output valu
+ 427              		.loc 1 133 0
+ 428 005a A178     		ldrb	r1, [r4, #2]
+ 429 005c E578     		ldrb	r5, [r4, #3]
+ 430 005e 0A02     		lsl	r2, r1, #8
+ 431 0060 2A43     		orr	r2, r5
+ 432 0062 16B2     		sxth	r6, r2
+ 433 0064 B310     		asr	r3, r6, #2
+ 434 0066 9EB2     		uxth	r6, r3
+ 435 0068 5146     		mov	r1, sl
+ 436 006a 0E80     		strh	r6, [r1]
+ 134:../Sources/Accelerometer.c **** 			Zout_14_bit = ((short) (AccData[4]<<8 | AccData[5])) >> 2;		// Compute 14-bit Z-axis output valu
+ 437              		.loc 1 134 0
+ 438 006c 2279     		ldrb	r2, [r4, #4]
+ 439 006e 6379     		ldrb	r3, [r4, #5]
+ 440 0070 1502     		lsl	r5, r2, #8
+ 441 0072 1D43     		orr	r5, r3
+ 442 0074 29B2     		sxth	r1, r5
+ 443 0076 8A10     		asr	r2, r1, #2
+ 444 0078 95B2     		uxth	r5, r2
+ 445 007a 4B46     		mov	r3, r9
+ 446 007c 1D80     		strh	r5, [r3]
+ 136:../Sources/Accelerometer.c **** 			Xout_g = ((float) Xout_14_bit) / SENSITIVITY_2G;		// Compute X-axis output value in g's
+ 447              		.loc 1 136 0
+ 448 007e 00B2     		sxth	r0, r0
+ 449 0080 FFF7FEFF 		bl	__aeabi_i2f
+ 450              	.LVL25:
+ 451 0084 E621     		mov	r1, #230
+ 452 0086 8905     		lsl	r1, r1, #22
+ 453 0088 FFF7FEFF 		bl	__aeabi_fmul
+ 454              	.LVL26:
+ 455 008c 4246     		mov	r2, r8
+ 456 008e 1060     		str	r0, [r2]
+ 137:../Sources/Accelerometer.c **** 			Yout_g = ((float) Yout_14_bit) / SENSITIVITY_2G;		// Compute Y-axis output value in g's
+ 457              		.loc 1 137 0
+ 458 0090 30B2     		sxth	r0, r6
+ 459 0092 E626     		mov	r6, #230
+ 460 0094 FFF7FEFF 		bl	__aeabi_i2f
+ 461              	.LVL27:
+ 462 0098 B105     		lsl	r1, r6, #22
+ 463 009a FFF7FEFF 		bl	__aeabi_fmul
+ 464              	.LVL28:
+ 465 009e 0C4B     		ldr	r3, .L20+24
+ 466 00a0 1860     		str	r0, [r3]
+ 138:../Sources/Accelerometer.c **** 			Zout_g = ((float) Zout_14_bit) / SENSITIVITY_2G;		// Compute Z-axis output value in g's						
+ 467              		.loc 1 138 0
+ 468 00a2 28B2     		sxth	r0, r5
+ 469 00a4 E625     		mov	r5, #230
+ 470 00a6 FFF7FEFF 		bl	__aeabi_i2f
+ 471              	.LVL29:
+ 472 00aa A905     		lsl	r1, r5, #22
+ 473 00ac FFF7FEFF 		bl	__aeabi_fmul
+ 474              	.LVL30:
+ 475 00b0 0849     		ldr	r1, .L20+28
+ 476 00b2 0860     		str	r0, [r1]
+ 477 00b4 BCE7     		b	.L19
+ 478              	.L21:
+ 479 00b6 C046     		.align	2
+ 480              	.L20:
+ 481 00b8 00000000 		.word	DataReady
+ 482 00bc 00000000 		.word	Xout_14_bit
+ 483 00c0 00000000 		.word	Yout_14_bit
+ 484 00c4 00000000 		.word	Zout_14_bit
+ 485 00c8 00000000 		.word	Xout_g
+ 486 00cc 00000000 		.word	AccData
+ 487 00d0 00000000 		.word	Yout_g
+ 488 00d4 00000000 		.word	Zout_g
+ 489              	.LBE4:
+ 490              		.cfi_endproc
+ 491              	.LFE0:
+ 493              		.section	.text.PORTA_IRQHandler,"ax",%progbits
+ 494              		.align	2
+ 495              		.global	PORTA_IRQHandler
+ 496              		.code	16
+ 497              		.thumb_func
+ 499              	PORTA_IRQHandler:
+ 500              	.LFB4:
+ 220:../Sources/Accelerometer.c **** 
+ 221:../Sources/Accelerometer.c **** /******************************************************************************
+ 222:../Sources/Accelerometer.c **** * PORT A Interrupt handler
+ 223:../Sources/Accelerometer.c **** ******************************************************************************/ 
+ 224:../Sources/Accelerometer.c **** 
+ 225:../Sources/Accelerometer.c **** void PORTA_IRQHandler()
+ 226:../Sources/Accelerometer.c **** {
+ 501              		.loc 1 226 0
+ 502              		.cfi_startproc
+ 227:../Sources/Accelerometer.c **** 	PORTA_PCR14 |= PORT_PCR_ISF_MASK;			// Clear the interrupt flag 
+ 503              		.loc 1 227 0
+ 504 0000 044B     		ldr	r3, .L23
+ 505 0002 8022     		mov	r2, #128
+ 506 0004 996B     		ldr	r1, [r3, #56]
+ 507 0006 5004     		lsl	r0, r2, #17
+ 508 0008 0843     		orr	r0, r1
+ 509 000a 9863     		str	r0, [r3, #56]
+ 228:../Sources/Accelerometer.c **** 	DataReady = 1;	
+ 510              		.loc 1 228 0
+ 511 000c 024B     		ldr	r3, .L23+4
+ 512 000e 0121     		mov	r1, #1
+ 513 0010 1970     		strb	r1, [r3]
+ 229:../Sources/Accelerometer.c **** }
+ 514              		.loc 1 229 0
+ 515              		@ sp needed for prologue
+ 516 0012 7047     		bx	lr
+ 517              	.L24:
+ 518              		.align	2
+ 519              	.L23:
+ 520 0014 00900440 		.word	1074040832
+ 521 0018 00000000 		.word	DataReady
+ 522              		.cfi_endproc
+ 523              	.LFE4:
+ 525              		.comm	Zoffset,1,1
+ 526              		.comm	Yoffset,1,1
+ 527              		.comm	Xoffset,1,1
+ 528              		.comm	DataReady,1,1
+ 529              		.comm	Zout_g,4,4
+ 530              		.comm	Yout_g,4,4
+ 531              		.comm	Xout_g,4,4
+ 532              		.comm	Zout_14_bit,2,2
+ 533              		.comm	Yout_14_bit,2,2
+ 534              		.comm	Xout_14_bit,2,2
+ 535              		.comm	AccData,6,4
+ 536              		.text
+ 537              	.Letext0:
+ 538              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 539              		.file 3 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/MKL25Z4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Accelerometer.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:18     .text.MCU_Init:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:23     .text.MCU_Init:00000000 MCU_Init
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:91     .text.MCU_Init:00000058 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:103    .text.Accelerometer_Init:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:108    .text.Accelerometer_Init:00000000 Accelerometer_Init
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:164    .text.Calibrate:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:169    .text.Calibrate:00000000 Calibrate
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:334    .text.Calibrate:000000dc $d
+                            *COM*:00000006 AccData
+                            *COM*:00000002 Xout_14_bit
+                            *COM*:00000002 Yout_14_bit
+                            *COM*:00000002 Zout_14_bit
+                            *COM*:00000001 Xoffset
+                            *COM*:00000001 Yoffset
+                            *COM*:00000001 Zoffset
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:348    .text.startup.main:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:353    .text.startup.main:00000000 main
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:481    .text.startup.main:000000b8 $d
+                            *COM*:00000001 DataReady
+                            *COM*:00000004 Xout_g
+                            *COM*:00000004 Yout_g
+                            *COM*:00000004 Zout_g
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:494    .text.PORTA_IRQHandler:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:499    .text.PORTA_IRQHandler:00000000 PORTA_IRQHandler
+C:\Users\BENTR_~1\AppData\Local\Temp\ccXAaXZg.s:520    .text.PORTA_IRQHandler:00000014 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+I2C_WriteRegister
+I2C_ReadRegister
+I2C_ReadMultiRegisters
+__aeabi_i2f
+__aeabi_fmul

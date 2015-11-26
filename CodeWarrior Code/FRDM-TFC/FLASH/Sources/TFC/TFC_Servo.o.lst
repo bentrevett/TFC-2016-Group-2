@@ -1,0 +1,553 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"TFC_Servo.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_f2d
+  18              		.global	__aeabi_dadd
+  19              		.global	__aeabi_dmul
+  20              		.global	__aeabi_d2f
+  21              		.global	__aeabi_ui2f
+  22              		.global	__aeabi_fmul
+  23              		.global	__aeabi_f2uiz
+  24              		.section	.text.TFC_SetServo,"ax",%progbits
+  25              		.align	2
+  26              		.global	TFC_SetServo
+  27              		.code	16
+  28              		.thumb_func
+  30              	TFC_SetServo:
+  31              	.LFB0:
+  32              		.file 1 "../Sources/TFC/TFC_Servo.c"
+   1:../Sources/TFC/TFC_Servo.c **** #include "TFC\TFC.h"
+   2:../Sources/TFC/TFC_Servo.c **** 
+   3:../Sources/TFC/TFC_Servo.c **** 
+   4:../Sources/TFC/TFC_Servo.c **** #define FTM1_CLOCK				(CORE_CLOCK)
+   5:../Sources/TFC/TFC_Servo.c **** #define FTM1_CLK_PRESCALE       5				// Original: 6; Prescale Selector value - see comments in Stat
+   6:../Sources/TFC/TFC_Servo.c **** #define FTM1_OVERFLOW_FREQUENCY 50  			// Desired Frequency of PWM Signal - Here 50Hz => 20ms perio
+   7:../Sources/TFC/TFC_Servo.c **** // use these to dial in servo steering to your particular servo
+   8:../Sources/TFC/TFC_Servo.c **** #define SERVO_MIN_DUTY_CYCLE                                          (float)(.0010*FTM1_OVERFLOW_F
+   9:../Sources/TFC/TFC_Servo.c **** #define SERVO_MAX_DUTY_CYCLE                                         (float)(.0020*FTM1_OVERFLOW_FR
+  10:../Sources/TFC/TFC_Servo.c **** /**********************************************************************************************/
+  11:../Sources/TFC/TFC_Servo.c **** 
+  12:../Sources/TFC/TFC_Servo.c **** //Position is -1.0 to 1.0.   Use SERVO_X_MIN_DUTY_CYCLE and SERVO_MAX_DUTY_CYCLE  to calibrate the 
+  13:../Sources/TFC/TFC_Servo.c **** void TFC_SetServo(uint8_t ServoNumber, float Position)
+  14:../Sources/TFC/TFC_Servo.c **** {
+  33              		.loc 1 14 0
+  34              		.cfi_startproc
+  35              	.LVL0:
+  36 0000 38B5     		push	{r3, r4, r5, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 3, -16
+  40              		.cfi_offset 4, -12
+  41              		.cfi_offset 5, -8
+  42              		.cfi_offset 14, -4
+  43              		.loc 1 14 0
+  44 0002 051C     		mov	r5, r0
+  15:../Sources/TFC/TFC_Servo.c ****                               TFC_SetServoDutyCycle(ServoNumber , 
+  16:../Sources/TFC/TFC_Servo.c ****                                                             (((Position + 1.0)/2)*(SERVO_MAX_DUTY_C
+  45              		.loc 1 16 0
+  46 0004 081C     		add	r0, r1, #0
+  47              	.LVL1:
+  48 0006 FFF7FEFF 		bl	__aeabi_f2d
+  49              	.LVL2:
+  50 000a 184B     		ldr	r3, .L6+4
+  51 000c 164A     		ldr	r2, .L6
+  52 000e FFF7FEFF 		bl	__aeabi_dadd
+  53              	.LVL3:
+  54 0012 174A     		ldr	r2, .L6+8
+  55 0014 174B     		ldr	r3, .L6+12
+  56 0016 FFF7FEFF 		bl	__aeabi_dmul
+  57              	.LVL4:
+  58 001a 174A     		ldr	r2, .L6+16
+  59 001c 174B     		ldr	r3, .L6+20
+  60 001e FFF7FEFF 		bl	__aeabi_dmul
+  61              	.LVL5:
+  62 0022 154A     		ldr	r2, .L6+16
+  63 0024 154B     		ldr	r3, .L6+20
+  64 0026 FFF7FEFF 		bl	__aeabi_dadd
+  65              	.LVL6:
+  15:../Sources/TFC/TFC_Servo.c ****                               TFC_SetServoDutyCycle(ServoNumber , 
+  66              		.loc 1 15 0
+  67 002a FFF7FEFF 		bl	__aeabi_d2f
+  68              	.LVL7:
+  69 002e 041C     		add	r4, r0, #0
+  70              	.LVL8:
+  71              	.LBB8:
+  72              	.LBB9:
+  17:../Sources/TFC/TFC_Servo.c ****                
+  18:../Sources/TFC/TFC_Servo.c **** }
+  19:../Sources/TFC/TFC_Servo.c **** 
+  20:../Sources/TFC/TFC_Servo.c **** void TFC_SetServoDutyCycle(uint8_t ServoNumber, float DutyCycle)
+  21:../Sources/TFC/TFC_Servo.c **** {
+  22:../Sources/TFC/TFC_Servo.c ****                switch(ServoNumber)
+  73              		.loc 1 22 0
+  74 0030 012D     		cmp	r5, #1
+  75 0032 0BD0     		beq	.L3
+  23:../Sources/TFC/TFC_Servo.c ****                {
+  24:../Sources/TFC/TFC_Servo.c ****                default:
+  25:../Sources/TFC/TFC_Servo.c ****                case 0:
+  26:../Sources/TFC/TFC_Servo.c ****                               TPM1_C0V = TPM1_MOD * DutyCycle;
+  76              		.loc 1 26 0
+  77 0034 124D     		ldr	r5, .L6+24
+  78              	.LVL9:
+  79 0036 A868     		ldr	r0, [r5, #8]
+  80              	.LVL10:
+  81 0038 FFF7FEFF 		bl	__aeabi_ui2f
+  82              	.LVL11:
+  83 003c 011C     		add	r1, r0, #0
+  84 003e 201C     		add	r0, r4, #0
+  85 0040 FFF7FEFF 		bl	__aeabi_fmul
+  86              	.LVL12:
+  87 0044 FFF7FEFF 		bl	__aeabi_f2uiz
+  88              	.LVL13:
+  89 0048 2861     		str	r0, [r5, #16]
+  90              	.L1:
+  91              	.LBE9:
+  92              	.LBE8:
+  18:../Sources/TFC/TFC_Servo.c **** }
+  93              		.loc 1 18 0
+  94              		@ sp needed for prologue
+  95              	.LVL14:
+  96 004a 38BD     		pop	{r3, r4, r5, pc}
+  97              	.LVL15:
+  98              	.L3:
+  99              	.LBB11:
+ 100              	.LBB10:
+  27:../Sources/TFC/TFC_Servo.c ****                               break;
+  28:../Sources/TFC/TFC_Servo.c **** 
+  29:../Sources/TFC/TFC_Servo.c ****                case 1:
+  30:../Sources/TFC/TFC_Servo.c ****                               TPM1_C1V = TPM1_MOD * DutyCycle;
+ 101              		.loc 1 30 0
+ 102 004c 0C4D     		ldr	r5, .L6+24
+ 103              	.LVL16:
+ 104 004e A868     		ldr	r0, [r5, #8]
+ 105              	.LVL17:
+ 106 0050 FFF7FEFF 		bl	__aeabi_ui2f
+ 107              	.LVL18:
+ 108 0054 011C     		add	r1, r0, #0
+ 109 0056 201C     		add	r0, r4, #0
+ 110 0058 FFF7FEFF 		bl	__aeabi_fmul
+ 111              	.LVL19:
+ 112 005c FFF7FEFF 		bl	__aeabi_f2uiz
+ 113              	.LVL20:
+ 114 0060 A861     		str	r0, [r5, #24]
+ 115 0062 F2E7     		b	.L1
+ 116              	.L7:
+ 117 0064 C046C046 		.align	3
+ 118              	.L6:
+ 119 0068 00000000 		.word	0
+ 120 006c 0000F03F 		.word	1072693248
+ 121 0070 00000000 		.word	0
+ 122 0074 0000E03F 		.word	1071644672
+ 123 0078 000000A0 		.word	-1610612736
+ 124 007c 9999A93F 		.word	1068079513
+ 125 0080 00900340 		.word	1073975296
+ 126              	.LBE10:
+ 127              	.LBE11:
+ 128              		.cfi_endproc
+ 129              	.LFE0:
+ 131 0084 C046C046 		.section	.text.TFC_SetServoDutyCycle,"ax",%progbits
+ 132              		.align	2
+ 133              		.global	TFC_SetServoDutyCycle
+ 134              		.code	16
+ 135              		.thumb_func
+ 137              	TFC_SetServoDutyCycle:
+ 138              	.LFB1:
+  21:../Sources/TFC/TFC_Servo.c **** {
+ 139              		.loc 1 21 0
+ 140              		.cfi_startproc
+ 141              	.LVL21:
+ 142 0000 38B5     		push	{r3, r4, r5, lr}
+ 143              	.LCFI1:
+ 144              		.cfi_def_cfa_offset 16
+ 145              		.cfi_offset 3, -16
+ 146              		.cfi_offset 4, -12
+ 147              		.cfi_offset 5, -8
+ 148              		.cfi_offset 14, -4
+  21:../Sources/TFC/TFC_Servo.c **** {
+ 149              		.loc 1 21 0
+ 150 0002 0C1C     		add	r4, r1, #0
+ 151              		.loc 1 30 0
+ 152 0004 0B4D     		ldr	r5, .L12
+  22:../Sources/TFC/TFC_Servo.c ****                switch(ServoNumber)
+ 153              		.loc 1 22 0
+ 154 0006 0128     		cmp	r0, #1
+ 155 0008 09D0     		beq	.L10
+  26:../Sources/TFC/TFC_Servo.c ****                               TPM1_C0V = TPM1_MOD * DutyCycle;
+ 156              		.loc 1 26 0
+ 157 000a A868     		ldr	r0, [r5, #8]
+ 158              	.LVL22:
+ 159 000c FFF7FEFF 		bl	__aeabi_ui2f
+ 160              	.LVL23:
+ 161 0010 211C     		add	r1, r4, #0
+ 162 0012 FFF7FEFF 		bl	__aeabi_fmul
+ 163              	.LVL24:
+ 164 0016 FFF7FEFF 		bl	__aeabi_f2uiz
+ 165              	.LVL25:
+ 166 001a 2861     		str	r0, [r5, #16]
+ 167              	.L8:
+  31:../Sources/TFC/TFC_Servo.c ****                               break;
+  32:../Sources/TFC/TFC_Servo.c ****                }
+  33:../Sources/TFC/TFC_Servo.c **** }
+ 168              		.loc 1 33 0
+ 169              		@ sp needed for prologue
+ 170              	.LVL26:
+ 171 001c 38BD     		pop	{r3, r4, r5, pc}
+ 172              	.LVL27:
+ 173              	.L10:
+  30:../Sources/TFC/TFC_Servo.c ****                               TPM1_C1V = TPM1_MOD * DutyCycle;
+ 174              		.loc 1 30 0
+ 175 001e A868     		ldr	r0, [r5, #8]
+ 176              	.LVL28:
+ 177 0020 FFF7FEFF 		bl	__aeabi_ui2f
+ 178              	.LVL29:
+ 179 0024 211C     		add	r1, r4, #0
+ 180 0026 FFF7FEFF 		bl	__aeabi_fmul
+ 181              	.LVL30:
+ 182 002a FFF7FEFF 		bl	__aeabi_f2uiz
+ 183              	.LVL31:
+ 184 002e A861     		str	r0, [r5, #24]
+  31:../Sources/TFC/TFC_Servo.c ****                               break;
+ 185              		.loc 1 31 0
+ 186 0030 F4E7     		b	.L8
+ 187              	.L13:
+ 188 0032 C046     		.align	2
+ 189              	.L12:
+ 190 0034 00900340 		.word	1073975296
+ 191              		.cfi_endproc
+ 192              	.LFE1:
+ 194              		.section	.text.FTM1_IRQHandler,"ax",%progbits
+ 195              		.align	2
+ 196              		.global	FTM1_IRQHandler
+ 197              		.code	16
+ 198              		.thumb_func
+ 200              	FTM1_IRQHandler:
+ 201              	.LFB2:
+  34:../Sources/TFC/TFC_Servo.c **** 
+  35:../Sources/TFC/TFC_Servo.c **** /******************************************* Function to control Interrupt ************************
+  36:../Sources/TFC/TFC_Servo.c **** volatile unsigned char ServoTickVar;
+  37:../Sources/TFC/TFC_Servo.c **** 
+  38:../Sources/TFC/TFC_Servo.c **** void FTM1_IRQHandler()
+  39:../Sources/TFC/TFC_Servo.c **** {
+ 202              		.loc 1 39 0
+ 203              		.cfi_startproc
+  40:../Sources/TFC/TFC_Servo.c ****                //Clear the overflow mask if set.   According to the reference manual, we clear by w
+  41:../Sources/TFC/TFC_Servo.c ****                if(TPM1_SC & TPM_SC_TOF_MASK)
+ 204              		.loc 1 41 0
+ 205 0000 084B     		ldr	r3, .L23
+ 206 0002 8022     		mov	r2, #128
+ 207 0004 1968     		ldr	r1, [r3]
+  39:../Sources/TFC/TFC_Servo.c **** {
+ 208              		.loc 1 39 0
+ 209 0006 00B5     		push	{lr}
+ 210              	.LCFI2:
+ 211              		.cfi_def_cfa_offset 4
+ 212              		.cfi_offset 14, -4
+ 213              		.loc 1 41 0
+ 214 0008 0A42     		tst	r2, r1
+ 215 000a 02D0     		beq	.L15
+  42:../Sources/TFC/TFC_Servo.c ****                               TPM1_SC |= TPM_SC_TOF_MASK;
+ 216              		.loc 1 42 0
+ 217 000c 1868     		ldr	r0, [r3]
+ 218 000e 0243     		orr	r2, r0
+ 219 0010 1A60     		str	r2, [r3]
+ 220              	.L15:
+  43:../Sources/TFC/TFC_Servo.c ****                
+  44:../Sources/TFC/TFC_Servo.c ****                if (ServoTickVar < 0xff)//if servo tick less than 255 count up... 
+ 221              		.loc 1 44 0
+ 222 0012 054B     		ldr	r3, .L23+4
+ 223 0014 1978     		ldrb	r1, [r3]
+ 224 0016 FF29     		cmp	r1, #255
+ 225 0018 03D0     		beq	.L14
+  45:../Sources/TFC/TFC_Servo.c ****                               ServoTickVar++;
+ 226              		.loc 1 45 0
+ 227 001a 1A78     		ldrb	r2, [r3]
+ 228 001c 0132     		add	r2, r2, #1
+ 229 001e D0B2     		uxtb	r0, r2
+ 230 0020 1870     		strb	r0, [r3]
+ 231              	.L14:
+  46:../Sources/TFC/TFC_Servo.c ****   
+  47:../Sources/TFC/TFC_Servo.c **** }
+ 232              		.loc 1 47 0
+ 233              		@ sp needed for prologue
+ 234 0022 00BD     		pop	{pc}
+ 235              	.L24:
+ 236              		.align	2
+ 237              	.L23:
+ 238 0024 00900340 		.word	1073975296
+ 239 0028 00000000 		.word	ServoTickVar
+ 240              		.cfi_endproc
+ 241              	.LFE2:
+ 243              		.section	.text.TFC_InitServos,"ax",%progbits
+ 244              		.align	2
+ 245              		.global	TFC_InitServos
+ 246              		.code	16
+ 247              		.thumb_func
+ 249              	TFC_InitServos:
+ 250              	.LFB3:
+  48:../Sources/TFC/TFC_Servo.c **** 
+  49:../Sources/TFC/TFC_Servo.c **** void TFC_InitServos()
+  50:../Sources/TFC/TFC_Servo.c **** {
+ 251              		.loc 1 50 0
+ 252              		.cfi_startproc
+  51:../Sources/TFC/TFC_Servo.c ****                
+  52:../Sources/TFC/TFC_Servo.c ****                //Clock Setup for the TPM requires a couple steps.
+  53:../Sources/TFC/TFC_Servo.c ****                
+  54:../Sources/TFC/TFC_Servo.c ****     
+  55:../Sources/TFC/TFC_Servo.c **** 				
+  56:../Sources/TFC/TFC_Servo.c ****                //1st,  set the clock mux
+  57:../Sources/TFC/TFC_Servo.c ****                //See Page 124 of f the KL25 Sub-Family Reference Manual, Rev. 3, September 2012
+  58:../Sources/TFC/TFC_Servo.c ****                SIM_SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK;// We Want MCGPLLCLK/2 (See Page 196 of the KL
+ 253              		.loc 1 58 0
+ 254 0000 224B     		ldr	r3, .L26
+ 255 0002 234A     		ldr	r2, .L26+4
+ 256 0004 8021     		mov	r1, #128
+ 257 0006 9858     		ldr	r0, [r3, r2]
+  50:../Sources/TFC/TFC_Servo.c **** {
+ 258              		.loc 1 50 0
+ 259 0008 10B5     		push	{r4, lr}
+ 260              	.LCFI3:
+ 261              		.cfi_def_cfa_offset 8
+ 262              		.cfi_offset 4, -8
+ 263              		.cfi_offset 14, -4
+ 264              		.loc 1 58 0
+ 265 000a 4C02     		lsl	r4, r1, #9
+ 266 000c 0443     		orr	r4, r0
+ 267 000e 9C50     		str	r4, [r3, r2]
+  59:../Sources/TFC/TFC_Servo.c ****                SIM_SOPT2 &= ~(SIM_SOPT2_TPMSRC_MASK);
+ 268              		.loc 1 59 0
+ 269 0010 9858     		ldr	r0, [r3, r2]
+ 270 0012 2049     		ldr	r1, .L26+8
+  60:../Sources/TFC/TFC_Servo.c ****                SIM_SOPT2 |= SIM_SOPT2_TPMSRC(1); //We want the MCGPLLCLK/2 (See Page 196 of the KL2
+  61:../Sources/TFC/TFC_Servo.c ****   
+  62:../Sources/TFC/TFC_Servo.c **** 
+  63:../Sources/TFC/TFC_Servo.c **** 				//Enable the Clock to the FTM1 Module
+  64:../Sources/TFC/TFC_Servo.c **** 				//See Page 207 of f the KL25 Sub-Family Reference Manual, Rev. 3, September 2012
+  65:../Sources/TFC/TFC_Servo.c **** 				SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK; 
+  66:../Sources/TFC/TFC_Servo.c ****                
+  67:../Sources/TFC/TFC_Servo.c ****                //The TPM Module has Clock.  Now set up the peripheral
+  68:../Sources/TFC/TFC_Servo.c ****                
+  69:../Sources/TFC/TFC_Servo.c ****                //Blow away the control registers to ensure that the counter is not running
+  70:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = 0;
+  71:../Sources/TFC/TFC_Servo.c ****                TPM1_CONF = 0;
+  72:../Sources/TFC/TFC_Servo.c ****                
+  73:../Sources/TFC/TFC_Servo.c ****                //While the counter is disabled we can setup the prescaler
+  74:../Sources/TFC/TFC_Servo.c ****                
+  75:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = TPM_SC_PS(FTM1_CLK_PRESCALE);
+  76:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_TOIE_MASK; //Enable Interrupts for the Timer Overflow
+  77:../Sources/TFC/TFC_Servo.c ****                
+  78:../Sources/TFC/TFC_Servo.c ****                //Setup the mod register to get the correct PWM Period
+  79:../Sources/TFC/TFC_Servo.c ****                
+  80:../Sources/TFC/TFC_Servo.c ****                TPM1_MOD = FTM1_CLOCK/(1<<(FTM1_CLK_PRESCALE+1))/FTM1_OVERFLOW_FREQUENCY;
+  81:../Sources/TFC/TFC_Servo.c ****                
+  82:../Sources/TFC/TFC_Servo.c ****                //Setup Channels 0 and 1
+  83:../Sources/TFC/TFC_Servo.c ****                
+  84:../Sources/TFC/TFC_Servo.c ****                TPM1_C0SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK;
+  85:../Sources/TFC/TFC_Servo.c ****                TPM1_C1SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK;
+  86:../Sources/TFC/TFC_Servo.c ****                
+  87:../Sources/TFC/TFC_Servo.c ****                //Enable the Counter
+  88:../Sources/TFC/TFC_Servo.c ****                
+  89:../Sources/TFC/TFC_Servo.c ****                //Set the Default duty cycle to servo neutral
+  90:../Sources/TFC/TFC_Servo.c ****                TFC_SetServo(0, 0.0);
+  91:../Sources/TFC/TFC_Servo.c ****                TFC_SetServo(1, 0.0);
+  92:../Sources/TFC/TFC_Servo.c ****                
+  93:../Sources/TFC/TFC_Servo.c ****                //Enable the TPM COunter
+  94:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_CMOD(1);
+  95:../Sources/TFC/TFC_Servo.c ****                
+  96:../Sources/TFC/TFC_Servo.c ****                //Enable TPM1 IRQ on the NVIC
+  97:../Sources/TFC/TFC_Servo.c ****                enable_irq (INT_TPM1-16);
+  98:../Sources/TFC/TFC_Servo.c ****               
+  99:../Sources/TFC/TFC_Servo.c ****                //Enable the FTM functions on the the port
+ 100:../Sources/TFC/TFC_Servo.c ****                
+ 101:../Sources/TFC/TFC_Servo.c ****                PORTB_PCR0 = PORT_PCR_MUX(3);
+ 102:../Sources/TFC/TFC_Servo.c ****                PORTB_PCR1 = PORT_PCR_MUX(3);
+ 103:../Sources/TFC/TFC_Servo.c ****                               
+ 104:../Sources/TFC/TFC_Servo.c **** }
+ 271              		.loc 1 104 0
+ 272              		@ sp needed for prologue
+  59:../Sources/TFC/TFC_Servo.c ****                SIM_SOPT2 &= ~(SIM_SOPT2_TPMSRC_MASK);
+ 273              		.loc 1 59 0
+ 274 0014 0140     		and	r1, r0
+ 275 0016 9950     		str	r1, [r3, r2]
+  60:../Sources/TFC/TFC_Servo.c ****                SIM_SOPT2 |= SIM_SOPT2_TPMSRC(1); //We want the MCGPLLCLK/2 (See Page 196 of the KL2
+ 276              		.loc 1 60 0
+ 277 0018 9C58     		ldr	r4, [r3, r2]
+ 278 001a 8020     		mov	r0, #128
+ 279 001c 4104     		lsl	r1, r0, #17
+ 280 001e 2143     		orr	r1, r4
+ 281 0020 9950     		str	r1, [r3, r2]
+  65:../Sources/TFC/TFC_Servo.c **** 				SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK; 
+ 282              		.loc 1 65 0
+ 283 0022 1D4A     		ldr	r2, .L26+12
+ 284 0024 8020     		mov	r0, #128
+ 285 0026 9C58     		ldr	r4, [r3, r2]
+ 286 0028 8104     		lsl	r1, r0, #18
+ 287 002a 2143     		orr	r1, r4
+  70:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = 0;
+ 288              		.loc 1 70 0
+ 289 002c 1B4C     		ldr	r4, .L26+16
+  65:../Sources/TFC/TFC_Servo.c **** 				SIM_SCGC6 |= SIM_SCGC6_TPM1_MASK; 
+ 290              		.loc 1 65 0
+ 291 002e 9950     		str	r1, [r3, r2]
+  75:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = TPM_SC_PS(FTM1_CLK_PRESCALE);
+ 292              		.loc 1 75 0
+ 293 0030 0520     		mov	r0, #5
+  70:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = 0;
+ 294              		.loc 1 70 0
+ 295 0032 0023     		mov	r3, #0
+  71:../Sources/TFC/TFC_Servo.c ****                TPM1_CONF = 0;
+ 296              		.loc 1 71 0
+ 297 0034 8422     		mov	r2, #132
+  70:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = 0;
+ 298              		.loc 1 70 0
+ 299 0036 2360     		str	r3, [r4]
+  71:../Sources/TFC/TFC_Servo.c ****                TPM1_CONF = 0;
+ 300              		.loc 1 71 0
+ 301 0038 A350     		str	r3, [r4, r2]
+  75:../Sources/TFC/TFC_Servo.c ****                TPM1_SC = TPM_SC_PS(FTM1_CLK_PRESCALE);
+ 302              		.loc 1 75 0
+ 303 003a 2060     		str	r0, [r4]
+  76:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_TOIE_MASK; //Enable Interrupts for the Timer Overflow
+ 304              		.loc 1 76 0
+ 305 003c 2168     		ldr	r1, [r4]
+  80:../Sources/TFC/TFC_Servo.c ****                TPM1_MOD = FTM1_CLOCK/(1<<(FTM1_CLK_PRESCALE+1))/FTM1_OVERFLOW_FREQUENCY;
+ 306              		.loc 1 80 0
+ 307 003e 184A     		ldr	r2, .L26+20
+  76:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_TOIE_MASK; //Enable Interrupts for the Timer Overflow
+ 308              		.loc 1 76 0
+ 309 0040 4023     		mov	r3, #64
+ 310 0042 0B43     		orr	r3, r1
+  84:../Sources/TFC/TFC_Servo.c ****                TPM1_C0SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK;
+ 311              		.loc 1 84 0
+ 312 0044 2820     		mov	r0, #40
+  76:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_TOIE_MASK; //Enable Interrupts for the Timer Overflow
+ 313              		.loc 1 76 0
+ 314 0046 2360     		str	r3, [r4]
+  80:../Sources/TFC/TFC_Servo.c ****                TPM1_MOD = FTM1_CLOCK/(1<<(FTM1_CLK_PRESCALE+1))/FTM1_OVERFLOW_FREQUENCY;
+ 315              		.loc 1 80 0
+ 316 0048 A260     		str	r2, [r4, #8]
+  84:../Sources/TFC/TFC_Servo.c ****                TPM1_C0SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK;
+ 317              		.loc 1 84 0
+ 318 004a E060     		str	r0, [r4, #12]
+  85:../Sources/TFC/TFC_Servo.c ****                TPM1_C1SC = TPM_CnSC_MSB_MASK | TPM_CnSC_ELSB_MASK;
+ 319              		.loc 1 85 0
+ 320 004c 6061     		str	r0, [r4, #20]
+ 321              	.LVL32:
+ 322              	.LBB20:
+ 323              	.LBB21:
+ 324              	.LBB22:
+ 325              	.LBB23:
+  26:../Sources/TFC/TFC_Servo.c ****                               TPM1_C0V = TPM1_MOD * DutyCycle;
+ 326              		.loc 1 26 0
+ 327 004e A068     		ldr	r0, [r4, #8]
+ 328 0050 FFF7FEFF 		bl	__aeabi_ui2f
+ 329              	.LVL33:
+ 330 0054 1349     		ldr	r1, .L26+24
+ 331 0056 FFF7FEFF 		bl	__aeabi_fmul
+ 332              	.LVL34:
+ 333 005a FFF7FEFF 		bl	__aeabi_f2uiz
+ 334              	.LVL35:
+ 335 005e 2061     		str	r0, [r4, #16]
+ 336              	.LVL36:
+ 337              	.LBE23:
+ 338              	.LBE22:
+ 339              	.LBE21:
+ 340              	.LBE20:
+ 341              	.LBB24:
+ 342              	.LBB25:
+ 343              	.LBB26:
+ 344              	.LBB27:
+  30:../Sources/TFC/TFC_Servo.c ****                               TPM1_C1V = TPM1_MOD * DutyCycle;
+ 345              		.loc 1 30 0
+ 346 0060 A068     		ldr	r0, [r4, #8]
+ 347 0062 FFF7FEFF 		bl	__aeabi_ui2f
+ 348              	.LVL37:
+ 349 0066 0F49     		ldr	r1, .L26+24
+ 350 0068 FFF7FEFF 		bl	__aeabi_fmul
+ 351              	.LVL38:
+ 352 006c FFF7FEFF 		bl	__aeabi_f2uiz
+ 353              	.LVL39:
+ 354 0070 A061     		str	r0, [r4, #24]
+ 355              	.LBE27:
+ 356              	.LBE26:
+ 357              	.LBE25:
+ 358              	.LBE24:
+  94:../Sources/TFC/TFC_Servo.c ****                TPM1_SC |= TPM_SC_CMOD(1);
+ 359              		.loc 1 94 0
+ 360 0072 2168     		ldr	r1, [r4]
+ 361 0074 0823     		mov	r3, #8
+ 362 0076 0B43     		orr	r3, r1
+ 363 0078 2360     		str	r3, [r4]
+  97:../Sources/TFC/TFC_Servo.c ****                enable_irq (INT_TPM1-16);
+ 364              		.loc 1 97 0
+ 365 007a 1220     		mov	r0, #18
+ 366 007c FFF7FEFF 		bl	enable_irq
+ 367              	.LVL40:
+ 101:../Sources/TFC/TFC_Servo.c ****                PORTB_PCR0 = PORT_PCR_MUX(3);
+ 368              		.loc 1 101 0
+ 369 0080 094C     		ldr	r4, .L26+28
+ 370 0082 C022     		mov	r2, #192
+ 371 0084 9000     		lsl	r0, r2, #2
+ 372 0086 2060     		str	r0, [r4]
+ 102:../Sources/TFC/TFC_Servo.c ****                PORTB_PCR1 = PORT_PCR_MUX(3);
+ 373              		.loc 1 102 0
+ 374 0088 6060     		str	r0, [r4, #4]
+ 375              		.loc 1 104 0
+ 376 008a 10BD     		pop	{r4, pc}
+ 377              	.L27:
+ 378              		.align	2
+ 379              	.L26:
+ 380 008c 00700440 		.word	1074032640
+ 381 0090 04100000 		.word	4100
+ 382 0094 FFFFFFFC 		.word	-50331649
+ 383 0098 3C100000 		.word	4156
+ 384 009c 00900340 		.word	1073975296
+ 385 00a0 983A0000 		.word	15000
+ 386 00a4 9A99993D 		.word	1033476506
+ 387 00a8 00A00440 		.word	1074044928
+ 388              		.cfi_endproc
+ 389              	.LFE3:
+ 391              		.comm	ServoTickVar,1,1
+ 392              		.text
+ 393              	.Letext0:
+ 394              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 395              		.file 3 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/MKL25Z4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 TFC_Servo.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:25     .text.TFC_SetServo:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:30     .text.TFC_SetServo:00000000 TFC_SetServo
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:119    .text.TFC_SetServo:00000068 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:132    .text.TFC_SetServoDutyCycle:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:137    .text.TFC_SetServoDutyCycle:00000000 TFC_SetServoDutyCycle
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:190    .text.TFC_SetServoDutyCycle:00000034 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:195    .text.FTM1_IRQHandler:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:200    .text.FTM1_IRQHandler:00000000 FTM1_IRQHandler
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:238    .text.FTM1_IRQHandler:00000024 $d
+                            *COM*:00000001 ServoTickVar
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:244    .text.TFC_InitServos:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:249    .text.TFC_InitServos:00000000 TFC_InitServos
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:380    .text.TFC_InitServos:0000008c $d
+                     .debug_frame:00000010 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccYD9RAj.s:131    .text.TFC_SetServo:00000084 $t
+
+UNDEFINED SYMBOLS
+__aeabi_f2d
+__aeabi_dadd
+__aeabi_dmul
+__aeabi_d2f
+__aeabi_ui2f
+__aeabi_fmul
+__aeabi_f2uiz
+enable_irq

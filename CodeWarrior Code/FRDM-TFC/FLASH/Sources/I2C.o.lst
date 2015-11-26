@@ -1,0 +1,920 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"I2C.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Init_I2C,"ax",%progbits
+  18              		.align	2
+  19              		.global	Init_I2C
+  20              		.code	16
+  21              		.thumb_func
+  23              	Init_I2C:
+  24              	.LFB0:
+  25              		.file 1 "../Sources/I2C.c"
+   1:../Sources/I2C.c **** #include "derivative.h"
+   2:../Sources/I2C.c **** #include "i2c.h"
+   3:../Sources/I2C.c **** void Init_I2C(void)
+   4:../Sources/I2C.c **** {
+  26              		.loc 1 4 0
+  27              		.cfi_startproc
+   5:../Sources/I2C.c ****  SIM_SCGC5 = SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTE_MASK;
+  28              		.loc 1 5 0
+  29 0000 0A4B     		ldr	r3, .L2
+  30 0002 8821     		mov	r1, #136
+  31 0004 0A4A     		ldr	r2, .L2+4
+  32 0006 8801     		lsl	r0, r1, #6
+  33 0008 9850     		str	r0, [r3, r2]
+   6:../Sources/I2C.c ****  SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;
+  34              		.loc 1 6 0
+  35 000a 0A4A     		ldr	r2, .L2+8
+  36 000c 4021     		mov	r1, #64
+  37 000e 9858     		ldr	r0, [r3, r2]
+   7:../Sources/I2C.c ****  PORTE_PCR24 = PORT_PCR_MUX(5);
+   8:../Sources/I2C.c ****  PORTE_PCR25 = PORT_PCR_MUX(5);
+   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+  10:../Sources/I2C.c ****  I2C0_C1 = I2C_C1_IICEN_MASK;
+  11:../Sources/I2C.c **** }
+  38              		.loc 1 11 0
+  39              		@ sp needed for prologue
+   6:../Sources/I2C.c ****  SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;
+  40              		.loc 1 6 0
+  41 0010 0143     		orr	r1, r0
+  42 0012 9950     		str	r1, [r3, r2]
+   7:../Sources/I2C.c ****  PORTE_PCR24 = PORT_PCR_MUX(5);
+  43              		.loc 1 7 0
+  44 0014 084B     		ldr	r3, .L2+12
+  45 0016 A022     		mov	r2, #160
+  46 0018 D000     		lsl	r0, r2, #3
+   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+  47              		.loc 1 9 0
+  48 001a 0849     		ldr	r1, .L2+16
+   7:../Sources/I2C.c ****  PORTE_PCR24 = PORT_PCR_MUX(5);
+  49              		.loc 1 7 0
+  50 001c 1866     		str	r0, [r3, #96]
+  10:../Sources/I2C.c ****  I2C0_C1 = I2C_C1_IICEN_MASK;
+  51              		.loc 1 10 0
+  52 001e 8022     		mov	r2, #128
+   8:../Sources/I2C.c ****  PORTE_PCR25 = PORT_PCR_MUX(5);
+  53              		.loc 1 8 0
+  54 0020 5866     		str	r0, [r3, #100]
+   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+  55              		.loc 1 9 0
+  56 0022 1423     		mov	r3, #20
+  57 0024 4B70     		strb	r3, [r1, #1]
+  10:../Sources/I2C.c ****  I2C0_C1 = I2C_C1_IICEN_MASK;
+  58              		.loc 1 10 0
+  59 0026 8A70     		strb	r2, [r1, #2]
+  60              		.loc 1 11 0
+  61 0028 7047     		bx	lr
+  62              	.L3:
+  63 002a C046     		.align	2
+  64              	.L2:
+  65 002c 00700440 		.word	1074032640
+  66 0030 38100000 		.word	4152
+  67 0034 34100000 		.word	4148
+  68 0038 00D00440 		.word	1074057216
+  69 003c 00600640 		.word	1074159616
+  70              		.cfi_endproc
+  71              	.LFE0:
+  73              		.section	.text.IIC_StartTransmission,"ax",%progbits
+  74              		.align	2
+  75              		.global	IIC_StartTransmission
+  76              		.code	16
+  77              		.thumb_func
+  79              	IIC_StartTransmission:
+  80              	.LFB1:
+  12:../Sources/I2C.c **** /* Inicia Transmissao I2C
+  13:../Sources/I2C.c **** * SlaveID: endereco do slave
+  14:../Sources/I2C.c **** * "Mode" define modo Read (1) ou Write (0)
+  15:../Sources/I2C.c **** */
+  16:../Sources/I2C.c **** void IIC_StartTransmission (char SlaveID, char Mode)
+  17:../Sources/I2C.c **** {
+  81              		.loc 1 17 0
+  82              		.cfi_startproc
+  83              	.LVL0:
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+  19:../Sources/I2C.c ****  SlaveID |= (Mode & 0x01);
+  84              		.loc 1 19 0
+  85 0000 0123     		mov	r3, #1
+  86 0002 1940     		and	r1, r3
+  87              	.LVL1:
+  20:../Sources/I2C.c ****  i2c_Start();
+  88              		.loc 1 20 0
+  89 0004 074B     		ldr	r3, .L5
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+  90              		.loc 1 18 0
+  91 0006 4200     		lsl	r2, r0, #1
+  19:../Sources/I2C.c ****  SlaveID |= (Mode & 0x01);
+  92              		.loc 1 19 0
+  93 0008 081C     		mov	r0, r1
+  94              	.LVL2:
+  95              		.loc 1 20 0
+  96 000a 9978     		ldrb	r1, [r3, #2]
+  19:../Sources/I2C.c ****  SlaveID |= (Mode & 0x01);
+  97              		.loc 1 19 0
+  98 000c 1043     		orr	r0, r2
+  99              		.loc 1 20 0
+ 100 000e 1022     		mov	r2, #16
+ 101 0010 0A43     		orr	r2, r1
+ 102 0012 9A70     		strb	r2, [r3, #2]
+ 103 0014 9978     		ldrb	r1, [r3, #2]
+ 104 0016 2022     		mov	r2, #32
+  19:../Sources/I2C.c ****  SlaveID |= (Mode & 0x01);
+ 105              		.loc 1 19 0
+ 106 0018 C0B2     		uxtb	r0, r0
+ 107              	.LVL3:
+ 108              		.loc 1 20 0
+ 109 001a 0A43     		orr	r2, r1
+ 110 001c 9A70     		strb	r2, [r3, #2]
+  21:../Sources/I2C.c ****  i2c_write_byte(SlaveID);
+  22:../Sources/I2C.c **** }
+ 111              		.loc 1 22 0
+ 112              		@ sp needed for prologue
+  21:../Sources/I2C.c ****  i2c_write_byte(SlaveID);
+ 113              		.loc 1 21 0
+ 114 001e 1871     		strb	r0, [r3, #4]
+ 115              		.loc 1 22 0
+ 116 0020 7047     		bx	lr
+ 117              	.L6:
+ 118 0022 C046     		.align	2
+ 119              	.L5:
+ 120 0024 00600640 		.word	1074159616
+ 121              		.cfi_endproc
+ 122              	.LFE1:
+ 124              		.section	.text.Pause,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	Pause
+ 127              		.code	16
+ 128              		.thumb_func
+ 130              	Pause:
+ 131              	.LFB2:
+  23:../Sources/I2C.c **** void Pause(void){
+ 132              		.loc 1 23 0
+ 133              		.cfi_startproc
+ 134              	.LVL4:
+ 135 0000 00B5     		push	{lr}
+ 136              	.LCFI0:
+ 137              		.cfi_def_cfa_offset 4
+ 138              		.cfi_offset 14, -4
+  24:../Sources/I2C.c ****  int n;
+  25:../Sources/I2C.c ****  for(n=1;n<50;n++) {
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 139              		.loc 1 26 0
+ 140              	@ 26 "../Sources/I2C.c" 1
+ 141 0002 C046     		nop
+ 142              	@ 0 "" 2
+ 143              	.LVL5:
+ 144              		.code	16
+ 145 0004 3023     		mov	r3, #48
+ 146              	.L8:
+ 147              		.loc 1 26 0 is_stmt 0
+ 148              	@ 26 "../Sources/I2C.c" 1
+ 149 0006 C046     		nop
+ 150              	@ 0 "" 2
+ 151              	@ 26 "../Sources/I2C.c" 1
+ 152 0008 C046     		nop
+ 153              	@ 0 "" 2
+ 154              		.code	16
+ 155 000a 023B     		sub	r3, r3, #2
+  25:../Sources/I2C.c ****  for(n=1;n<50;n++) {
+ 156              		.loc 1 25 0 is_stmt 1
+ 157 000c 002B     		cmp	r3, #0
+ 158 000e FAD1     		bne	.L8
+  27:../Sources/I2C.c ****  }
+  28:../Sources/I2C.c **** }
+ 159              		.loc 1 28 0
+ 160              		@ sp needed for prologue
+ 161 0010 00BD     		pop	{pc}
+ 162              		.cfi_endproc
+ 163              	.LFE2:
+ 165 0012 C046     		.section	.text.I2CReadRegister,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	I2CReadRegister
+ 168              		.code	16
+ 169              		.thumb_func
+ 171              	I2CReadRegister:
+ 172              	.LFB3:
+  29:../Sources/I2C.c **** /* Le um registrador do slave I2C
+  30:../Sources/I2C.c **** * SlaveID: endereco do slave
+  31:../Sources/I2C.c **** * RegisterAddress: endereco do registrador interno do slave
+  32:../Sources/I2C.c **** * Retorna o valor do registrador
+  33:../Sources/I2C.c **** */
+  34:../Sources/I2C.c **** char I2CReadRegister(char SlaveID, char RegisterAddress)
+  35:../Sources/I2C.c **** {
+ 173              		.loc 1 35 0
+ 174              		.cfi_startproc
+ 175              	.LVL6:
+ 176 0000 30B5     		push	{r4, r5, lr}
+ 177              	.LCFI1:
+ 178              		.cfi_def_cfa_offset 12
+ 179              		.cfi_offset 4, -12
+ 180              		.cfi_offset 5, -8
+ 181              		.cfi_offset 14, -4
+ 182              	.LBB14:
+ 183              	.LBB15:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 184              		.loc 1 20 0
+ 185 0002 2C4D     		ldr	r5, .L38
+ 186 0004 1022     		mov	r2, #16
+ 187 0006 AC78     		ldrb	r4, [r5, #2]
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 188              		.loc 1 18 0
+ 189 0008 4000     		lsl	r0, r0, #1
+ 190              	.LVL7:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 191              		.loc 1 20 0
+ 192 000a 2243     		orr	r2, r4
+ 193 000c AA70     		strb	r2, [r5, #2]
+ 194 000e AC78     		ldrb	r4, [r5, #2]
+ 195 0010 2022     		mov	r2, #32
+ 196 0012 2243     		orr	r2, r4
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 197              		.loc 1 18 0
+ 198 0014 C3B2     		uxtb	r3, r0
+ 199              	.LVL8:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 200              		.loc 1 20 0
+ 201 0016 AA70     		strb	r2, [r5, #2]
+ 202              	.LBE15:
+ 203              	.LBE14:
+  36:../Sources/I2C.c ****  char result;
+  37:../Sources/I2C.c ****  IIC_StartTransmission(SlaveID,MWSR);
+  38:../Sources/I2C.c ****  i2c_Wait();
+ 204              		.loc 1 38 0
+ 205 0018 0224     		mov	r4, #2
+ 206              	.LBB17:
+ 207              	.LBB16:
+  21:../Sources/I2C.c ****  i2c_write_byte(SlaveID);
+ 208              		.loc 1 21 0
+ 209 001a 2B71     		strb	r3, [r5, #4]
+ 210              	.L14:
+ 211              	.LBE16:
+ 212              	.LBE17:
+ 213              		.loc 1 38 0
+ 214 001c EB78     		ldrb	r3, [r5, #3]
+ 215 001e 254A     		ldr	r2, .L38
+ 216 0020 1C42     		tst	r4, r3
+ 217 0022 FBD0     		beq	.L14
+ 218              		.loc 1 38 0 is_stmt 0
+ 219 0024 D578     		ldrb	r5, [r2, #3]
+ 220 0026 0224     		mov	r4, #2
+ 221 0028 2C43     		orr	r4, r5
+ 222 002a E3B2     		uxtb	r3, r4
+ 223 002c D370     		strb	r3, [r2, #3]
+  39:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+  40:../Sources/I2C.c ****  i2c_Wait();
+ 224              		.loc 1 40 0 is_stmt 1
+ 225 002e 151C     		mov	r5, r2
+  39:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+ 226              		.loc 1 39 0
+ 227 0030 1171     		strb	r1, [r2, #4]
+ 228              		.loc 1 40 0
+ 229 0032 0221     		mov	r1, #2
+ 230              	.LVL9:
+ 231              	.L15:
+ 232              		.loc 1 40 0 is_stmt 0
+ 233 0034 EC78     		ldrb	r4, [r5, #3]
+ 234 0036 1F4A     		ldr	r2, .L38
+ 235 0038 2142     		tst	r1, r4
+ 236 003a FBD0     		beq	.L15
+ 237              		.loc 1 40 0
+ 238 003c D578     		ldrb	r5, [r2, #3]
+ 239 003e 0223     		mov	r3, #2
+ 240 0040 2B43     		orr	r3, r5
+ 241 0042 D9B2     		uxtb	r1, r3
+ 242 0044 D170     		strb	r1, [r2, #3]
+  41:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 243              		.loc 1 41 0 is_stmt 1
+ 244 0046 9478     		ldrb	r4, [r2, #2]
+  42:../Sources/I2C.c ****  i2c_write_byte((SlaveID << 1) | 0x01);
+ 245              		.loc 1 42 0
+ 246 0048 0123     		mov	r3, #1
+  41:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 247              		.loc 1 41 0
+ 248 004a 0425     		mov	r5, #4
+ 249              		.loc 1 42 0
+ 250 004c 1843     		orr	r0, r3
+ 251              	.LVL10:
+  41:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 252              		.loc 1 41 0
+ 253 004e 2543     		orr	r5, r4
+ 254              		.loc 1 42 0
+ 255 0050 C0B2     		uxtb	r0, r0
+  41:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 256              		.loc 1 41 0
+ 257 0052 9570     		strb	r5, [r2, #2]
+  43:../Sources/I2C.c ****  i2c_Wait();
+ 258              		.loc 1 43 0
+ 259 0054 141C     		mov	r4, r2
+  42:../Sources/I2C.c ****  i2c_write_byte((SlaveID << 1) | 0x01);
+ 260              		.loc 1 42 0
+ 261 0056 1071     		strb	r0, [r2, #4]
+ 262              		.loc 1 43 0
+ 263 0058 0221     		mov	r1, #2
+ 264              	.L16:
+ 265              		.loc 1 43 0 is_stmt 0
+ 266 005a E578     		ldrb	r5, [r4, #3]
+ 267 005c 154A     		ldr	r2, .L38
+ 268 005e 2942     		tst	r1, r5
+ 269 0060 FBD0     		beq	.L16
+ 270              		.loc 1 43 0
+ 271 0062 D078     		ldrb	r0, [r2, #3]
+ 272 0064 0223     		mov	r3, #2
+ 273 0066 0343     		orr	r3, r0
+ 274 0068 DCB2     		uxtb	r4, r3
+ 275 006a D470     		strb	r4, [r2, #3]
+  44:../Sources/I2C.c ****  i2c_EnterRxMode();
+ 276              		.loc 1 44 0 is_stmt 1
+ 277 006c 9578     		ldrb	r5, [r2, #2]
+ 278 006e 1021     		mov	r1, #16
+ 279 0070 8D43     		bic	r5, r1
+ 280 0072 9570     		strb	r5, [r2, #2]
+  45:../Sources/I2C.c ****  i2c_DisableAck(); // Desabilita ACK por ser o penultimo byte a ler
+ 281              		.loc 1 45 0
+ 282 0074 9078     		ldrb	r0, [r2, #2]
+ 283 0076 0823     		mov	r3, #8
+ 284 0078 0343     		orr	r3, r0
+ 285 007a 9370     		strb	r3, [r2, #2]
+  46:../Sources/I2C.c ****  result = I2C0_D ; // Dummy read
+ 286              		.loc 1 46 0
+ 287 007c 1379     		ldrb	r3, [r2, #4]
+ 288              	.LVL11:
+  47:../Sources/I2C.c ****  i2c_Wait();
+ 289              		.loc 1 47 0
+ 290 007e 0224     		mov	r4, #2
+ 291              	.L17:
+ 292              		.loc 1 47 0 is_stmt 0
+ 293 0080 D178     		ldrb	r1, [r2, #3]
+ 294 0082 0C4D     		ldr	r5, .L38
+ 295 0084 0C42     		tst	r4, r1
+ 296 0086 FBD0     		beq	.L17
+ 297              		.loc 1 47 0
+ 298 0088 EA78     		ldrb	r2, [r5, #3]
+ 299 008a 0220     		mov	r0, #2
+ 300 008c 1043     		orr	r0, r2
+ 301 008e C3B2     		uxtb	r3, r0
+ 302 0090 EB70     		strb	r3, [r5, #3]
+  48:../Sources/I2C.c ****  i2c_Stop(); // Envia STOP por ser o ultimo byte
+ 303              		.loc 1 48 0 is_stmt 1
+ 304 0092 AC78     		ldrb	r4, [r5, #2]
+ 305 0094 2021     		mov	r1, #32
+ 306 0096 8C43     		bic	r4, r1
+ 307 0098 AC70     		strb	r4, [r5, #2]
+ 308 009a A878     		ldrb	r0, [r5, #2]
+ 309 009c 1022     		mov	r2, #16
+ 310 009e 9043     		bic	r0, r2
+ 311 00a0 A870     		strb	r0, [r5, #2]
+  49:../Sources/I2C.c ****  result = I2C0_D ; // Le o byte
+ 312              		.loc 1 49 0
+ 313 00a2 2879     		ldrb	r0, [r5, #4]
+ 314              	.LVL12:
+ 315              	.LBB18:
+ 316              	.LBB19:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 317              		.loc 1 26 0
+ 318              	@ 26 "../Sources/I2C.c" 1
+ 319 00a4 C046     		nop
+ 320              	@ 0 "" 2
+ 321              	.LVL13:
+ 322              		.code	16
+ 323 00a6 3025     		mov	r5, #48
+ 324              	.LVL14:
+ 325              	.L18:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 326              		.loc 1 26 0 is_stmt 0
+ 327              	@ 26 "../Sources/I2C.c" 1
+ 328 00a8 C046     		nop
+ 329              	@ 0 "" 2
+ 330              	@ 26 "../Sources/I2C.c" 1
+ 331 00aa C046     		nop
+ 332              	@ 0 "" 2
+ 333              		.code	16
+ 334 00ac 023D     		sub	r5, r5, #2
+  25:../Sources/I2C.c ****  for(n=1;n<50;n++) {
+ 335              		.loc 1 25 0 is_stmt 1
+ 336 00ae 002D     		cmp	r5, #0
+ 337 00b0 FAD1     		bne	.L18
+ 338              	.LBE19:
+ 339              	.LBE18:
+  50:../Sources/I2C.c ****  Pause();
+  51:../Sources/I2C.c ****  return result;
+  52:../Sources/I2C.c **** }
+ 340              		.loc 1 52 0
+ 341              		@ sp needed for prologue
+ 342 00b2 30BD     		pop	{r4, r5, pc}
+ 343              	.L39:
+ 344              		.align	2
+ 345              	.L38:
+ 346 00b4 00600640 		.word	1074159616
+ 347              		.cfi_endproc
+ 348              	.LFE3:
+ 350              		.section	.text.I2CWriteRegister,"ax",%progbits
+ 351              		.align	2
+ 352              		.global	I2CWriteRegister
+ 353              		.code	16
+ 354              		.thumb_func
+ 356              	I2CWriteRegister:
+ 357              	.LFB4:
+  53:../Sources/I2C.c **** /* Escreve um byte no registrador interno do slave I2C
+  54:../Sources/I2C.c **** * SlaveID: endereco do slave
+  55:../Sources/I2C.c **** * RegisterAddress: endereco do registrador interno do slave
+  56:../Sources/I2C.c **** * Data: Valor a escrever
+  57:../Sources/I2C.c **** */
+  58:../Sources/I2C.c **** void I2CWriteRegister(char SlaveID, char RegisterAddress, char Data)
+  59:../Sources/I2C.c **** {
+ 358              		.loc 1 59 0
+ 359              		.cfi_startproc
+ 360              	.LVL15:
+ 361 0000 30B5     		push	{r4, r5, lr}
+ 362              	.LCFI2:
+ 363              		.cfi_def_cfa_offset 12
+ 364              		.cfi_offset 4, -12
+ 365              		.cfi_offset 5, -8
+ 366              		.cfi_offset 14, -4
+ 367              	.LBB20:
+ 368              	.LBB21:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 369              		.loc 1 20 0
+ 370 0002 1E4D     		ldr	r5, .L60
+ 371 0004 1023     		mov	r3, #16
+ 372 0006 AC78     		ldrb	r4, [r5, #2]
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 373              		.loc 1 18 0
+ 374 0008 4000     		lsl	r0, r0, #1
+ 375              	.LVL16:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 376              		.loc 1 20 0
+ 377 000a 2343     		orr	r3, r4
+ 378 000c AB70     		strb	r3, [r5, #2]
+ 379 000e AC78     		ldrb	r4, [r5, #2]
+ 380 0010 2023     		mov	r3, #32
+ 381 0012 2343     		orr	r3, r4
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 382              		.loc 1 18 0
+ 383 0014 C0B2     		uxtb	r0, r0
+ 384              	.LVL17:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 385              		.loc 1 20 0
+ 386 0016 AB70     		strb	r3, [r5, #2]
+ 387              	.LBE21:
+ 388              	.LBE20:
+  60:../Sources/I2C.c ****  IIC_StartTransmission(SlaveID,MWSR);
+  61:../Sources/I2C.c ****  i2c_Wait();
+ 389              		.loc 1 61 0
+ 390 0018 0224     		mov	r4, #2
+ 391              	.LBB23:
+ 392              	.LBB22:
+  21:../Sources/I2C.c ****  i2c_write_byte(SlaveID);
+ 393              		.loc 1 21 0
+ 394 001a 2871     		strb	r0, [r5, #4]
+ 395              	.LVL18:
+ 396              	.L41:
+ 397              	.LBE22:
+ 398              	.LBE23:
+ 399              		.loc 1 61 0
+ 400 001c EB78     		ldrb	r3, [r5, #3]
+ 401 001e 1748     		ldr	r0, .L60
+ 402 0020 1C42     		tst	r4, r3
+ 403 0022 FBD0     		beq	.L41
+ 404              		.loc 1 61 0 is_stmt 0
+ 405 0024 C578     		ldrb	r5, [r0, #3]
+ 406 0026 0224     		mov	r4, #2
+ 407 0028 2C43     		orr	r4, r5
+ 408 002a E3B2     		uxtb	r3, r4
+ 409 002c C370     		strb	r3, [r0, #3]
+  62:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+  63:../Sources/I2C.c ****  i2c_Wait();
+ 410              		.loc 1 63 0 is_stmt 1
+ 411 002e 0225     		mov	r5, #2
+  62:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+ 412              		.loc 1 62 0
+ 413 0030 0171     		strb	r1, [r0, #4]
+ 414              	.LVL19:
+ 415              	.L42:
+ 416              		.loc 1 63 0
+ 417 0032 C478     		ldrb	r4, [r0, #3]
+ 418 0034 1149     		ldr	r1, .L60
+ 419 0036 2542     		tst	r5, r4
+ 420 0038 FBD0     		beq	.L42
+ 421              		.loc 1 63 0 is_stmt 0
+ 422 003a C878     		ldrb	r0, [r1, #3]
+ 423              	.LVL20:
+ 424 003c 0223     		mov	r3, #2
+ 425 003e 0343     		orr	r3, r0
+ 426 0040 DDB2     		uxtb	r5, r3
+ 427 0042 CD70     		strb	r5, [r1, #3]
+  64:../Sources/I2C.c ****  i2c_write_byte(Data);
+  65:../Sources/I2C.c ****  i2c_Wait();
+ 428              		.loc 1 65 0 is_stmt 1
+ 429 0044 0224     		mov	r4, #2
+  64:../Sources/I2C.c ****  i2c_write_byte(Data);
+ 430              		.loc 1 64 0
+ 431 0046 0A71     		strb	r2, [r1, #4]
+ 432              	.LVL21:
+ 433              	.L43:
+ 434              		.loc 1 65 0
+ 435 0048 C878     		ldrb	r0, [r1, #3]
+ 436 004a 0C4A     		ldr	r2, .L60
+ 437 004c 0442     		tst	r4, r0
+ 438 004e FBD0     		beq	.L43
+ 439              		.loc 1 65 0 is_stmt 0
+ 440 0050 D178     		ldrb	r1, [r2, #3]
+ 441              	.LVL22:
+ 442 0052 0223     		mov	r3, #2
+ 443 0054 0B43     		orr	r3, r1
+ 444 0056 DDB2     		uxtb	r5, r3
+ 445 0058 D570     		strb	r5, [r2, #3]
+  66:../Sources/I2C.c ****  i2c_Stop();
+ 446              		.loc 1 66 0 is_stmt 1
+ 447 005a 9478     		ldrb	r4, [r2, #2]
+ 448 005c 2020     		mov	r0, #32
+ 449 005e 8443     		bic	r4, r0
+ 450 0060 9470     		strb	r4, [r2, #2]
+ 451 0062 9378     		ldrb	r3, [r2, #2]
+ 452 0064 1021     		mov	r1, #16
+ 453 0066 8B43     		bic	r3, r1
+ 454 0068 9370     		strb	r3, [r2, #2]
+ 455              	.LVL23:
+ 456              	.LBB24:
+ 457              	.LBB25:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 458              		.loc 1 26 0
+ 459              	@ 26 "../Sources/I2C.c" 1
+ 460 006a C046     		nop
+ 461              	@ 0 "" 2
+ 462              	.LVL24:
+ 463              		.code	16
+ 464 006c 3022     		mov	r2, #48
+ 465              	.LVL25:
+ 466              	.L44:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 467              		.loc 1 26 0 is_stmt 0
+ 468              	@ 26 "../Sources/I2C.c" 1
+ 469 006e C046     		nop
+ 470              	@ 0 "" 2
+ 471              	@ 26 "../Sources/I2C.c" 1
+ 472 0070 C046     		nop
+ 473              	@ 0 "" 2
+ 474              		.code	16
+ 475 0072 023A     		sub	r2, r2, #2
+  25:../Sources/I2C.c ****  for(n=1;n<50;n++) {
+ 476              		.loc 1 25 0 is_stmt 1
+ 477 0074 002A     		cmp	r2, #0
+ 478 0076 FAD1     		bne	.L44
+ 479              	.LBE25:
+ 480              	.LBE24:
+  67:../Sources/I2C.c ****  Pause();
+  68:../Sources/I2C.c **** }
+ 481              		.loc 1 68 0
+ 482              		@ sp needed for prologue
+ 483 0078 30BD     		pop	{r4, r5, pc}
+ 484              	.L61:
+ 485 007a C046     		.align	2
+ 486              	.L60:
+ 487 007c 00600640 		.word	1074159616
+ 488              		.cfi_endproc
+ 489              	.LFE4:
+ 491              		.section	.text.I2CReadMultiRegisters,"ax",%progbits
+ 492              		.align	2
+ 493              		.global	I2CReadMultiRegisters
+ 494              		.code	16
+ 495              		.thumb_func
+ 497              	I2CReadMultiRegisters:
+ 498              	.LFB5:
+  69:../Sources/I2C.c **** /* Le "N" registradores internos do slave I2C
+  70:../Sources/I2C.c **** * SlaveID: endereco do slave
+  71:../Sources/I2C.c **** * RegisterAddress: endereco do primeiro registrador interno do slave a ser lido
+  72:../Sources/I2C.c **** * n: Numero de registradores a serem lidos em sequencia
+  73:../Sources/I2C.c **** * Resultado armazenado no ponteiro *r
+  74:../Sources/I2C.c **** */
+  75:../Sources/I2C.c **** void I2CReadMultiRegisters(char SlaveID, char RegisterAddress, char n, char * r)
+  76:../Sources/I2C.c **** {
+ 499              		.loc 1 76 0
+ 500              		.cfi_startproc
+ 501              	.LVL26:
+ 502 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 503              	.LCFI3:
+ 504              		.cfi_def_cfa_offset 20
+ 505              		.cfi_offset 4, -20
+ 506              		.cfi_offset 5, -16
+ 507              		.cfi_offset 6, -12
+ 508              		.cfi_offset 7, -8
+ 509              		.cfi_offset 14, -4
+ 510              	.LBB26:
+ 511              	.LBB27:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 512              		.loc 1 20 0
+ 513 0002 3F4F     		ldr	r7, .L101
+ 514 0004 1025     		mov	r5, #16
+ 515 0006 BE78     		ldrb	r6, [r7, #2]
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 516              		.loc 1 18 0
+ 517 0008 4000     		lsl	r0, r0, #1
+ 518              	.LVL27:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 519              		.loc 1 20 0
+ 520 000a 3543     		orr	r5, r6
+ 521 000c BD70     		strb	r5, [r7, #2]
+ 522 000e BE78     		ldrb	r6, [r7, #2]
+ 523 0010 2025     		mov	r5, #32
+ 524 0012 3543     		orr	r5, r6
+  18:../Sources/I2C.c ****  SlaveID = SlaveID << 1;
+ 525              		.loc 1 18 0
+ 526 0014 C4B2     		uxtb	r4, r0
+ 527              	.LVL28:
+  20:../Sources/I2C.c ****  i2c_Start();
+ 528              		.loc 1 20 0
+ 529 0016 BD70     		strb	r5, [r7, #2]
+ 530              	.LBE27:
+ 531              	.LBE26:
+  77:../Sources/I2C.c ****  char i;
+  78:../Sources/I2C.c ****  IIC_StartTransmission(SlaveID,MWSR);
+  79:../Sources/I2C.c ****  i2c_Wait();
+ 532              		.loc 1 79 0
+ 533 0018 0226     		mov	r6, #2
+ 534              	.LBB29:
+ 535              	.LBB28:
+  21:../Sources/I2C.c ****  i2c_write_byte(SlaveID);
+ 536              		.loc 1 21 0
+ 537 001a 3C71     		strb	r4, [r7, #4]
+ 538              	.L63:
+ 539              	.LBE28:
+ 540              	.LBE29:
+ 541              		.loc 1 79 0
+ 542 001c FC78     		ldrb	r4, [r7, #3]
+ 543 001e 384D     		ldr	r5, .L101
+ 544 0020 2642     		tst	r6, r4
+ 545 0022 FBD0     		beq	.L63
+ 546              		.loc 1 79 0 is_stmt 0
+ 547 0024 EF78     		ldrb	r7, [r5, #3]
+ 548 0026 0226     		mov	r6, #2
+ 549 0028 3E43     		orr	r6, r7
+ 550 002a F4B2     		uxtb	r4, r6
+ 551 002c EC70     		strb	r4, [r5, #3]
+  80:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+  81:../Sources/I2C.c ****  i2c_Wait();
+ 552              		.loc 1 81 0 is_stmt 1
+ 553 002e 0227     		mov	r7, #2
+  80:../Sources/I2C.c ****  i2c_write_byte(RegisterAddress);
+ 554              		.loc 1 80 0
+ 555 0030 2971     		strb	r1, [r5, #4]
+ 556              	.LVL29:
+ 557              	.L64:
+ 558              		.loc 1 81 0
+ 559 0032 E978     		ldrb	r1, [r5, #3]
+ 560 0034 324E     		ldr	r6, .L101
+ 561 0036 0F42     		tst	r7, r1
+ 562 0038 FBD0     		beq	.L64
+ 563              		.loc 1 81 0 is_stmt 0
+ 564 003a F578     		ldrb	r5, [r6, #3]
+ 565              	.LVL30:
+ 566 003c 0224     		mov	r4, #2
+ 567 003e 2C43     		orr	r4, r5
+ 568 0040 E7B2     		uxtb	r7, r4
+ 569 0042 F770     		strb	r7, [r6, #3]
+  82:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 570              		.loc 1 82 0 is_stmt 1
+ 571 0044 B578     		ldrb	r5, [r6, #2]
+  83:../Sources/I2C.c ****  i2c_write_byte((SlaveID << 1) | 0x01);
+ 572              		.loc 1 83 0
+ 573 0046 0124     		mov	r4, #1
+  82:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 574              		.loc 1 82 0
+ 575 0048 0421     		mov	r1, #4
+ 576              		.loc 1 83 0
+ 577 004a 2043     		orr	r0, r4
+ 578              	.LVL31:
+  82:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 579              		.loc 1 82 0
+ 580 004c 2943     		orr	r1, r5
+ 581              		.loc 1 83 0
+ 582 004e C0B2     		uxtb	r0, r0
+  82:../Sources/I2C.c ****  i2c_RepeatedStart();
+ 583              		.loc 1 82 0
+ 584 0050 B170     		strb	r1, [r6, #2]
+  84:../Sources/I2C.c ****  i2c_Wait();
+ 585              		.loc 1 84 0
+ 586 0052 0227     		mov	r7, #2
+  83:../Sources/I2C.c ****  i2c_write_byte((SlaveID << 1) | 0x01);
+ 587              		.loc 1 83 0
+ 588 0054 3071     		strb	r0, [r6, #4]
+ 589              	.L65:
+ 590              		.loc 1 84 0
+ 591 0056 F578     		ldrb	r5, [r6, #3]
+ 592 0058 2948     		ldr	r0, .L101
+ 593 005a 2F42     		tst	r7, r5
+ 594 005c FBD0     		beq	.L65
+ 595              		.loc 1 84 0 is_stmt 0
+ 596 005e C678     		ldrb	r6, [r0, #3]
+ 597              	.LVL32:
+ 598 0060 0221     		mov	r1, #2
+ 599 0062 3143     		orr	r1, r6
+ 600 0064 CCB2     		uxtb	r4, r1
+ 601 0066 C470     		strb	r4, [r0, #3]
+  85:../Sources/I2C.c ****  i2c_EnterRxMode();
+ 602              		.loc 1 85 0 is_stmt 1
+ 603 0068 8778     		ldrb	r7, [r0, #2]
+ 604 006a 1025     		mov	r5, #16
+ 605 006c AF43     		bic	r7, r5
+ 606 006e 8770     		strb	r7, [r0, #2]
+  86:../Sources/I2C.c ****  i2c_EnableAck();
+ 607              		.loc 1 86 0
+ 608 0070 8678     		ldrb	r6, [r0, #2]
+ 609 0072 0821     		mov	r1, #8
+ 610 0074 8E43     		bic	r6, r1
+ 611 0076 8670     		strb	r6, [r0, #2]
+  87:../Sources/I2C.c ****  i = I2C0_D ; // Dummy read
+ 612              		.loc 1 87 0
+ 613 0078 0179     		ldrb	r1, [r0, #4]
+ 614              	.LVL33:
+  88:../Sources/I2C.c ****  i2c_Wait();
+ 615              		.loc 1 88 0
+ 616 007a 0227     		mov	r7, #2
+ 617              	.L66:
+ 618              		.loc 1 88 0 is_stmt 0
+ 619 007c C578     		ldrb	r5, [r0, #3]
+ 620 007e 204C     		ldr	r4, .L101
+ 621 0080 2F42     		tst	r7, r5
+ 622 0082 FBD0     		beq	.L66
+ 623              		.loc 1 88 0
+ 624 0084 E078     		ldrb	r0, [r4, #3]
+ 625              	.LVL34:
+ 626 0086 0226     		mov	r6, #2
+ 627 0088 0643     		orr	r6, r0
+ 628 008a F1B2     		uxtb	r1, r6
+  89:../Sources/I2C.c ****  for(i=0;i<n-2;i++) // le n-1 bytes
+ 629              		.loc 1 89 0 is_stmt 1
+ 630 008c 023A     		sub	r2, r2, #2
+ 631              	.LVL35:
+  88:../Sources/I2C.c ****  i2c_Wait();
+ 632              		.loc 1 88 0
+ 633 008e E170     		strb	r1, [r4, #3]
+ 634              	.LVL36:
+ 635              		.loc 1 89 0
+ 636 0090 1E1C     		mov	r6, r3
+ 637 0092 002A     		cmp	r2, #0
+ 638 0094 10DD     		ble	.L67
+  90:../Sources/I2C.c ****  {
+  91:../Sources/I2C.c ****  *r = I2C0_D;
+  92:../Sources/I2C.c ****  r++;
+  93:../Sources/I2C.c ****  i2c_Wait();
+ 639              		.loc 1 93 0
+ 640 0096 0225     		mov	r5, #2
+ 641 0098 0227     		mov	r7, #2
+ 642              	.LVL37:
+ 643              	.L69:
+  91:../Sources/I2C.c ****  *r = I2C0_D;
+ 644              		.loc 1 91 0
+ 645 009a 2079     		ldrb	r0, [r4, #4]
+ 646 009c 3070     		strb	r0, [r6]
+  92:../Sources/I2C.c ****  r++;
+ 647              		.loc 1 92 0
+ 648 009e 0136     		add	r6, r6, #1
+ 649              	.LVL38:
+ 650              	.L68:
+ 651              		.loc 1 93 0
+ 652 00a0 E178     		ldrb	r1, [r4, #3]
+ 653 00a2 1748     		ldr	r0, .L101
+ 654 00a4 0D42     		tst	r5, r1
+ 655 00a6 FBD0     		beq	.L68
+ 656              		.loc 1 93 0 is_stmt 0
+ 657 00a8 C178     		ldrb	r1, [r0, #3]
+ 658 00aa 3943     		orr	r1, r7
+ 659 00ac C9B2     		uxtb	r1, r1
+ 660 00ae C170     		strb	r1, [r0, #3]
+ 661              	.LVL39:
+  75:../Sources/I2C.c **** void I2CReadMultiRegisters(char SlaveID, char RegisterAddress, char n, char * r)
+ 662              		.loc 1 75 0 is_stmt 1
+ 663 00b0 F01A     		sub	r0, r6, r3
+  89:../Sources/I2C.c ****  for(i=0;i<n-2;i++) // le n-1 bytes
+ 664              		.loc 1 89 0
+ 665 00b2 C1B2     		uxtb	r1, r0
+ 666 00b4 9142     		cmp	r1, r2
+ 667 00b6 F0DB     		blt	.L69
+ 668              	.LVL40:
+ 669              	.L67:
+  94:../Sources/I2C.c ****  }
+  95:../Sources/I2C.c ****  i2c_DisableAck(); // Desabilita ACK por ser o penultimo byte a ler
+ 670              		.loc 1 95 0
+ 671 00b8 114C     		ldr	r4, .L101
+ 672 00ba 0823     		mov	r3, #8
+ 673 00bc A278     		ldrb	r2, [r4, #2]
+  96:../Sources/I2C.c ****  *r = I2C0_D; // Le penultimo byte
+  97:../Sources/I2C.c ****  r++;
+  98:../Sources/I2C.c ****  i2c_Wait();
+ 674              		.loc 1 98 0
+ 675 00be 0227     		mov	r7, #2
+  95:../Sources/I2C.c ****  i2c_DisableAck(); // Desabilita ACK por ser o penultimo byte a ler
+ 676              		.loc 1 95 0
+ 677 00c0 1343     		orr	r3, r2
+ 678 00c2 A370     		strb	r3, [r4, #2]
+  96:../Sources/I2C.c ****  *r = I2C0_D; // Le penultimo byte
+ 679              		.loc 1 96 0
+ 680 00c4 2579     		ldrb	r5, [r4, #4]
+ 681 00c6 3570     		strb	r5, [r6]
+ 682              	.LVL41:
+ 683              	.L70:
+ 684              		.loc 1 98 0
+ 685 00c8 E178     		ldrb	r1, [r4, #3]
+ 686 00ca 0D48     		ldr	r0, .L101
+ 687 00cc 0F42     		tst	r7, r1
+ 688 00ce FBD0     		beq	.L70
+ 689              		.loc 1 98 0 is_stmt 0
+ 690 00d0 C478     		ldrb	r4, [r0, #3]
+ 691              	.LVL42:
+ 692 00d2 0222     		mov	r2, #2
+ 693 00d4 2243     		orr	r2, r4
+ 694 00d6 D3B2     		uxtb	r3, r2
+ 695 00d8 C370     		strb	r3, [r0, #3]
+  99:../Sources/I2C.c ****  i2c_Stop(); // Envia STOP por ser o ultimo byte
+ 696              		.loc 1 99 0 is_stmt 1
+ 697 00da 8578     		ldrb	r5, [r0, #2]
+ 698 00dc 2027     		mov	r7, #32
+ 699 00de BD43     		bic	r5, r7
+ 700 00e0 8570     		strb	r5, [r0, #2]
+ 701 00e2 8478     		ldrb	r4, [r0, #2]
+ 702 00e4 1021     		mov	r1, #16
+ 703 00e6 8C43     		bic	r4, r1
+ 704 00e8 8470     		strb	r4, [r0, #2]
+ 100:../Sources/I2C.c ****  *r = I2C0_D; // Le ultimo byte
+ 705              		.loc 1 100 0
+ 706 00ea 0079     		ldrb	r0, [r0, #4]
+ 707              	.LVL43:
+ 708 00ec 7070     		strb	r0, [r6, #1]
+ 709              	.LVL44:
+ 710              	.LBB30:
+ 711              	.LBB31:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 712              		.loc 1 26 0
+ 713              	@ 26 "../Sources/I2C.c" 1
+ 714 00ee C046     		nop
+ 715              	@ 0 "" 2
+ 716              	.LVL45:
+ 717              		.code	16
+ 718 00f0 3026     		mov	r6, #48
+ 719              	.LVL46:
+ 720              	.L71:
+  26:../Sources/I2C.c **** 	 __asm("nop");
+ 721              		.loc 1 26 0 is_stmt 0
+ 722              	@ 26 "../Sources/I2C.c" 1
+ 723 00f2 C046     		nop
+ 724              	@ 0 "" 2
+ 725              	@ 26 "../Sources/I2C.c" 1
+ 726 00f4 C046     		nop
+ 727              	@ 0 "" 2
+ 728              		.code	16
+ 729 00f6 023E     		sub	r6, r6, #2
+  25:../Sources/I2C.c ****  for(n=1;n<50;n++) {
+ 730              		.loc 1 25 0 is_stmt 1
+ 731 00f8 002E     		cmp	r6, #0
+ 732 00fa FAD1     		bne	.L71
+ 733              	.LBE31:
+ 734              	.LBE30:
+ 101:../Sources/I2C.c ****  Pause();
+ 102:../Sources/I2C.c **** }
+ 735              		.loc 1 102 0
+ 736              		@ sp needed for prologue
+ 737 00fc F0BD     		pop	{r4, r5, r6, r7, pc}
+ 738              	.L102:
+ 739 00fe C046     		.align	2
+ 740              	.L101:
+ 741 0100 00600640 		.word	1074159616
+ 742              		.cfi_endproc
+ 743              	.LFE5:
+ 745              		.text
+ 746              	.Letext0:
+ 747              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 748              		.file 3 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/MKL25Z4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 I2C.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:18     .text.Init_I2C:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:23     .text.Init_I2C:00000000 Init_I2C
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:65     .text.Init_I2C:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:74     .text.IIC_StartTransmission:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:79     .text.IIC_StartTransmission:00000000 IIC_StartTransmission
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:120    .text.IIC_StartTransmission:00000024 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:125    .text.Pause:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:130    .text.Pause:00000000 Pause
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:166    .text.I2CReadRegister:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:171    .text.I2CReadRegister:00000000 I2CReadRegister
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:346    .text.I2CReadRegister:000000b4 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:351    .text.I2CWriteRegister:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:356    .text.I2CWriteRegister:00000000 I2CWriteRegister
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:487    .text.I2CWriteRegister:0000007c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:492    .text.I2CReadMultiRegisters:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:497    .text.I2CReadMultiRegisters:00000000 I2CReadMultiRegisters
+C:\Users\BENTR_~1\AppData\Local\Temp\ccmAc8kZ.s:741    .text.I2CReadMultiRegisters:00000100 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS
