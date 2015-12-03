@@ -126,9 +126,6 @@ int main(void)
 		Init_Accelerometer();
 	#endif
 			
-	while(1){
-		TFC_SetServo(0,0.5f);
-	}
 	while (1)
 	{
 		loop_begin = TFC_Ticker[5];
@@ -275,9 +272,6 @@ void lineFollowingMode(carState_s* carState)
 		}
 		totalIntensity = getTotalIntensity(LineScanImage0);
 		TFC_SetLineScanExposureTime(calculateNewExposure(totalIntensity, TARGET_TOTAL_INTENSITY));
-#ifdef CAMERA_FEED
-		
-#endif
 	}
 
 	if (carState->lineDetectionState == LINE_FOUND || carState->lineDetectionState == LINE_TEMPORARILY_LOST)
@@ -303,19 +297,10 @@ void lineFollowingMode(carState_s* carState)
 		#endif
 
 		if (carState->UARTSpeedState == DUAL_SPEED_NO_UART)
-		{//50000=1sec
-#ifdef TESTING
-			if(TFC_Ticker[5]>50000){
-				TFC_Ticker[5]=0;
-				i+=0.1f;
-				TFC_SetMotorPWM(i,i);
-			}
-#endif
-#ifndef TESTING
-			TFC_SetMotorPWM( //(max_speed_percent/100)
+		{
+			TFC_SetMotorPWM(
 					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[0], speedR, isANewmeasurementAvailable(CHANNEL_0), CHANNEL_0),
 					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[1], speedL, isANewmeasurementAvailable(CHANNEL_1), CHANNEL_1));
-#endif
 		}
 		else if (carState->UARTSpeedState == SINGLE_SPEED_SINGLE_UART)
 		{

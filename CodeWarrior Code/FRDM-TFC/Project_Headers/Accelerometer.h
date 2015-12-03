@@ -5,7 +5,7 @@
 #include "TFC\TFC.h"
 
 void Init_Accelerometer();
-void zeroAccelerometers();
+void zeroAccelerometer();
 float getXAcc();
 float getYAcc();
 float getZAcc();

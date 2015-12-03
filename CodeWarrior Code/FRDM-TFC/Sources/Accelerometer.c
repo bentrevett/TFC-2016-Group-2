@@ -83,7 +83,7 @@ float getZAcc()
 	buf[1] = I2CReadRegister(MMA8451_ADDRESS, MMA8451_OUT_Z_LSB);
 	return ((((((int8_t)buf[0])*256 + (int8_t)buf[1]) / 4) / 4096.0f) * 9.81f) - zBias;
 }
-
+/*
 int16_t getRawXAcc()
 {
 	buf[0] = I2CReadRegister(MMA8451_ADDRESS, MMA8451_OUT_X_MSB);
@@ -109,4 +109,4 @@ uint8_t getID()
 {
 	return I2CReadRegister(MMA8451_ADDRESS, WHO_AM_I);
 }
-
+*/
