@@ -58,7 +58,7 @@ Switch_1	Stop Line reset
 #define CHANNEL_1 1
 #define PUSH_BUTTON_1 1
 #define PUSH_BUTTON_2 2
-
+//#define TESTING
 
 
 #define BLUETOOTH_FLAG	-128
@@ -85,13 +85,14 @@ float speedL = 0;
 float speedR = 0;
 static float servoValue = 0;
 extern int32_t newExposure;
-float max_speed_percent = 50;
+float max_speed_percent = 30;
 uint8_t received_byte1 = 0; //received byte from bluetooth 0 to 255
 uint8_t received_byte2 = 0;
 uint8_t count = 0; //bluetooth count
 static uint8_t stoplineJustDetected = 0;
 float friction_correct = 0;
-
+float i =0; // for testing pwm speed for torque control
+uint8_t camera_output[128];
 #ifdef S_MODE_ENABLE
 uint8_t s_mode_enable = 1;
 #else
@@ -122,14 +123,12 @@ int main(void)
 	
 	#ifdef ACCELEROMETER_ENABLE
 		Init_I2C();
-		Init_MMA8451Q();
+		Init_Accelerometer();
 	#endif
-		
-		GPIOB_PSOR |= (1<<8);
-				GPIOB_PSOR |= (1<<9);
-				GPIOB_PSOR |= (1<<10);
-				GPIOB_PSOR |= (1<<11);		
-		
+			
+	while(1){
+		TFC_SetServo(0,0.5f);
+	}
 	while (1)
 	{
 		loop_begin = TFC_Ticker[5];
@@ -229,7 +228,7 @@ void lineFollowingMode(carState_s* carState)
 			TFC_Ticker[8]=0;
 			//accel_z=getZAcc();
 			if(getZAcc<-1){
-				incline_speed=max_speed_percent-25;
+				incline_speed=max_speed_percent+10;
 			}
 			else{
 				incline_speed=max_speed_percent;
@@ -239,6 +238,7 @@ void lineFollowingMode(carState_s* carState)
 	#ifndef ACCELEROMETER_ENABLE
 		incline_speed=max_speed_percent;
 	#endif
+		
 	if (carState->lineScanState == LINESCAN_IMAGE_READY)
 	{
 		steeringControlUpdate = LINESCAN_IMAGE_READY;	
@@ -253,15 +253,14 @@ void lineFollowingMode(carState_s* carState)
 		TFC_Ticker[0] = 0;
 		servoValue = getDesiredServoValue(carState->raceLineCenter, 0, &steeringControlUpdate);
 		
-		//to make up for vehicle not turning left enough
-		if(servoValue>0){
-					servoValue+=servoValue+0.015f;
-					if(servoValue>STEERING_LIMIT_UPPER)
+		if(servoValue>0){ //to offset not steering left enough
+				servoValue+=servoValue*0.3f; //
+				if(servoValue>STEERING_LIMIT_UPPER)
 					{
-						servoValue=STEERING_LIMIT_UPPER;
+					servoValue=STEERING_LIMIT_UPPER;
 					}
-				
-				}
+			}
+	
 		
 		TFC_SetServo(0, servoValue - SERVO_MOUNT_DIRECTION*STEERING_OFFSET);
 		servoValue = servoValueAverage(servoValue);		// Low-pass of servoValue to be used for the radius mapping
@@ -276,6 +275,9 @@ void lineFollowingMode(carState_s* carState)
 		}
 		totalIntensity = getTotalIntensity(LineScanImage0);
 		TFC_SetLineScanExposureTime(calculateNewExposure(totalIntensity, TARGET_TOTAL_INTENSITY));
+#ifdef CAMERA_FEED
+		
+#endif
 	}
 
 	if (carState->lineDetectionState == LINE_FOUND || carState->lineDetectionState == LINE_TEMPORARILY_LOST)
@@ -301,11 +303,19 @@ void lineFollowingMode(carState_s* carState)
 		#endif
 
 		if (carState->UARTSpeedState == DUAL_SPEED_NO_UART)
-		{
-			
+		{//50000=1sec
+#ifdef TESTING
+			if(TFC_Ticker[5]>50000){
+				TFC_Ticker[5]=0;
+				i+=0.1f;
+				TFC_SetMotorPWM(i,i);
+			}
+#endif
+#ifndef TESTING
 			TFC_SetMotorPWM( //(max_speed_percent/100)
 					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[0], speedR, isANewmeasurementAvailable(CHANNEL_0), CHANNEL_0),
 					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[1], speedL, isANewmeasurementAvailable(CHANNEL_1), CHANNEL_1));
+#endif
 		}
 		else if (carState->UARTSpeedState == SINGLE_SPEED_SINGLE_UART)
 		{
@@ -445,7 +455,7 @@ void TFC_Init(carState_s* carState)
 	carState->UARTSpeedState = DUAL_SPEED_NO_UART;
 	#endif
 	
-	TFC_SetServo(0, -SERVO_MOUNT_DIRECTION*STEERING_OFFSET);
+	TFC_SetServo(0, 0);
 }
 
 void TFC_Task()
@@ -601,6 +611,7 @@ void telemetrySendData()
 	uart_putchar(UART2_BASE_PTR, (signed char)loop_time);
 	// 13 - Line Distance
 	uart_putchar(UART2_BASE_PTR, (signed char)carState.lineDistance);
+	
 }
 
 void telemetryReadData(){

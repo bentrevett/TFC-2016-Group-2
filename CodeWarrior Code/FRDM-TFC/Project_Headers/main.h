@@ -23,7 +23,7 @@
 #include "EdgeDetection.h"
 #include "ServoMapping.h"
 #include "typedefs_structs\carState_s.h"
-#include "MMA8451Q.h"
+#include "Accelerometer.h"
 //#include "Telemetry.h"
 
 void TFC_Init(carState_s* carState);

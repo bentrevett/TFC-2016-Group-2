@@ -43,8 +43,8 @@ extern uint8_t stopline_enable;
 
 #define INTEGRAL_LIMIT 		   1.0f		// Integral anti-windup
 #define STEERING_LIMIT_UPPER   0.43f 	// Right Turn Limit
-#define STEERING_LIMIT_LOWER   -0.3f	// Left Turn Limit
-#define STEERING_OFFSET		   0.05f  // Servo center point offset, positive to turn left
+#define STEERING_LIMIT_LOWER   -0.3f	// Left Turn Limit  
+#define STEERING_OFFSET		   0  // Servo center point offset, positive to turn left
 #define SERVO_MOUNT_DIRECTION -1		// Changes the direction of the servo depending how the servo is mounted
 #define SERVO_LOWPASS_COEFF	   0.800f	// Servo Lowpass Coeff - Affects only the speed control and active diff
 ///////////////////////////////////////////////////////////////////////////////////////////////////

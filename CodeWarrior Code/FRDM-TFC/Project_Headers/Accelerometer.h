@@ -4,7 +4,7 @@
 #include "I2C.h"
 #include "TFC\TFC.h"
 
-void Init_MMA8451Q();
+void Init_Accelerometer();
 void zeroAccelerometers();
 float getXAcc();
 float getYAcc();

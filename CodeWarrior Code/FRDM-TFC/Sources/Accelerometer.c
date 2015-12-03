@@ -1,11 +1,11 @@
 /*
- * MMA8451.c
+ * Accelerometer.c
  *
  *  Created on: Nov 18, 2015
  *      Author: bentr_000
  */
 
-#include "MMA8451Q.h"
+#include "Accelerometer.h"
 
 #define MMA8451_ADDRESS 0x1d
 
@@ -34,15 +34,15 @@
 static uint8_t buf[16];
 static float xBias, yBias, zBias;
 
-void Init_MMA8451Q()
+void Init_Accelerometer()
 {
 	I2CWriteRegister(0x1d, MMA8451_CTRL_REG_2, 0x00 | MMA8641_HIGH_RES);
 	I2CWriteRegister(0x1d, MMA8451_CTRL_REG_1, 0x00 | MMA8451_50HZ_ODR_BIT_MASK | MMA8451_ACTIVE_BIT_MASK | MMA8451_LNOISE_BIT_MASK);
 	TERMINAL_PRINTF("MMA8451 address: %x", getID());
-	zeroAccelerometers();
+	zeroAccelerometer();
 }
 
-void zeroAccelerometers()
+void zeroAccelerometer()
 {
 	float xAccSum = 0;
 	float yAccSum = 0;

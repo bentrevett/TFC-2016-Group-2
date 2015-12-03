@@ -407,14 +407,14 @@
  356              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
 DEFINED SYMBOLS
                             *ABS*:00000000 ServoMapping.c
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:25     .text.getRadiusRoot:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:30     .text.getRadiusRoot:00000000 getRadiusRoot
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:117    .text.getRadiusRoot:00000068 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:127    .text.getRadius:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:132    .text.getRadius:00000000 getRadius
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:235    .text.getRadius:00000074 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:252    .data.mapArray:00000000 mapArray
-C:\Users\BENTR_~1\AppData\Local\Temp\cckrpdx4.s:248    .data.mapArray:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:25     .text.getRadiusRoot:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:30     .text.getRadiusRoot:00000000 getRadiusRoot
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:117    .text.getRadiusRoot:00000068 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:127    .text.getRadius:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:132    .text.getRadius:00000000 getRadius
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:235    .text.getRadius:00000074 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:252    .data.mapArray:00000000 mapArray
+C:\Users\BENTR_~1\AppData\Local\Temp\ccd4iRb7.s:248    .data.mapArray:00000000 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

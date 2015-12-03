@@ -983,46 +983,46 @@
  796              		.text
  797              	.Letext0:
  798              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
- 799              		.file 3 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/TFC\\TFC_Queue.h"
- 800              		.file 4 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/TFC\\TFC_ARM_SysTick.h"
- 801              		.file 5 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/TFC\\TFC_UART.h"
+ 799              		.file 3 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
+ 800              		.file 4 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
+ 801              		.file 5 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
 DEFINED SYMBOLS
                             *ABS*:00000000 MMA8451Q.c
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:23     .text.zeroAccelerometers:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:28     .text.zeroAccelerometers:00000000 zeroAccelerometers
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:302    .text.zeroAccelerometers:00000148 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:313    .text.Init_MMA8451Q:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:318    .text.Init_MMA8451Q:00000000 Init_MMA8451Q
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:370    .text.Init_MMA8451Q:00000030 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:376    .text.getXAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:381    .text.getXAcc:00000000 getXAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:438    .text.getXAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:445    .text.getYAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:450    .text.getYAcc:00000000 getYAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:507    .text.getYAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:514    .text.getZAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:519    .text.getZAcc:00000000 getZAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:576    .text.getZAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:583    .text.getRawXAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:588    .text.getRawXAcc:00000000 getRawXAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:630    .text.getRawXAcc:0000002c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:635    .text.getRawYAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:640    .text.getRawYAcc:00000000 getRawYAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:682    .text.getRawYAcc:0000002c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:687    .text.getRawZAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:692    .text.getRawZAcc:00000000 getRawZAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:734    .text.getRawZAcc:0000002c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:739    .text.getID:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:744    .text.getID:00000000 getID
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:765    .bss.xBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:769    .bss.xBias:00000000 xBias
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:772    .bss.yBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:776    .bss.yBias:00000000 yBias
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:779    .rodata.str1.4:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:783    .bss.zBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:787    .bss.zBias:00000000 zBias
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:790    .bss.buf:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccCMNHq1.s:794    .bss.buf:00000000 buf
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:23     .text.zeroAccelerometers:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:28     .text.zeroAccelerometers:00000000 zeroAccelerometers
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:302    .text.zeroAccelerometers:00000148 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:313    .text.Init_MMA8451Q:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:318    .text.Init_MMA8451Q:00000000 Init_MMA8451Q
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:370    .text.Init_MMA8451Q:00000030 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:376    .text.getXAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:381    .text.getXAcc:00000000 getXAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:438    .text.getXAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:445    .text.getYAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:450    .text.getYAcc:00000000 getYAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:507    .text.getYAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:514    .text.getZAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:519    .text.getZAcc:00000000 getZAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:576    .text.getZAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:583    .text.getRawXAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:588    .text.getRawXAcc:00000000 getRawXAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:630    .text.getRawXAcc:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:635    .text.getRawYAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:640    .text.getRawYAcc:00000000 getRawYAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:682    .text.getRawYAcc:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:687    .text.getRawZAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:692    .text.getRawZAcc:00000000 getRawZAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:734    .text.getRawZAcc:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:739    .text.getID:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:744    .text.getID:00000000 getID
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:765    .bss.xBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:769    .bss.xBias:00000000 xBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:772    .bss.yBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:776    .bss.yBias:00000000 yBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:779    .rodata.str1.4:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:783    .bss.zBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:787    .bss.zBias:00000000 zBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:790    .bss.buf:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccQ1YQyJ.s:794    .bss.buf:00000000 buf
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

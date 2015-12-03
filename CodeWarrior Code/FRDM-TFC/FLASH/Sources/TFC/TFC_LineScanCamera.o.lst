@@ -304,12 +304,12 @@
  232              		.text
  233              	.Letext0:
  234              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
- 235              		.file 3 "C:/Users/bentr_000/Desktop/FRDM-TFC/Project_Headers/MKL25Z4.h"
+ 235              		.file 3 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
 DEFINED SYMBOLS
                             *ABS*:00000000 TFC_LineScanCamera.c
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:18     .text.TFC_InitLineScanCamera:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:23     .text.TFC_InitLineScanCamera:00000000 TFC_InitLineScanCamera
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:113    .text.TFC_InitLineScanCamera:0000005c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:18     .text.TFC_InitLineScanCamera:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:23     .text.TFC_InitLineScanCamera:00000000 TFC_InitLineScanCamera
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:113    .text.TFC_InitLineScanCamera:0000005c $d
                             *COM*:00000001 LineScanWorkingBuffer
                             *COM*:00000200 LineScanImage1Buffer
                             *COM*:00000004 LineScanImage0WorkingBuffer
@@ -317,14 +317,14 @@ C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:113    .text.TFC_InitLineScanCam
                             *COM*:00000004 LineScanImage1WorkingBuffer
                             *COM*:00000004 LineScanImage0
                             *COM*:00000004 LineScanImage1
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:134    .text.TFC_SetLineScanExposureTime:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:139    .text.TFC_SetLineScanExposureTime:00000000 TFC_SetLineScanExposureTime
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:171    .text.TFC_SetLineScanExposureTime:00000020 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:178    .text.TFC_getLineScanExposureTime:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:183    .text.TFC_getLineScanExposureTime:00000000 TFC_getLineScanExposureTime
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:213    .text.TFC_getLineScanExposureTime:00000020 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:230    .bss.LineScanImageReady:00000000 LineScanImageReady
-C:\Users\BENTR_~1\AppData\Local\Temp\ccGiqJ9c.s:231    .bss.LineScanImageReady:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:134    .text.TFC_SetLineScanExposureTime:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:139    .text.TFC_SetLineScanExposureTime:00000000 TFC_SetLineScanExposureTime
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:171    .text.TFC_SetLineScanExposureTime:00000020 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:178    .text.TFC_getLineScanExposureTime:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:183    .text.TFC_getLineScanExposureTime:00000000 TFC_getLineScanExposureTime
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:213    .text.TFC_getLineScanExposureTime:00000020 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:230    .bss.LineScanImageReady:00000000 LineScanImageReady
+C:\Users\BENTR_~1\AppData\Local\Temp\ccKmT2Hg.s:231    .bss.LineScanImageReady:00000000 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

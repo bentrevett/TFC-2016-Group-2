@@ -6,12 +6,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS_QUOTED += \
+"../Sources/Accelerometer.c" \
 "../Sources/ActiveDifferential.c" \
 "../Sources/AutoExposure.c" \
 "../Sources/EdgeDetection.c" \
 "../Sources/I2C.c" \
 "../Sources/LineDetectionDouble.c" \
-"../Sources/MMA8451Q.c" \
 "../Sources/Probability.c" \
 "../Sources/ServoMapping.c" \
 "../Sources/SpeedControl.c" \
@@ -21,12 +21,12 @@ C_SRCS_QUOTED += \
 "../Sources/main.c" \
 
 C_SRCS += \
+../Sources/Accelerometer.c \
 ../Sources/ActiveDifferential.c \
 ../Sources/AutoExposure.c \
 ../Sources/EdgeDetection.c \
 ../Sources/I2C.c \
 ../Sources/LineDetectionDouble.c \
-../Sources/MMA8451Q.c \
 ../Sources/Probability.c \
 ../Sources/ServoMapping.c \
 ../Sources/SpeedControl.c \
@@ -36,12 +36,12 @@ C_SRCS += \
 ../Sources/main.c \
 
 OBJS += \
+./Sources/Accelerometer.o \
 ./Sources/ActiveDifferential.o \
 ./Sources/AutoExposure.o \
 ./Sources/EdgeDetection.o \
 ./Sources/I2C.o \
 ./Sources/LineDetectionDouble.o \
-./Sources/MMA8451Q.o \
 ./Sources/Probability.o \
 ./Sources/ServoMapping.o \
 ./Sources/SpeedControl.o \
@@ -51,12 +51,12 @@ OBJS += \
 ./Sources/main.o \
 
 OBJS_QUOTED += \
+"./Sources/Accelerometer.o" \
 "./Sources/ActiveDifferential.o" \
 "./Sources/AutoExposure.o" \
 "./Sources/EdgeDetection.o" \
 "./Sources/I2C.o" \
 "./Sources/LineDetectionDouble.o" \
-"./Sources/MMA8451Q.o" \
 "./Sources/Probability.o" \
 "./Sources/ServoMapping.o" \
 "./Sources/SpeedControl.o" \
@@ -66,12 +66,12 @@ OBJS_QUOTED += \
 "./Sources/main.o" \
 
 C_DEPS += \
+./Sources/Accelerometer.d \
 ./Sources/ActiveDifferential.d \
 ./Sources/AutoExposure.d \
 ./Sources/EdgeDetection.d \
 ./Sources/I2C.d \
 ./Sources/LineDetectionDouble.d \
-./Sources/MMA8451Q.d \
 ./Sources/Probability.d \
 ./Sources/ServoMapping.d \
 ./Sources/SpeedControl.d \
@@ -81,12 +81,12 @@ C_DEPS += \
 ./Sources/main.d \
 
 OBJS_OS_FORMAT += \
+./Sources/Accelerometer.o \
 ./Sources/ActiveDifferential.o \
 ./Sources/AutoExposure.o \
 ./Sources/EdgeDetection.o \
 ./Sources/I2C.o \
 ./Sources/LineDetectionDouble.o \
-./Sources/MMA8451Q.o \
 ./Sources/Probability.o \
 ./Sources/ServoMapping.o \
 ./Sources/SpeedControl.o \
@@ -96,12 +96,12 @@ OBJS_OS_FORMAT += \
 ./Sources/main.o \
 
 C_DEPS_QUOTED += \
+"./Sources/Accelerometer.d" \
 "./Sources/ActiveDifferential.d" \
 "./Sources/AutoExposure.d" \
 "./Sources/EdgeDetection.d" \
 "./Sources/I2C.d" \
 "./Sources/LineDetectionDouble.d" \
-"./Sources/MMA8451Q.d" \
 "./Sources/Probability.d" \
 "./Sources/ServoMapping.d" \
 "./Sources/SpeedControl.d" \
@@ -112,9 +112,17 @@ C_DEPS_QUOTED += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Sources/ActiveDifferential.o: ../Sources/ActiveDifferential.c
+Sources/Accelerometer.o: ../Sources/Accelerometer.c
 	@echo 'Building file: $<'
 	@echo 'Executing target #1 $<'
+	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
+	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/Accelerometer.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/Accelerometer.o"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Sources/ActiveDifferential.o: ../Sources/ActiveDifferential.c
+	@echo 'Building file: $<'
+	@echo 'Executing target #2 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/ActiveDifferential.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/ActiveDifferential.o"
 	@echo 'Finished building: $<'
@@ -122,7 +130,7 @@ Sources/ActiveDifferential.o: ../Sources/ActiveDifferential.c
 
 Sources/AutoExposure.o: ../Sources/AutoExposure.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #2 $<'
+	@echo 'Executing target #3 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/AutoExposure.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/AutoExposure.o"
 	@echo 'Finished building: $<'
@@ -130,7 +138,7 @@ Sources/AutoExposure.o: ../Sources/AutoExposure.c
 
 Sources/EdgeDetection.o: ../Sources/EdgeDetection.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #3 $<'
+	@echo 'Executing target #4 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/EdgeDetection.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/EdgeDetection.o"
 	@echo 'Finished building: $<'
@@ -138,7 +146,7 @@ Sources/EdgeDetection.o: ../Sources/EdgeDetection.c
 
 Sources/I2C.o: ../Sources/I2C.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #4 $<'
+	@echo 'Executing target #5 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/I2C.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/I2C.o"
 	@echo 'Finished building: $<'
@@ -146,17 +154,9 @@ Sources/I2C.o: ../Sources/I2C.c
 
 Sources/LineDetectionDouble.o: ../Sources/LineDetectionDouble.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #5 $<'
-	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
-	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/LineDetectionDouble.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/LineDetectionDouble.o"
-	@echo 'Finished building: $<'
-	@echo ' '
-
-Sources/MMA8451Q.o: ../Sources/MMA8451Q.c
-	@echo 'Building file: $<'
 	@echo 'Executing target #6 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
-	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/MMA8451Q.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/MMA8451Q.o"
+	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/LineDetectionDouble.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/LineDetectionDouble.o"
 	@echo 'Finished building: $<'
 	@echo ' '
 
