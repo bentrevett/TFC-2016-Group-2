@@ -24,6 +24,7 @@
 #include "ServoMapping.h"
 #include "typedefs_structs\carState_s.h"
 #include "Accelerometer.h"
+#include "LCD.h"
 //#include "Telemetry.h"
 
 void TFC_Init(carState_s* carState);
@@ -43,6 +44,5 @@ float servoValueAverage(float servoValue);
 void BluetoothSetLED(uint8_t i);
 void BluetoothSetSpeed(uint8_t i);
 void telemetryReadData();
-
 
 #endif /* MAIN_H_ */

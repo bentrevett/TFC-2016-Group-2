@@ -364,15 +364,15 @@
  302              		.file 4 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
 DEFINED SYMBOLS
                             *ABS*:00000000 SteeringControl.c
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:27     .text.getDesiredServoValue:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:32     .text.getDesiredServoValue:00000000 getDesiredServoValue
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:260    .text.getDesiredServoValue:00000138 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:278    .bss.newPosition.5887:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:282    .bss.newPosition.5887:00000000 newPosition.5887
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:285    .bss.errorSum.5888:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:289    .bss.errorSum.5888:00000000 errorSum.5888
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:292    .bss.previousError.5889:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccXsX8KK.s:296    .bss.previousError.5889:00000000 previousError.5889
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:27     .text.getDesiredServoValue:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:32     .text.getDesiredServoValue:00000000 getDesiredServoValue
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:260    .text.getDesiredServoValue:00000138 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:278    .bss.newPosition.5887:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:282    .bss.newPosition.5887:00000000 newPosition.5887
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:285    .bss.errorSum.5888:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:289    .bss.errorSum.5888:00000000 errorSum.5888
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:292    .bss.previousError.5889:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc3ONT1I.s:296    .bss.previousError.5889:00000000 previousError.5889
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

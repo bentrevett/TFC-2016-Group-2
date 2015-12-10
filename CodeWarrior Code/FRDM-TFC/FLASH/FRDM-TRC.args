@@ -20,6 +20,7 @@
 "./Sources/ServoMapping.o"
 "./Sources/Probability.o"
 "./Sources/LineDetectionDouble.o"
+"./Sources/LCD.o"
 "./Sources/I2C.o"
 "./Sources/EdgeDetection.o"
 "./Sources/AutoExposure.o"

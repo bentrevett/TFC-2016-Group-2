@@ -120,12 +120,16 @@ uint32_t test_time  = 0;
 int main(void)
 {
 	TFC_Init(&carState);
+	while(TFC_Ticker[5]<=10000){
+	}
 	
 	#ifdef ACCELEROMETER_ENABLE
 		Init_I2C();
 		Init_Accelerometer();
 	#endif
-			
+
+	//LCDinit();
+
 	while (1)
 	{
 		loop_begin = TFC_Ticker[5];
@@ -219,6 +223,11 @@ void lineFollowingMode(carState_s* carState)
 		telemetryReadData();
 	}
 	#endif
+	
+	if(TFC_Ticker[5]>=50){ 
+		TFC_Ticker[5]=0;
+		LCDwriteState(carState); 				//gives feedback for car state by the LCD display
+	}
 	
 	#ifdef ACCELEROMETER_ENABLE
 		if(TFC_Ticker[8]>=1000){
@@ -421,7 +430,7 @@ void TFC_Init(carState_s* carState)
 		TFC_BluetoothModuleSetBaud(BLUETOOTH_BAUD);		// Need to manually power the AT pin on the module
 	#endif
 	
-	TFC_InitUARTs(SDA_SERIAL_BAUD, BLUETOOTH_BAUD);
+	TFC_InitUARTs(SDA_SERIAL_BAUD, 9600);
 	
 	#ifdef TERMINAL_ENABLED
 		TFC_InitTerminal();
@@ -722,5 +731,3 @@ float servoValueAverage(float servoValue)
 	previousServoValue = SERVO_LOWPASS_COEFF*previousServoValue + (1-SERVO_LOWPASS_COEFF)*servoValue;
 	return previousServoValue;
 }
-
-

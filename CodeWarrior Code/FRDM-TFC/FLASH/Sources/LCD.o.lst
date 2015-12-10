@@ -1,0 +1,3208 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"LCD.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LCDinit,"ax",%progbits
+  18              		.align	2
+  19              		.global	LCDinit
+  20              		.code	16
+  21              		.thumb_func
+  23              	LCDinit:
+  24              	.LFB0:
+  25              		.file 1 "../Sources/LCD.c"
+   1:../Sources/LCD.c **** /*
+   2:../Sources/LCD.c ****  * LCD.c
+   3:../Sources/LCD.c ****  *
+   4:../Sources/LCD.c ****  *  Created on: Dec 8, 2015
+   5:../Sources/LCD.c ****  *      Author: bentr_000
+   6:../Sources/LCD.c ****  */
+   7:../Sources/LCD.c **** 
+   8:../Sources/LCD.c **** #include "LCD.h"
+   9:../Sources/LCD.c **** #include "TFC\TFC.h"
+  10:../Sources/LCD.c **** 
+  11:../Sources/LCD.c **** void LCDinit(){
+  26              		.loc 1 11 0
+  27              		.cfi_startproc
+  28 0000 10B5     		push	{r4, lr}
+  29              	.LCFI0:
+  30              		.cfi_def_cfa_offset 8
+  31              		.cfi_offset 4, -8
+  32              		.cfi_offset 14, -4
+  12:../Sources/LCD.c **** 	
+  13:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'S');
+  33              		.loc 1 13 0
+  34 0002 134C     		ldr	r4, .L2
+  35 0004 5321     		mov	r1, #83
+  36 0006 201C     		mov	r0, r4
+  37 0008 FFF7FEFF 		bl	uart_putchar
+  38              	.LVL0:
+  14:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'B');
+  39              		.loc 1 14 0
+  40 000c 201C     		mov	r0, r4
+  41 000e 4221     		mov	r1, #66
+  42 0010 FFF7FEFF 		bl	uart_putchar
+  43              	.LVL1:
+  15:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '1');
+  44              		.loc 1 15 0
+  45 0014 201C     		mov	r0, r4
+  46 0016 3121     		mov	r1, #49
+  47 0018 FFF7FEFF 		bl	uart_putchar
+  48              	.LVL2:
+  16:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '1');
+  49              		.loc 1 16 0
+  50 001c 201C     		mov	r0, r4
+  51 001e 3121     		mov	r1, #49
+  52 0020 FFF7FEFF 		bl	uart_putchar
+  53              	.LVL3:
+  17:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '5');
+  54              		.loc 1 17 0
+  55 0024 201C     		mov	r0, r4
+  56 0026 3521     		mov	r1, #53
+  57 0028 FFF7FEFF 		bl	uart_putchar
+  58              	.LVL4:
+  18:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '2');
+  59              		.loc 1 18 0
+  60 002c 201C     		mov	r0, r4
+  61 002e 3221     		mov	r1, #50
+  62 0030 FFF7FEFF 		bl	uart_putchar
+  63              	.LVL5:
+  19:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '0');
+  64              		.loc 1 19 0
+  65 0034 201C     		mov	r0, r4
+  66 0036 3021     		mov	r1, #48
+  67 0038 FFF7FEFF 		bl	uart_putchar
+  68              	.LVL6:
+  20:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, '0');
+  69              		.loc 1 20 0
+  70 003c 201C     		mov	r0, r4
+  71 003e 3021     		mov	r1, #48
+  72 0040 FFF7FEFF 		bl	uart_putchar
+  73              	.LVL7:
+  21:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 0x00);
+  74              		.loc 1 21 0
+  75 0044 201C     		mov	r0, r4
+  76 0046 0021     		mov	r1, #0
+  77 0048 FFF7FEFF 		bl	uart_putchar
+  78              	.LVL8:
+  22:../Sources/LCD.c **** 	
+  23:../Sources/LCD.c **** 	//TFC_InitUARTs(115200, 115200);
+  24:../Sources/LCD.c **** }
+  79              		.loc 1 24 0
+  80              		@ sp needed for prologue
+  81 004c 10BD     		pop	{r4, pc}
+  82              	.L3:
+  83 004e C046     		.align	2
+  84              	.L2:
+  85 0050 00C00640 		.word	1074184192
+  86              		.cfi_endproc
+  87              	.LFE0:
+  89              		.section	.text.LCDwriteString,"ax",%progbits
+  90              		.align	2
+  91              		.global	LCDwriteString
+  92              		.code	16
+  93              		.thumb_func
+  95              	LCDwriteString:
+  96              	.LFB1:
+  25:../Sources/LCD.c **** 
+  26:../Sources/LCD.c **** void LCDwriteString(char string[]){
+  97              		.loc 1 26 0
+  98              		.cfi_startproc
+  99              	.LVL9:
+ 100 0000 38B5     		push	{r3, r4, r5, lr}
+ 101              	.LCFI1:
+ 102              		.cfi_def_cfa_offset 16
+ 103              		.cfi_offset 3, -16
+ 104              		.cfi_offset 4, -12
+ 105              		.cfi_offset 5, -8
+ 106              		.cfi_offset 14, -4
+  27:../Sources/LCD.c **** 	
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 107              		.loc 1 28 0
+ 108 0002 4321     		mov	r1, #67
+  26:../Sources/LCD.c **** void LCDwriteString(char string[]){
+ 109              		.loc 1 26 0
+ 110 0004 051C     		mov	r5, r0
+ 111              		.loc 1 28 0
+ 112 0006 1048     		ldr	r0, .L8
+ 113              	.LVL10:
+ 114 0008 FFF7FEFF 		bl	uart_putchar
+ 115              	.LVL11:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 116              		.loc 1 29 0
+ 117 000c 0E48     		ldr	r0, .L8
+ 118 000e 4C21     		mov	r1, #76
+ 119 0010 FFF7FEFF 		bl	uart_putchar
+ 120              	.LVL12:
+ 121              	.LBB3:
+  30:../Sources/LCD.c **** 	
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 122              		.loc 1 31 0
+ 123 0014 0024     		mov	r4, #0
+ 124 0016 10E0     		b	.L5
+ 125              	.LVL13:
+ 126              	.L6:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 127              		.loc 1 32 0
+ 128 0018 0B48     		ldr	r0, .L8
+ 129 001a 5421     		mov	r1, #84
+ 130 001c FFF7FEFF 		bl	uart_putchar
+ 131              	.LVL14:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 132              		.loc 1 33 0
+ 133 0020 0948     		ldr	r0, .L8
+ 134 0022 5421     		mov	r1, #84
+ 135 0024 FFF7FEFF 		bl	uart_putchar
+ 136              	.LVL15:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 137              		.loc 1 34 0
+ 138 0028 295D     		ldrb	r1, [r5, r4]
+ 139 002a 0748     		ldr	r0, .L8
+ 140 002c FFF7FEFF 		bl	uart_putchar
+ 141              	.LVL16:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 142              		.loc 1 35 0
+ 143 0030 0548     		ldr	r0, .L8
+ 144 0032 0021     		mov	r1, #0
+ 145 0034 FFF7FEFF 		bl	uart_putchar
+ 146              	.LVL17:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 147              		.loc 1 31 0
+ 148 0038 0134     		add	r4, r4, #1
+ 149              	.LVL18:
+ 150              	.L5:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 151              		.loc 1 31 0 is_stmt 0
+ 152 003a 281C     		mov	r0, r5
+ 153 003c FFF7FEFF 		bl	strlen
+ 154              	.LVL19:
+ 155 0040 8442     		cmp	r4, r0
+ 156 0042 E9D3     		bcc	.L6
+ 157              	.LBE3:
+  36:../Sources/LCD.c **** 	}
+  37:../Sources/LCD.c **** }
+ 158              		.loc 1 37 0 is_stmt 1
+ 159              		@ sp needed for prologue
+ 160              	.LVL20:
+ 161              	.LVL21:
+ 162 0044 38BD     		pop	{r3, r4, r5, pc}
+ 163              	.L9:
+ 164 0046 C046     		.align	2
+ 165              	.L8:
+ 166 0048 00C00640 		.word	1074184192
+ 167              		.cfi_endproc
+ 168              	.LFE1:
+ 170              		.global	__aeabi_idivmod
+ 171              		.global	__aeabi_idiv
+ 172              		.section	.text.LCDwriteVariable,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	LCDwriteVariable
+ 175              		.code	16
+ 176              		.thumb_func
+ 178              	LCDwriteVariable:
+ 179              	.LFB2:
+  38:../Sources/LCD.c **** 
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 180              		.loc 1 39 0
+ 181              		.cfi_startproc
+ 182              	.LVL22:
+ 183 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 184              	.LCFI2:
+ 185              		.cfi_def_cfa_offset 20
+ 186              		.cfi_offset 4, -20
+ 187              		.cfi_offset 5, -16
+ 188              		.cfi_offset 6, -12
+ 189              		.cfi_offset 7, -8
+ 190              		.cfi_offset 14, -4
+ 191 0002 061C     		mov	r6, r0
+ 192 0004 85B0     		sub	sp, sp, #20
+ 193              	.LCFI3:
+ 194              		.cfi_def_cfa_offset 40
+  40:../Sources/LCD.c **** 	
+  41:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 195              		.loc 1 41 0
+ 196 0006 4448     		ldr	r0, .L21
+ 197              	.LVL23:
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 198              		.loc 1 39 0
+ 199 0008 0F1C     		mov	r7, r1
+ 200              		.loc 1 41 0
+ 201 000a 4321     		mov	r1, #67
+ 202              	.LVL24:
+ 203 000c FFF7FEFF 		bl	uart_putchar
+ 204              	.LVL25:
+  42:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 205              		.loc 1 42 0
+ 206 0010 4148     		ldr	r0, .L21
+ 207 0012 4C21     		mov	r1, #76
+ 208 0014 FFF7FEFF 		bl	uart_putchar
+ 209              	.LVL26:
+ 210              	.LBB12:
+ 211              	.LBB13:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 212              		.loc 1 28 0
+ 213 0018 3F48     		ldr	r0, .L21
+ 214 001a 4321     		mov	r1, #67
+ 215 001c FFF7FEFF 		bl	uart_putchar
+ 216              	.LVL27:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 217              		.loc 1 29 0
+ 218 0020 3D48     		ldr	r0, .L21
+ 219 0022 4C21     		mov	r1, #76
+ 220 0024 FFF7FEFF 		bl	uart_putchar
+ 221              	.LVL28:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 222              		.loc 1 31 0
+ 223 0028 0024     		mov	r4, #0
+ 224 002a 10E0     		b	.L11
+ 225              	.LVL29:
+ 226              	.L12:
+ 227              	.LBB14:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 228              		.loc 1 32 0
+ 229 002c 3A48     		ldr	r0, .L21
+ 230 002e 5421     		mov	r1, #84
+ 231 0030 FFF7FEFF 		bl	uart_putchar
+ 232              	.LVL30:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 233              		.loc 1 33 0
+ 234 0034 3848     		ldr	r0, .L21
+ 235 0036 5421     		mov	r1, #84
+ 236 0038 FFF7FEFF 		bl	uart_putchar
+ 237              	.LVL31:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 238              		.loc 1 34 0
+ 239 003c 315D     		ldrb	r1, [r6, r4]
+ 240 003e 3648     		ldr	r0, .L21
+ 241 0040 FFF7FEFF 		bl	uart_putchar
+ 242              	.LVL32:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 243              		.loc 1 35 0
+ 244 0044 3448     		ldr	r0, .L21
+ 245 0046 0021     		mov	r1, #0
+ 246 0048 FFF7FEFF 		bl	uart_putchar
+ 247              	.LVL33:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 248              		.loc 1 31 0
+ 249 004c 0134     		add	r4, r4, #1
+ 250              	.LVL34:
+ 251              	.L11:
+ 252 004e 301C     		mov	r0, r6
+ 253 0050 FFF7FEFF 		bl	strlen
+ 254              	.LVL35:
+ 255 0054 8442     		cmp	r4, r0
+ 256 0056 E9D3     		bcc	.L12
+ 257              	.LBE14:
+ 258              	.LBE13:
+ 259              	.LBE12:
+  43:../Sources/LCD.c **** 	
+  44:../Sources/LCD.c **** 	LCDwriteString(string);
+  45:../Sources/LCD.c **** 	
+  46:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'T');
+ 260              		.loc 1 46 0
+ 261 0058 2F48     		ldr	r0, .L21
+ 262 005a 5421     		mov	r1, #84
+ 263 005c FFF7FEFF 		bl	uart_putchar
+ 264              	.LVL36:
+  47:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'P');
+ 265              		.loc 1 47 0
+ 266 0060 2D48     		ldr	r0, .L21
+ 267 0062 5021     		mov	r1, #80
+ 268 0064 FFF7FEFF 		bl	uart_putchar
+ 269              	.LVL37:
+  48:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 0); //x
+ 270              		.loc 1 48 0
+ 271 0068 2B48     		ldr	r0, .L21
+ 272 006a 0021     		mov	r1, #0
+ 273 006c FFF7FEFF 		bl	uart_putchar
+ 274              	.LVL38:
+  49:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 1); //y
+ 275              		.loc 1 49 0
+ 276 0070 2948     		ldr	r0, .L21
+ 277 0072 0121     		mov	r1, #1
+ 278 0074 FFF7FEFF 		bl	uart_putchar
+ 279              	.LVL39:
+ 280 0078 FA17     		asr	r2, r7, #31
+ 281 007a BC18     		add	r4, r7, r2
+ 282              	.LVL40:
+ 283 007c 5440     		eor	r4, r2
+ 284 007e 0025     		mov	r5, #0
+ 285 0080 00E0     		b	.L13
+ 286              	.LVL41:
+ 287              	.L19:
+ 288              	.LBB15:
+ 289              	.LBB16:
+  50:../Sources/LCD.c **** 	
+  51:../Sources/LCD.c **** 	char intstring[16];
+  52:../Sources/LCD.c **** 
+  53:../Sources/LCD.c **** 	itoa(variable, intstring);
+  54:../Sources/LCD.c **** 	
+  55:../Sources/LCD.c **** 	for(int i=0;i<strlen(intstring);i++){
+  56:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+  57:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+  58:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, intstring[i]);
+  59:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+  60:../Sources/LCD.c **** 	}	
+  61:../Sources/LCD.c **** }
+  62:../Sources/LCD.c **** 
+  63:../Sources/LCD.c **** void LCDwriteState(carState_s* carState){
+  64:../Sources/LCD.c **** 	
+  65:../Sources/LCD.c **** 	//uart_putchar(UART2_BASE_PTR, 'C');
+  66:../Sources/LCD.c **** 	//uart_putchar(UART2_BASE_PTR, 'L');
+  67:../Sources/LCD.c **** 	
+  68:../Sources/LCD.c **** 	if(carState->lineDetectionState == STOPLINE_DETECTED)	// Also set in lineFollowingMode()
+  69:../Sources/LCD.c **** 			{
+  70:../Sources/LCD.c **** 				LCDwriteString("STOPLINE DETECTED");
+  71:../Sources/LCD.c **** 			}
+  72:../Sources/LCD.c **** 			#ifdef CROSS_DETECTION_ENABLE
+  73:../Sources/LCD.c **** 			else if(carState->crossSection == YES)
+  74:../Sources/LCD.c **** 			{
+  75:../Sources/LCD.c **** 				LCDwriteString("CROSS SECTION DETECTED");
+  76:../Sources/LCD.c **** 			}
+  77:../Sources/LCD.c **** 			#endif
+  78:../Sources/LCD.c **** 			else if(carState->sMode == S_MODE_ON)
+  79:../Sources/LCD.c **** 			{
+  80:../Sources/LCD.c **** 				LCDwriteString("S_MODE ACTIVATED");
+  81:../Sources/LCD.c **** 			}
+  82:../Sources/LCD.c **** 			if(carState->detectedType == DOUBLE_EDGE)
+  83:../Sources/LCD.c **** 			{
+  84:../Sources/LCD.c **** 				LCDwriteString("BOTH EDGES FOUND");
+  85:../Sources/LCD.c **** 			}
+  86:../Sources/LCD.c **** 			else if (carState->edge == LEFT_EDGE)
+  87:../Sources/LCD.c **** 			{	
+  88:../Sources/LCD.c **** 				LCDwriteString("LEFT EDGE FOUND");
+  89:../Sources/LCD.c **** 			}
+  90:../Sources/LCD.c **** 			else if (carState->edge == RIGHT_EDGE)
+  91:../Sources/LCD.c **** 			{	
+  92:../Sources/LCD.c **** 				LCDwriteString("RIGHT EDGE FOUND");
+  93:../Sources/LCD.c **** 			}
+  94:../Sources/LCD.c **** 			else if (carState->lineDetectionState == LINE_TEMPORARILY_LOST)
+  95:../Sources/LCD.c **** 			{	
+  96:../Sources/LCD.c **** 				LCDwriteString("LINE TEMP LOST");
+  97:../Sources/LCD.c **** 			}
+  98:../Sources/LCD.c **** 			else if (carState->lineDetectionState == LINE_LOST)
+  99:../Sources/LCD.c **** 			{	
+ 100:../Sources/LCD.c **** 				LCDwriteString("LINE LOST :(");
+ 101:../Sources/LCD.c **** 			}
+ 102:../Sources/LCD.c **** 			
+ 103:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 104:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'S');
+ 105:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 0);
+ 106:../Sources/LCD.c **** 			
+ 107:../Sources/LCD.c **** }
+ 108:../Sources/LCD.c **** 
+ 109:../Sources/LCD.c **** /* itoa:  convert n to characters in s */
+ 110:../Sources/LCD.c **** void itoa(int n, char s[])
+ 111:../Sources/LCD.c **** {
+ 112:../Sources/LCD.c ****     int i, sign;
+ 113:../Sources/LCD.c **** 
+ 114:../Sources/LCD.c ****     if ((sign = n) < 0)  /* record sign */
+ 115:../Sources/LCD.c ****         n = -n;          /* make n positive */
+ 116:../Sources/LCD.c ****     i = 0;
+ 117:../Sources/LCD.c ****     do {       /* generate digits in reverse order */
+ 118:../Sources/LCD.c ****         s[i++] = n % 10 + '0';   /* get next digit */
+ 290              		.loc 1 118 0
+ 291 0082 351C     		mov	r5, r6
+ 292              	.LVL42:
+ 293              	.L13:
+ 294 0084 201C     		mov	r0, r4
+ 295 0086 0A21     		mov	r1, #10
+ 296 0088 FFF7FEFF 		bl	__aeabi_idivmod
+ 297              	.LVL43:
+ 298 008c 6B46     		mov	r3, sp
+ 299 008e 3031     		add	r1, r1, #48
+ 300 0090 5955     		strb	r1, [r3, r5]
+ 119:../Sources/LCD.c ****     } while ((n /= 10) > 0);     /* delete it */
+ 301              		.loc 1 119 0
+ 302 0092 201C     		mov	r0, r4
+ 303 0094 0A21     		mov	r1, #10
+ 304 0096 FFF7FEFF 		bl	__aeabi_idiv
+ 305              	.LVL44:
+ 118:../Sources/LCD.c ****         s[i++] = n % 10 + '0';   /* get next digit */
+ 306              		.loc 1 118 0
+ 307 009a 6E1C     		add	r6, r5, #1
+ 308              	.LVL45:
+ 309              		.loc 1 119 0
+ 310 009c 041E     		sub	r4, r0, #0
+ 311              	.LVL46:
+ 312 009e F0DC     		bgt	.L19
+ 120:../Sources/LCD.c ****     if (sign < 0)
+ 313              		.loc 1 120 0
+ 314 00a0 002F     		cmp	r7, #0
+ 315 00a2 03DA     		bge	.L14
+ 121:../Sources/LCD.c ****         s[i++] = '-';
+ 316              		.loc 1 121 0
+ 317 00a4 2D20     		mov	r0, #45
+ 318              	.LVL47:
+ 319 00a6 6946     		mov	r1, sp
+ 320 00a8 8855     		strb	r0, [r1, r6]
+ 321 00aa AE1C     		add	r6, r5, #2
+ 322              	.LVL48:
+ 323              	.L14:
+ 122:../Sources/LCD.c ****     s[i] = '\0';
+ 324              		.loc 1 122 0
+ 325 00ac 00AD     		add	r5, sp, #0
+ 326 00ae 0022     		mov	r2, #0
+ 327 00b0 AF19     		add	r7, r5, r6
+ 328              	.LVL49:
+ 329 00b2 3A70     		strb	r2, [r7]
+ 330              	.LVL50:
+ 331              	.LBB17:
+ 332              	.LBB18:
+ 123:../Sources/LCD.c ****     reverse(s);
+ 124:../Sources/LCD.c **** }
+ 125:../Sources/LCD.c **** 
+ 126:../Sources/LCD.c **** /* reverse:  reverse string s in place */
+ 127:../Sources/LCD.c **** void reverse(char s[])
+ 128:../Sources/LCD.c **** {
+ 129:../Sources/LCD.c ****     int i, j;
+ 130:../Sources/LCD.c ****     char c;
+ 131:../Sources/LCD.c **** 
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 333              		.loc 1 132 0
+ 334 00b4 6846     		mov	r0, sp
+ 335 00b6 FFF7FEFF 		bl	strlen
+ 336              	.LVL51:
+ 337 00ba 411E     		sub	r1, r0, #1
+ 338              	.LVL52:
+ 339 00bc 0029     		cmp	r1, #0
+ 340 00be 0FDD     		ble	.L15
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 341              		.loc 1 39 0
+ 342 00c0 00AB     		add	r3, sp, #0
+ 343 00c2 5E18     		add	r6, r3, r1
+ 344              	.LVL53:
+ 345              	.LBE18:
+ 346              	.LBE17:
+ 347              		.loc 1 132 0
+ 348 00c4 0027     		mov	r7, #0
+ 349              	.LVL54:
+ 350              	.L16:
+ 351              	.LBB20:
+ 352              	.LBB19:
+ 133:../Sources/LCD.c ****         c = s[i];
+ 134:../Sources/LCD.c ****         s[i] = s[j];
+ 353              		.loc 1 134 0
+ 354 00c6 3278     		ldrb	r2, [r6]
+ 133:../Sources/LCD.c ****         c = s[i];
+ 355              		.loc 1 133 0
+ 356 00c8 6C46     		mov	r4, sp
+ 357 00ca E05D     		ldrb	r0, [r4, r7]
+ 358              	.LVL55:
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 359              		.loc 1 132 0
+ 360 00cc 0139     		sub	r1, r1, #1
+ 361              	.LVL56:
+ 362              		.loc 1 134 0
+ 363 00ce E255     		strb	r2, [r4, r7]
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 364              		.loc 1 132 0
+ 365 00d0 0137     		add	r7, r7, #1
+ 366              	.LVL57:
+ 135:../Sources/LCD.c ****         s[j] = c;
+ 367              		.loc 1 135 0
+ 368 00d2 3070     		strb	r0, [r6]
+ 369 00d4 013E     		sub	r6, r6, #1
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 370              		.loc 1 132 0
+ 371 00d6 8F42     		cmp	r7, r1
+ 372 00d8 F5DB     		blt	.L16
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 373              		.loc 1 39 0
+ 374 00da 6846     		mov	r0, sp
+ 375 00dc FFF7FEFF 		bl	strlen
+ 376              	.LVL58:
+ 377              	.L15:
+ 378              	.LBE19:
+ 379              	.LBE20:
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 380              		.loc 1 132 0
+ 381 00e0 0026     		mov	r6, #0
+ 382 00e2 14E0     		b	.L17
+ 383              	.LVL59:
+ 384              	.L18:
+ 385              	.LBE16:
+ 386              	.LBE15:
+ 387              	.LBB21:
+  56:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 388              		.loc 1 56 0
+ 389 00e4 0C48     		ldr	r0, .L21
+ 390 00e6 5421     		mov	r1, #84
+ 391 00e8 FFF7FEFF 		bl	uart_putchar
+ 392              	.LVL60:
+  57:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 393              		.loc 1 57 0
+ 394 00ec 0A48     		ldr	r0, .L21
+ 395 00ee 5421     		mov	r1, #84
+ 396 00f0 FFF7FEFF 		bl	uart_putchar
+ 397              	.LVL61:
+  58:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, intstring[i]);
+ 398              		.loc 1 58 0
+ 399 00f4 6946     		mov	r1, sp
+ 400 00f6 895D     		ldrb	r1, [r1, r6]
+ 401 00f8 0748     		ldr	r0, .L21
+ 402 00fa FFF7FEFF 		bl	uart_putchar
+ 403              	.LVL62:
+  59:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 404              		.loc 1 59 0
+ 405 00fe 0648     		ldr	r0, .L21
+ 406 0100 0021     		mov	r1, #0
+ 407 0102 FFF7FEFF 		bl	uart_putchar
+ 408              	.LVL63:
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 409              		.loc 1 39 0
+ 410 0106 6846     		mov	r0, sp
+  55:../Sources/LCD.c **** 	for(int i=0;i<strlen(intstring);i++){
+ 411              		.loc 1 55 0
+ 412 0108 0136     		add	r6, r6, #1
+ 413              	.LVL64:
+  39:../Sources/LCD.c **** void LCDwriteVariable(char string[],int variable){
+ 414              		.loc 1 39 0
+ 415 010a FFF7FEFF 		bl	strlen
+ 416              	.LVL65:
+ 417              	.L17:
+  55:../Sources/LCD.c **** 	for(int i=0;i<strlen(intstring);i++){
+ 418              		.loc 1 55 0
+ 419 010e 8642     		cmp	r6, r0
+ 420 0110 E8D3     		bcc	.L18
+ 421              	.LBE21:
+  61:../Sources/LCD.c **** }
+ 422              		.loc 1 61 0
+ 423 0112 05B0     		add	sp, sp, #20
+ 424              		@ sp needed for prologue
+ 425              	.LVL66:
+ 426              	.LVL67:
+ 427 0114 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 428              	.L22:
+ 429 0116 C046     		.align	2
+ 430              	.L21:
+ 431 0118 00C00640 		.word	1074184192
+ 432              		.cfi_endproc
+ 433              	.LFE2:
+ 435              		.section	.text.LCDwriteState,"ax",%progbits
+ 436              		.align	2
+ 437              		.global	LCDwriteState
+ 438              		.code	16
+ 439              		.thumb_func
+ 441              	LCDwriteState:
+ 442              	.LFB3:
+  63:../Sources/LCD.c **** void LCDwriteState(carState_s* carState){
+ 443              		.loc 1 63 0
+ 444              		.cfi_startproc
+ 445              	.LVL68:
+ 446 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 447              	.LCFI4:
+ 448              		.cfi_def_cfa_offset 24
+ 449              		.cfi_offset 3, -24
+ 450              		.cfi_offset 4, -20
+ 451              		.cfi_offset 5, -16
+ 452              		.cfi_offset 6, -12
+ 453              		.cfi_offset 7, -8
+ 454              		.cfi_offset 14, -4
+  68:../Sources/LCD.c **** 	if(carState->lineDetectionState == STOPLINE_DETECTED)	// Also set in lineFollowingMode()
+ 455              		.loc 1 68 0
+ 456 0002 8378     		ldrb	r3, [r0, #2]
+  63:../Sources/LCD.c **** void LCDwriteState(carState_s* carState){
+ 457              		.loc 1 63 0
+ 458 0004 041C     		mov	r4, r0
+  68:../Sources/LCD.c **** 	if(carState->lineDetectionState == STOPLINE_DETECTED)	// Also set in lineFollowingMode()
+ 459              		.loc 1 68 0
+ 460 0006 022B     		cmp	r3, #2
+ 461 0008 29D0     		beq	.L41
+  73:../Sources/LCD.c **** 			else if(carState->crossSection == YES)
+ 462              		.loc 1 73 0
+ 463 000a 8079     		ldrb	r0, [r0, #6]
+ 464              	.LVL69:
+ 465 000c 0128     		cmp	r0, #1
+ 466 000e 00D1     		bne	.LCB435
+ 467 0010 09E2     		b	.L42	@long jump
+ 468              	.LCB435:
+  78:../Sources/LCD.c **** 			else if(carState->sMode == S_MODE_ON)
+ 469              		.loc 1 78 0
+ 470 0012 617A     		ldrb	r1, [r4, #9]
+ 471 0014 0129     		cmp	r1, #1
+ 472 0016 00D1     		bne	.LCB438
+ 473 0018 36E2     		b	.L43	@long jump
+ 474              	.LCB438:
+ 475              	.L29:
+  82:../Sources/LCD.c **** 			if(carState->detectedType == DOUBLE_EDGE)
+ 476              		.loc 1 82 0
+ 477 001a 2279     		ldrb	r2, [r4, #4]
+ 478 001c 022A     		cmp	r2, #2
+ 479 001e 00D1     		bne	.LCB442
+ 480 0020 0AE3     		b	.L44	@long jump
+ 481              	.LCB442:
+  86:../Sources/LCD.c **** 			else if (carState->edge == LEFT_EDGE)
+ 482              		.loc 1 86 0
+ 483 0022 6379     		ldrb	r3, [r4, #5]
+ 484 0024 012B     		cmp	r3, #1
+ 485 0026 01D1     		bne	.LCB445
+ 486 0028 00F010FC 		bl	.L45	@far jump
+ 487              	.LCB445:
+  90:../Sources/LCD.c **** 			else if (carState->edge == RIGHT_EDGE)
+ 488              		.loc 1 90 0
+ 489 002c 022B     		cmp	r3, #2
+ 490 002e 01D1     		bne	.LCB447
+ 491 0030 00F09FFC 		bl	.L46	@far jump
+ 492              	.LCB447:
+  94:../Sources/LCD.c **** 			else if (carState->lineDetectionState == LINE_TEMPORARILY_LOST)
+ 493              		.loc 1 94 0
+ 494 0034 A478     		ldrb	r4, [r4, #2]
+ 495              	.LVL70:
+ 496 0036 012C     		cmp	r4, #1
+ 497 0038 01D1     		bne	.LCB451
+ 498 003a 00F0DFFC 		bl	.L47	@far jump
+ 499              	.LCB451:
+  98:../Sources/LCD.c **** 			else if (carState->lineDetectionState == LINE_LOST)
+ 500              		.loc 1 98 0
+ 501 003e 032C     		cmp	r4, #3
+ 502 0040 00D1     		bne	.LCB453
+ 503 0042 27E1     		b	.L48	@long jump
+ 504              	.LCB453:
+ 505              	.L31:
+ 103:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 506              		.loc 1 103 0
+ 507 0044 9248     		ldr	r0, .L49
+ 508 0046 4321     		mov	r1, #67
+ 509 0048 FFF7FEFF 		bl	uart_putchar
+ 510              	.LVL71:
+ 104:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'S');
+ 511              		.loc 1 104 0
+ 512 004c 9048     		ldr	r0, .L49
+ 513 004e 5321     		mov	r1, #83
+ 514 0050 FFF7FEFF 		bl	uart_putchar
+ 515              	.LVL72:
+ 105:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 0);
+ 516              		.loc 1 105 0
+ 517 0054 8E48     		ldr	r0, .L49
+ 518 0056 0021     		mov	r1, #0
+ 519 0058 FFF7FEFF 		bl	uart_putchar
+ 520              	.LVL73:
+ 107:../Sources/LCD.c **** }
+ 521              		.loc 1 107 0
+ 522              		@ sp needed for prologue
+ 523 005c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 524              	.LVL74:
+ 525              	.L41:
+ 526              	.LBB46:
+ 527              	.LBB47:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 528              		.loc 1 28 0
+ 529 005e 8C48     		ldr	r0, .L49
+ 530              	.LVL75:
+ 531 0060 4321     		mov	r1, #67
+ 532 0062 FFF7FEFF 		bl	uart_putchar
+ 533              	.LVL76:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 534              		.loc 1 29 0
+ 535 0066 8A48     		ldr	r0, .L49
+ 536 0068 4C21     		mov	r1, #76
+ 537 006a FFF7FEFF 		bl	uart_putchar
+ 538              	.LVL77:
+ 539              	.LBB48:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 540              		.loc 1 32 0
+ 541 006e 8848     		ldr	r0, .L49
+ 542 0070 5421     		mov	r1, #84
+ 543 0072 FFF7FEFF 		bl	uart_putchar
+ 544              	.LVL78:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 545              		.loc 1 33 0
+ 546 0076 8648     		ldr	r0, .L49
+ 547 0078 5421     		mov	r1, #84
+ 548 007a FFF7FEFF 		bl	uart_putchar
+ 549              	.LVL79:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 550              		.loc 1 34 0
+ 551 007e 8448     		ldr	r0, .L49
+ 552 0080 5321     		mov	r1, #83
+ 553 0082 FFF7FEFF 		bl	uart_putchar
+ 554              	.LVL80:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 555              		.loc 1 35 0
+ 556 0086 8248     		ldr	r0, .L49
+ 557 0088 0021     		mov	r1, #0
+ 558 008a FFF7FEFF 		bl	uart_putchar
+ 559              	.LVL81:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 560              		.loc 1 32 0
+ 561 008e 8048     		ldr	r0, .L49
+ 562 0090 5421     		mov	r1, #84
+ 563 0092 FFF7FEFF 		bl	uart_putchar
+ 564              	.LVL82:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 565              		.loc 1 33 0
+ 566 0096 7E48     		ldr	r0, .L49
+ 567 0098 5421     		mov	r1, #84
+ 568 009a FFF7FEFF 		bl	uart_putchar
+ 569              	.LVL83:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 570              		.loc 1 34 0
+ 571 009e 7C48     		ldr	r0, .L49
+ 572 00a0 5421     		mov	r1, #84
+ 573 00a2 FFF7FEFF 		bl	uart_putchar
+ 574              	.LVL84:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 575              		.loc 1 35 0
+ 576 00a6 7A48     		ldr	r0, .L49
+ 577 00a8 0021     		mov	r1, #0
+ 578 00aa FFF7FEFF 		bl	uart_putchar
+ 579              	.LVL85:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 580              		.loc 1 32 0
+ 581 00ae 7848     		ldr	r0, .L49
+ 582 00b0 5421     		mov	r1, #84
+ 583 00b2 FFF7FEFF 		bl	uart_putchar
+ 584              	.LVL86:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 585              		.loc 1 33 0
+ 586 00b6 7648     		ldr	r0, .L49
+ 587 00b8 5421     		mov	r1, #84
+ 588 00ba FFF7FEFF 		bl	uart_putchar
+ 589              	.LVL87:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 590              		.loc 1 34 0
+ 591 00be 7448     		ldr	r0, .L49
+ 592 00c0 4F21     		mov	r1, #79
+ 593 00c2 FFF7FEFF 		bl	uart_putchar
+ 594              	.LVL88:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 595              		.loc 1 35 0
+ 596 00c6 7248     		ldr	r0, .L49
+ 597 00c8 0021     		mov	r1, #0
+ 598 00ca FFF7FEFF 		bl	uart_putchar
+ 599              	.LVL89:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 600              		.loc 1 32 0
+ 601 00ce 7048     		ldr	r0, .L49
+ 602 00d0 5421     		mov	r1, #84
+ 603 00d2 FFF7FEFF 		bl	uart_putchar
+ 604              	.LVL90:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 605              		.loc 1 33 0
+ 606 00d6 6E48     		ldr	r0, .L49
+ 607 00d8 5421     		mov	r1, #84
+ 608 00da FFF7FEFF 		bl	uart_putchar
+ 609              	.LVL91:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 610              		.loc 1 34 0
+ 611 00de 6C48     		ldr	r0, .L49
+ 612 00e0 5021     		mov	r1, #80
+ 613 00e2 FFF7FEFF 		bl	uart_putchar
+ 614              	.LVL92:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 615              		.loc 1 35 0
+ 616 00e6 6A48     		ldr	r0, .L49
+ 617 00e8 0021     		mov	r1, #0
+ 618 00ea FFF7FEFF 		bl	uart_putchar
+ 619              	.LVL93:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 620              		.loc 1 32 0
+ 621 00ee 6848     		ldr	r0, .L49
+ 622 00f0 5421     		mov	r1, #84
+ 623 00f2 FFF7FEFF 		bl	uart_putchar
+ 624              	.LVL94:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 625              		.loc 1 33 0
+ 626 00f6 6648     		ldr	r0, .L49
+ 627 00f8 5421     		mov	r1, #84
+ 628 00fa FFF7FEFF 		bl	uart_putchar
+ 629              	.LVL95:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 630              		.loc 1 34 0
+ 631 00fe 6448     		ldr	r0, .L49
+ 632 0100 4C21     		mov	r1, #76
+ 633 0102 FFF7FEFF 		bl	uart_putchar
+ 634              	.LVL96:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 635              		.loc 1 35 0
+ 636 0106 6248     		ldr	r0, .L49
+ 637 0108 0021     		mov	r1, #0
+ 638 010a FFF7FEFF 		bl	uart_putchar
+ 639              	.LVL97:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 640              		.loc 1 32 0
+ 641 010e 6048     		ldr	r0, .L49
+ 642 0110 5421     		mov	r1, #84
+ 643 0112 FFF7FEFF 		bl	uart_putchar
+ 644              	.LVL98:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 645              		.loc 1 33 0
+ 646 0116 5E48     		ldr	r0, .L49
+ 647 0118 5421     		mov	r1, #84
+ 648 011a FFF7FEFF 		bl	uart_putchar
+ 649              	.LVL99:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 650              		.loc 1 34 0
+ 651 011e 5C48     		ldr	r0, .L49
+ 652 0120 4921     		mov	r1, #73
+ 653 0122 FFF7FEFF 		bl	uart_putchar
+ 654              	.LVL100:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 655              		.loc 1 35 0
+ 656 0126 5A48     		ldr	r0, .L49
+ 657 0128 0021     		mov	r1, #0
+ 658 012a FFF7FEFF 		bl	uart_putchar
+ 659              	.LVL101:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 660              		.loc 1 32 0
+ 661 012e 5848     		ldr	r0, .L49
+ 662 0130 5421     		mov	r1, #84
+ 663 0132 FFF7FEFF 		bl	uart_putchar
+ 664              	.LVL102:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 665              		.loc 1 33 0
+ 666 0136 5648     		ldr	r0, .L49
+ 667 0138 5421     		mov	r1, #84
+ 668 013a FFF7FEFF 		bl	uart_putchar
+ 669              	.LVL103:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 670              		.loc 1 34 0
+ 671 013e 5448     		ldr	r0, .L49
+ 672 0140 4E21     		mov	r1, #78
+ 673 0142 FFF7FEFF 		bl	uart_putchar
+ 674              	.LVL104:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 675              		.loc 1 35 0
+ 676 0146 5248     		ldr	r0, .L49
+ 677 0148 0021     		mov	r1, #0
+ 678 014a FFF7FEFF 		bl	uart_putchar
+ 679              	.LVL105:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 680              		.loc 1 32 0
+ 681 014e 5048     		ldr	r0, .L49
+ 682 0150 5421     		mov	r1, #84
+ 683 0152 FFF7FEFF 		bl	uart_putchar
+ 684              	.LVL106:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 685              		.loc 1 33 0
+ 686 0156 4E48     		ldr	r0, .L49
+ 687 0158 5421     		mov	r1, #84
+ 688 015a FFF7FEFF 		bl	uart_putchar
+ 689              	.LVL107:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 690              		.loc 1 34 0
+ 691 015e 4C48     		ldr	r0, .L49
+ 692 0160 4521     		mov	r1, #69
+ 693 0162 FFF7FEFF 		bl	uart_putchar
+ 694              	.LVL108:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 695              		.loc 1 35 0
+ 696 0166 4A48     		ldr	r0, .L49
+ 697 0168 0021     		mov	r1, #0
+ 698 016a FFF7FEFF 		bl	uart_putchar
+ 699              	.LVL109:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 700              		.loc 1 32 0
+ 701 016e 4848     		ldr	r0, .L49
+ 702 0170 5421     		mov	r1, #84
+ 703 0172 FFF7FEFF 		bl	uart_putchar
+ 704              	.LVL110:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 705              		.loc 1 33 0
+ 706 0176 4648     		ldr	r0, .L49
+ 707 0178 5421     		mov	r1, #84
+ 708 017a FFF7FEFF 		bl	uart_putchar
+ 709              	.LVL111:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 710              		.loc 1 34 0
+ 711 017e 4448     		ldr	r0, .L49
+ 712 0180 2021     		mov	r1, #32
+ 713 0182 FFF7FEFF 		bl	uart_putchar
+ 714              	.LVL112:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 715              		.loc 1 35 0
+ 716 0186 4248     		ldr	r0, .L49
+ 717 0188 0021     		mov	r1, #0
+ 718 018a FFF7FEFF 		bl	uart_putchar
+ 719              	.LVL113:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 720              		.loc 1 32 0
+ 721 018e 4048     		ldr	r0, .L49
+ 722 0190 5421     		mov	r1, #84
+ 723 0192 FFF7FEFF 		bl	uart_putchar
+ 724              	.LVL114:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 725              		.loc 1 33 0
+ 726 0196 3E48     		ldr	r0, .L49
+ 727 0198 5421     		mov	r1, #84
+ 728 019a FFF7FEFF 		bl	uart_putchar
+ 729              	.LVL115:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 730              		.loc 1 34 0
+ 731 019e 3C48     		ldr	r0, .L49
+ 732 01a0 4421     		mov	r1, #68
+ 733 01a2 FFF7FEFF 		bl	uart_putchar
+ 734              	.LVL116:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 735              		.loc 1 35 0
+ 736 01a6 3A48     		ldr	r0, .L49
+ 737 01a8 0021     		mov	r1, #0
+ 738 01aa FFF7FEFF 		bl	uart_putchar
+ 739              	.LVL117:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 740              		.loc 1 32 0
+ 741 01ae 3848     		ldr	r0, .L49
+ 742 01b0 5421     		mov	r1, #84
+ 743 01b2 FFF7FEFF 		bl	uart_putchar
+ 744              	.LVL118:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 745              		.loc 1 33 0
+ 746 01b6 3648     		ldr	r0, .L49
+ 747 01b8 5421     		mov	r1, #84
+ 748 01ba FFF7FEFF 		bl	uart_putchar
+ 749              	.LVL119:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 750              		.loc 1 34 0
+ 751 01be 3448     		ldr	r0, .L49
+ 752 01c0 4521     		mov	r1, #69
+ 753 01c2 FFF7FEFF 		bl	uart_putchar
+ 754              	.LVL120:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 755              		.loc 1 35 0
+ 756 01c6 3248     		ldr	r0, .L49
+ 757 01c8 0021     		mov	r1, #0
+ 758 01ca FFF7FEFF 		bl	uart_putchar
+ 759              	.LVL121:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 760              		.loc 1 32 0
+ 761 01ce 3048     		ldr	r0, .L49
+ 762 01d0 5421     		mov	r1, #84
+ 763 01d2 FFF7FEFF 		bl	uart_putchar
+ 764              	.LVL122:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 765              		.loc 1 33 0
+ 766 01d6 2E48     		ldr	r0, .L49
+ 767 01d8 5421     		mov	r1, #84
+ 768 01da FFF7FEFF 		bl	uart_putchar
+ 769              	.LVL123:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 770              		.loc 1 34 0
+ 771 01de 2C48     		ldr	r0, .L49
+ 772 01e0 5421     		mov	r1, #84
+ 773 01e2 FFF7FEFF 		bl	uart_putchar
+ 774              	.LVL124:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 775              		.loc 1 35 0
+ 776 01e6 2A48     		ldr	r0, .L49
+ 777 01e8 0021     		mov	r1, #0
+ 778 01ea FFF7FEFF 		bl	uart_putchar
+ 779              	.LVL125:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 780              		.loc 1 32 0
+ 781 01ee 2848     		ldr	r0, .L49
+ 782 01f0 5421     		mov	r1, #84
+ 783 01f2 FFF7FEFF 		bl	uart_putchar
+ 784              	.LVL126:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 785              		.loc 1 33 0
+ 786 01f6 2648     		ldr	r0, .L49
+ 787 01f8 5421     		mov	r1, #84
+ 788 01fa FFF7FEFF 		bl	uart_putchar
+ 789              	.LVL127:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 790              		.loc 1 34 0
+ 791 01fe 2448     		ldr	r0, .L49
+ 792 0200 4521     		mov	r1, #69
+ 793 0202 FFF7FEFF 		bl	uart_putchar
+ 794              	.LVL128:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 795              		.loc 1 35 0
+ 796 0206 2248     		ldr	r0, .L49
+ 797 0208 0021     		mov	r1, #0
+ 798 020a FFF7FEFF 		bl	uart_putchar
+ 799              	.LVL129:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 800              		.loc 1 32 0
+ 801 020e 2048     		ldr	r0, .L49
+ 802 0210 5421     		mov	r1, #84
+ 803 0212 FFF7FEFF 		bl	uart_putchar
+ 804              	.LVL130:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 805              		.loc 1 33 0
+ 806 0216 1E48     		ldr	r0, .L49
+ 807 0218 5421     		mov	r1, #84
+ 808 021a FFF7FEFF 		bl	uart_putchar
+ 809              	.LVL131:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 810              		.loc 1 34 0
+ 811 021e 1C48     		ldr	r0, .L49
+ 812 0220 4321     		mov	r1, #67
+ 813              	.LVL132:
+ 814              	.L38:
+ 815 0222 FFF7FEFF 		bl	uart_putchar
+ 816              	.LVL133:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 817              		.loc 1 35 0
+ 818 0226 1A48     		ldr	r0, .L49
+ 819 0228 0021     		mov	r1, #0
+ 820 022a FFF7FEFF 		bl	uart_putchar
+ 821              	.LVL134:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 822              		.loc 1 32 0
+ 823 022e 1848     		ldr	r0, .L49
+ 824 0230 5421     		mov	r1, #84
+ 825 0232 FFF7FEFF 		bl	uart_putchar
+ 826              	.LVL135:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 827              		.loc 1 33 0
+ 828 0236 1648     		ldr	r0, .L49
+ 829 0238 5421     		mov	r1, #84
+ 830 023a FFF7FEFF 		bl	uart_putchar
+ 831              	.LVL136:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 832              		.loc 1 34 0
+ 833 023e 1448     		ldr	r0, .L49
+ 834 0240 5421     		mov	r1, #84
+ 835 0242 FFF7FEFF 		bl	uart_putchar
+ 836              	.LVL137:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 837              		.loc 1 35 0
+ 838 0246 1248     		ldr	r0, .L49
+ 839 0248 0021     		mov	r1, #0
+ 840 024a FFF7FEFF 		bl	uart_putchar
+ 841              	.LVL138:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 842              		.loc 1 32 0
+ 843 024e 1048     		ldr	r0, .L49
+ 844 0250 5421     		mov	r1, #84
+ 845 0252 FFF7FEFF 		bl	uart_putchar
+ 846              	.LVL139:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 847              		.loc 1 33 0
+ 848 0256 0E48     		ldr	r0, .L49
+ 849 0258 5421     		mov	r1, #84
+ 850 025a FFF7FEFF 		bl	uart_putchar
+ 851              	.LVL140:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 852              		.loc 1 34 0
+ 853 025e 0C48     		ldr	r0, .L49
+ 854 0260 4521     		mov	r1, #69
+ 855 0262 FFF7FEFF 		bl	uart_putchar
+ 856              	.LVL141:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 857              		.loc 1 35 0
+ 858 0266 0A48     		ldr	r0, .L49
+ 859 0268 0021     		mov	r1, #0
+ 860 026a FFF7FEFF 		bl	uart_putchar
+ 861              	.LVL142:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 862              		.loc 1 32 0
+ 863 026e 0848     		ldr	r0, .L49
+ 864 0270 5421     		mov	r1, #84
+ 865 0272 FFF7FEFF 		bl	uart_putchar
+ 866              	.LVL143:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 867              		.loc 1 33 0
+ 868 0276 0648     		ldr	r0, .L49
+ 869 0278 5421     		mov	r1, #84
+ 870 027a FFF7FEFF 		bl	uart_putchar
+ 871              	.LVL144:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 872              		.loc 1 34 0
+ 873 027e 0448     		ldr	r0, .L49
+ 874 0280 4421     		mov	r1, #68
+ 875 0282 FFF7FEFF 		bl	uart_putchar
+ 876              	.LVL145:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 877              		.loc 1 35 0
+ 878 0286 0248     		ldr	r0, .L49
+ 879 0288 0021     		mov	r1, #0
+ 880 028a FFF7FEFF 		bl	uart_putchar
+ 881              	.LVL146:
+ 882 028e C4E6     		b	.L29
+ 883              	.L50:
+ 884              		.align	2
+ 885              	.L49:
+ 886 0290 00C00640 		.word	1074184192
+ 887              	.LVL147:
+ 888              	.L48:
+ 889              	.LBE48:
+ 890              	.LBE47:
+ 891              	.LBE46:
+ 892              	.LBB49:
+ 893              	.LBB50:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 894              		.loc 1 28 0
+ 895 0294 E648     		ldr	r0, .L51
+ 896 0296 4321     		mov	r1, #67
+ 897 0298 FFF7FEFF 		bl	uart_putchar
+ 898              	.LVL148:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 899              		.loc 1 29 0
+ 900 029c E448     		ldr	r0, .L51
+ 901 029e 4C21     		mov	r1, #76
+ 902 02a0 FFF7FEFF 		bl	uart_putchar
+ 903              	.LVL149:
+ 904              	.LBB51:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 905              		.loc 1 32 0
+ 906 02a4 E248     		ldr	r0, .L51
+ 907 02a6 5421     		mov	r1, #84
+ 908 02a8 FFF7FEFF 		bl	uart_putchar
+ 909              	.LVL150:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 910              		.loc 1 33 0
+ 911 02ac E048     		ldr	r0, .L51
+ 912 02ae 5421     		mov	r1, #84
+ 913 02b0 FFF7FEFF 		bl	uart_putchar
+ 914              	.LVL151:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 915              		.loc 1 34 0
+ 916 02b4 DE48     		ldr	r0, .L51
+ 917 02b6 4C21     		mov	r1, #76
+ 918 02b8 FFF7FEFF 		bl	uart_putchar
+ 919              	.LVL152:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 920              		.loc 1 35 0
+ 921 02bc DC48     		ldr	r0, .L51
+ 922 02be 0021     		mov	r1, #0
+ 923 02c0 FFF7FEFF 		bl	uart_putchar
+ 924              	.LVL153:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 925              		.loc 1 32 0
+ 926 02c4 DA48     		ldr	r0, .L51
+ 927 02c6 5421     		mov	r1, #84
+ 928 02c8 FFF7FEFF 		bl	uart_putchar
+ 929              	.LVL154:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 930              		.loc 1 33 0
+ 931 02cc D848     		ldr	r0, .L51
+ 932 02ce 5421     		mov	r1, #84
+ 933 02d0 FFF7FEFF 		bl	uart_putchar
+ 934              	.LVL155:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 935              		.loc 1 34 0
+ 936 02d4 D648     		ldr	r0, .L51
+ 937 02d6 4921     		mov	r1, #73
+ 938 02d8 FFF7FEFF 		bl	uart_putchar
+ 939              	.LVL156:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 940              		.loc 1 35 0
+ 941 02dc D448     		ldr	r0, .L51
+ 942 02de 0021     		mov	r1, #0
+ 943 02e0 FFF7FEFF 		bl	uart_putchar
+ 944              	.LVL157:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 945              		.loc 1 32 0
+ 946 02e4 D248     		ldr	r0, .L51
+ 947 02e6 5421     		mov	r1, #84
+ 948 02e8 FFF7FEFF 		bl	uart_putchar
+ 949              	.LVL158:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 950              		.loc 1 33 0
+ 951 02ec D048     		ldr	r0, .L51
+ 952 02ee 5421     		mov	r1, #84
+ 953 02f0 FFF7FEFF 		bl	uart_putchar
+ 954              	.LVL159:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 955              		.loc 1 34 0
+ 956 02f4 CE48     		ldr	r0, .L51
+ 957 02f6 4E21     		mov	r1, #78
+ 958 02f8 FFF7FEFF 		bl	uart_putchar
+ 959              	.LVL160:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 960              		.loc 1 35 0
+ 961 02fc CC48     		ldr	r0, .L51
+ 962 02fe 0021     		mov	r1, #0
+ 963 0300 FFF7FEFF 		bl	uart_putchar
+ 964              	.LVL161:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 965              		.loc 1 32 0
+ 966 0304 CA48     		ldr	r0, .L51
+ 967 0306 5421     		mov	r1, #84
+ 968 0308 FFF7FEFF 		bl	uart_putchar
+ 969              	.LVL162:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 970              		.loc 1 33 0
+ 971 030c C848     		ldr	r0, .L51
+ 972 030e 5421     		mov	r1, #84
+ 973 0310 FFF7FEFF 		bl	uart_putchar
+ 974              	.LVL163:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 975              		.loc 1 34 0
+ 976 0314 C648     		ldr	r0, .L51
+ 977 0316 4521     		mov	r1, #69
+ 978 0318 FFF7FEFF 		bl	uart_putchar
+ 979              	.LVL164:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 980              		.loc 1 35 0
+ 981 031c C448     		ldr	r0, .L51
+ 982 031e 0021     		mov	r1, #0
+ 983 0320 FFF7FEFF 		bl	uart_putchar
+ 984              	.LVL165:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 985              		.loc 1 32 0
+ 986 0324 C248     		ldr	r0, .L51
+ 987 0326 5421     		mov	r1, #84
+ 988 0328 FFF7FEFF 		bl	uart_putchar
+ 989              	.LVL166:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 990              		.loc 1 33 0
+ 991 032c C048     		ldr	r0, .L51
+ 992 032e 5421     		mov	r1, #84
+ 993 0330 FFF7FEFF 		bl	uart_putchar
+ 994              	.LVL167:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 995              		.loc 1 34 0
+ 996 0334 BE48     		ldr	r0, .L51
+ 997 0336 2021     		mov	r1, #32
+ 998 0338 FFF7FEFF 		bl	uart_putchar
+ 999              	.LVL168:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1000              		.loc 1 35 0
+ 1001 033c BC48     		ldr	r0, .L51
+ 1002 033e 0021     		mov	r1, #0
+ 1003 0340 FFF7FEFF 		bl	uart_putchar
+ 1004              	.LVL169:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1005              		.loc 1 32 0
+ 1006 0344 BA48     		ldr	r0, .L51
+ 1007 0346 5421     		mov	r1, #84
+ 1008 0348 FFF7FEFF 		bl	uart_putchar
+ 1009              	.LVL170:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1010              		.loc 1 33 0
+ 1011 034c B848     		ldr	r0, .L51
+ 1012 034e 5421     		mov	r1, #84
+ 1013 0350 FFF7FEFF 		bl	uart_putchar
+ 1014              	.LVL171:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1015              		.loc 1 34 0
+ 1016 0354 B648     		ldr	r0, .L51
+ 1017 0356 4C21     		mov	r1, #76
+ 1018 0358 FFF7FEFF 		bl	uart_putchar
+ 1019              	.LVL172:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1020              		.loc 1 35 0
+ 1021 035c B448     		ldr	r0, .L51
+ 1022 035e 0021     		mov	r1, #0
+ 1023 0360 FFF7FEFF 		bl	uart_putchar
+ 1024              	.LVL173:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1025              		.loc 1 32 0
+ 1026 0364 B248     		ldr	r0, .L51
+ 1027 0366 5421     		mov	r1, #84
+ 1028 0368 FFF7FEFF 		bl	uart_putchar
+ 1029              	.LVL174:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1030              		.loc 1 33 0
+ 1031 036c B048     		ldr	r0, .L51
+ 1032 036e 5421     		mov	r1, #84
+ 1033 0370 FFF7FEFF 		bl	uart_putchar
+ 1034              	.LVL175:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1035              		.loc 1 34 0
+ 1036 0374 AE48     		ldr	r0, .L51
+ 1037 0376 4F21     		mov	r1, #79
+ 1038 0378 FFF7FEFF 		bl	uart_putchar
+ 1039              	.LVL176:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1040              		.loc 1 35 0
+ 1041 037c AC48     		ldr	r0, .L51
+ 1042 037e 0021     		mov	r1, #0
+ 1043 0380 FFF7FEFF 		bl	uart_putchar
+ 1044              	.LVL177:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1045              		.loc 1 32 0
+ 1046 0384 AA48     		ldr	r0, .L51
+ 1047 0386 5421     		mov	r1, #84
+ 1048 0388 FFF7FEFF 		bl	uart_putchar
+ 1049              	.LVL178:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1050              		.loc 1 33 0
+ 1051 038c A848     		ldr	r0, .L51
+ 1052 038e 5421     		mov	r1, #84
+ 1053 0390 FFF7FEFF 		bl	uart_putchar
+ 1054              	.LVL179:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1055              		.loc 1 34 0
+ 1056 0394 A648     		ldr	r0, .L51
+ 1057 0396 5321     		mov	r1, #83
+ 1058 0398 FFF7FEFF 		bl	uart_putchar
+ 1059              	.LVL180:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1060              		.loc 1 35 0
+ 1061 039c A448     		ldr	r0, .L51
+ 1062 039e 0021     		mov	r1, #0
+ 1063 03a0 FFF7FEFF 		bl	uart_putchar
+ 1064              	.LVL181:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1065              		.loc 1 32 0
+ 1066 03a4 A248     		ldr	r0, .L51
+ 1067 03a6 5421     		mov	r1, #84
+ 1068 03a8 FFF7FEFF 		bl	uart_putchar
+ 1069              	.LVL182:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1070              		.loc 1 33 0
+ 1071 03ac A048     		ldr	r0, .L51
+ 1072 03ae 5421     		mov	r1, #84
+ 1073 03b0 FFF7FEFF 		bl	uart_putchar
+ 1074              	.LVL183:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1075              		.loc 1 34 0
+ 1076 03b4 9E48     		ldr	r0, .L51
+ 1077 03b6 5421     		mov	r1, #84
+ 1078 03b8 FFF7FEFF 		bl	uart_putchar
+ 1079              	.LVL184:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1080              		.loc 1 35 0
+ 1081 03bc 9C48     		ldr	r0, .L51
+ 1082 03be 0021     		mov	r1, #0
+ 1083 03c0 FFF7FEFF 		bl	uart_putchar
+ 1084              	.LVL185:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1085              		.loc 1 32 0
+ 1086 03c4 9A48     		ldr	r0, .L51
+ 1087 03c6 5421     		mov	r1, #84
+ 1088 03c8 FFF7FEFF 		bl	uart_putchar
+ 1089              	.LVL186:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1090              		.loc 1 33 0
+ 1091 03cc 9848     		ldr	r0, .L51
+ 1092 03ce 5421     		mov	r1, #84
+ 1093 03d0 FFF7FEFF 		bl	uart_putchar
+ 1094              	.LVL187:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1095              		.loc 1 34 0
+ 1096 03d4 9648     		ldr	r0, .L51
+ 1097 03d6 2021     		mov	r1, #32
+ 1098 03d8 FFF7FEFF 		bl	uart_putchar
+ 1099              	.LVL188:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1100              		.loc 1 35 0
+ 1101 03dc 9448     		ldr	r0, .L51
+ 1102 03de 0021     		mov	r1, #0
+ 1103 03e0 FFF7FEFF 		bl	uart_putchar
+ 1104              	.LVL189:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1105              		.loc 1 32 0
+ 1106 03e4 9248     		ldr	r0, .L51
+ 1107 03e6 5421     		mov	r1, #84
+ 1108 03e8 FFF7FEFF 		bl	uart_putchar
+ 1109              	.LVL190:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1110              		.loc 1 33 0
+ 1111 03ec 9048     		ldr	r0, .L51
+ 1112 03ee 5421     		mov	r1, #84
+ 1113 03f0 FFF7FEFF 		bl	uart_putchar
+ 1114              	.LVL191:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1115              		.loc 1 34 0
+ 1116 03f4 8E48     		ldr	r0, .L51
+ 1117 03f6 3A21     		mov	r1, #58
+ 1118 03f8 FFF7FEFF 		bl	uart_putchar
+ 1119              	.LVL192:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1120              		.loc 1 35 0
+ 1121 03fc 8C48     		ldr	r0, .L51
+ 1122 03fe 0021     		mov	r1, #0
+ 1123 0400 FFF7FEFF 		bl	uart_putchar
+ 1124              	.LVL193:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1125              		.loc 1 32 0
+ 1126 0404 8A48     		ldr	r0, .L51
+ 1127 0406 5421     		mov	r1, #84
+ 1128 0408 FFF7FEFF 		bl	uart_putchar
+ 1129              	.LVL194:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1130              		.loc 1 33 0
+ 1131 040c 8848     		ldr	r0, .L51
+ 1132 040e 5421     		mov	r1, #84
+ 1133 0410 FFF7FEFF 		bl	uart_putchar
+ 1134              	.LVL195:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1135              		.loc 1 34 0
+ 1136 0414 8648     		ldr	r0, .L51
+ 1137 0416 2821     		mov	r1, #40
+ 1138 0418 FFF7FEFF 		bl	uart_putchar
+ 1139              	.LVL196:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1140              		.loc 1 35 0
+ 1141 041c 8448     		ldr	r0, .L51
+ 1142 041e 0021     		mov	r1, #0
+ 1143 0420 FFF7FEFF 		bl	uart_putchar
+ 1144              	.LVL197:
+ 1145 0424 0EE6     		b	.L31
+ 1146              	.LVL198:
+ 1147              	.L42:
+ 1148              	.LBE51:
+ 1149              	.LBE50:
+ 1150              	.LBE49:
+ 1151              	.LBB52:
+ 1152              	.LBB53:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 1153              		.loc 1 28 0
+ 1154 0426 8248     		ldr	r0, .L51
+ 1155 0428 4321     		mov	r1, #67
+ 1156 042a FFF7FEFF 		bl	uart_putchar
+ 1157              	.LVL199:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 1158              		.loc 1 29 0
+ 1159 042e 8048     		ldr	r0, .L51
+ 1160 0430 4C21     		mov	r1, #76
+ 1161 0432 FFF7FEFF 		bl	uart_putchar
+ 1162              	.LVL200:
+ 1163 0436 7F4E     		ldr	r6, .L51+4
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 1164              		.loc 1 31 0
+ 1165 0438 0025     		mov	r5, #0
+ 1166 043a 0027     		mov	r7, #0
+ 1167              	.LVL201:
+ 1168              	.L28:
+ 1169              	.LBB54:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1170              		.loc 1 32 0
+ 1171 043c 7C48     		ldr	r0, .L51
+ 1172 043e 5421     		mov	r1, #84
+ 1173 0440 FFF7FEFF 		bl	uart_putchar
+ 1174              	.LVL202:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1175              		.loc 1 33 0
+ 1176 0444 7A48     		ldr	r0, .L51
+ 1177 0446 5421     		mov	r1, #84
+ 1178 0448 FFF7FEFF 		bl	uart_putchar
+ 1179              	.LVL203:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1180              		.loc 1 34 0
+ 1181 044c F15D     		ldrb	r1, [r6, r7]
+ 1182 044e 7848     		ldr	r0, .L51
+ 1183 0450 FFF7FEFF 		bl	uart_putchar
+ 1184              	.LVL204:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1185              		.loc 1 35 0
+ 1186 0454 7648     		ldr	r0, .L51
+ 1187 0456 0021     		mov	r1, #0
+ 1188 0458 FFF7FEFF 		bl	uart_putchar
+ 1189              	.LVL205:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1190              		.loc 1 32 0
+ 1191 045c 7448     		ldr	r0, .L51
+ 1192 045e 5421     		mov	r1, #84
+ 1193 0460 FFF7FEFF 		bl	uart_putchar
+ 1194              	.LVL206:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 1195              		.loc 1 31 0
+ 1196 0464 0135     		add	r5, r5, #1
+ 1197              	.LVL207:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1198              		.loc 1 33 0
+ 1199 0466 7248     		ldr	r0, .L51
+ 1200 0468 5421     		mov	r1, #84
+ 1201 046a FFF7FEFF 		bl	uart_putchar
+ 1202              	.LVL208:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1203              		.loc 1 34 0
+ 1204 046e 715D     		ldrb	r1, [r6, r5]
+ 1205 0470 6F48     		ldr	r0, .L51
+ 1206 0472 FFF7FEFF 		bl	uart_putchar
+ 1207              	.LVL209:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 1208              		.loc 1 31 0
+ 1209 0476 0135     		add	r5, r5, #1
+ 1210              	.LVL210:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1211              		.loc 1 35 0
+ 1212 0478 6D48     		ldr	r0, .L51
+ 1213 047a 0021     		mov	r1, #0
+ 1214 047c FFF7FEFF 		bl	uart_putchar
+ 1215              	.LVL211:
+  31:../Sources/LCD.c **** 	for(int i=0;i<strlen(string);i++){
+ 1216              		.loc 1 31 0
+ 1217 0480 2F1E     		sub	r7, r5, #0
+ 1218 0482 162F     		cmp	r7, #22
+ 1219 0484 DAD1     		bne	.L28
+ 1220 0486 C8E5     		b	.L29
+ 1221              	.LVL212:
+ 1222              	.L43:
+ 1223              	.LBE54:
+ 1224              	.LBE53:
+ 1225              	.LBE52:
+ 1226              	.LBB55:
+ 1227              	.LBB56:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 1228              		.loc 1 28 0
+ 1229 0488 6948     		ldr	r0, .L51
+ 1230 048a 4321     		mov	r1, #67
+ 1231 048c FFF7FEFF 		bl	uart_putchar
+ 1232              	.LVL213:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 1233              		.loc 1 29 0
+ 1234 0490 6748     		ldr	r0, .L51
+ 1235 0492 4C21     		mov	r1, #76
+ 1236 0494 FFF7FEFF 		bl	uart_putchar
+ 1237              	.LVL214:
+ 1238              	.LBB57:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1239              		.loc 1 32 0
+ 1240 0498 6548     		ldr	r0, .L51
+ 1241 049a 5421     		mov	r1, #84
+ 1242 049c FFF7FEFF 		bl	uart_putchar
+ 1243              	.LVL215:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1244              		.loc 1 33 0
+ 1245 04a0 6348     		ldr	r0, .L51
+ 1246 04a2 5421     		mov	r1, #84
+ 1247 04a4 FFF7FEFF 		bl	uart_putchar
+ 1248              	.LVL216:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1249              		.loc 1 34 0
+ 1250 04a8 6148     		ldr	r0, .L51
+ 1251 04aa 5321     		mov	r1, #83
+ 1252 04ac FFF7FEFF 		bl	uart_putchar
+ 1253              	.LVL217:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1254              		.loc 1 35 0
+ 1255 04b0 5F48     		ldr	r0, .L51
+ 1256 04b2 0021     		mov	r1, #0
+ 1257 04b4 FFF7FEFF 		bl	uart_putchar
+ 1258              	.LVL218:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1259              		.loc 1 32 0
+ 1260 04b8 5D48     		ldr	r0, .L51
+ 1261 04ba 5421     		mov	r1, #84
+ 1262 04bc FFF7FEFF 		bl	uart_putchar
+ 1263              	.LVL219:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1264              		.loc 1 33 0
+ 1265 04c0 5B48     		ldr	r0, .L51
+ 1266 04c2 5421     		mov	r1, #84
+ 1267 04c4 FFF7FEFF 		bl	uart_putchar
+ 1268              	.LVL220:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1269              		.loc 1 34 0
+ 1270 04c8 5948     		ldr	r0, .L51
+ 1271 04ca 5F21     		mov	r1, #95
+ 1272 04cc FFF7FEFF 		bl	uart_putchar
+ 1273              	.LVL221:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1274              		.loc 1 35 0
+ 1275 04d0 5748     		ldr	r0, .L51
+ 1276 04d2 0021     		mov	r1, #0
+ 1277 04d4 FFF7FEFF 		bl	uart_putchar
+ 1278              	.LVL222:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1279              		.loc 1 32 0
+ 1280 04d8 5548     		ldr	r0, .L51
+ 1281 04da 5421     		mov	r1, #84
+ 1282 04dc FFF7FEFF 		bl	uart_putchar
+ 1283              	.LVL223:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1284              		.loc 1 33 0
+ 1285 04e0 5348     		ldr	r0, .L51
+ 1286 04e2 5421     		mov	r1, #84
+ 1287 04e4 FFF7FEFF 		bl	uart_putchar
+ 1288              	.LVL224:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1289              		.loc 1 34 0
+ 1290 04e8 5148     		ldr	r0, .L51
+ 1291 04ea 4D21     		mov	r1, #77
+ 1292 04ec FFF7FEFF 		bl	uart_putchar
+ 1293              	.LVL225:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1294              		.loc 1 35 0
+ 1295 04f0 4F48     		ldr	r0, .L51
+ 1296 04f2 0021     		mov	r1, #0
+ 1297 04f4 FFF7FEFF 		bl	uart_putchar
+ 1298              	.LVL226:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1299              		.loc 1 32 0
+ 1300 04f8 4D48     		ldr	r0, .L51
+ 1301 04fa 5421     		mov	r1, #84
+ 1302 04fc FFF7FEFF 		bl	uart_putchar
+ 1303              	.LVL227:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1304              		.loc 1 33 0
+ 1305 0500 4B48     		ldr	r0, .L51
+ 1306 0502 5421     		mov	r1, #84
+ 1307 0504 FFF7FEFF 		bl	uart_putchar
+ 1308              	.LVL228:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1309              		.loc 1 34 0
+ 1310 0508 4948     		ldr	r0, .L51
+ 1311 050a 4F21     		mov	r1, #79
+ 1312 050c FFF7FEFF 		bl	uart_putchar
+ 1313              	.LVL229:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1314              		.loc 1 35 0
+ 1315 0510 4748     		ldr	r0, .L51
+ 1316 0512 0021     		mov	r1, #0
+ 1317 0514 FFF7FEFF 		bl	uart_putchar
+ 1318              	.LVL230:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1319              		.loc 1 32 0
+ 1320 0518 4548     		ldr	r0, .L51
+ 1321 051a 5421     		mov	r1, #84
+ 1322 051c FFF7FEFF 		bl	uart_putchar
+ 1323              	.LVL231:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1324              		.loc 1 33 0
+ 1325 0520 4348     		ldr	r0, .L51
+ 1326 0522 5421     		mov	r1, #84
+ 1327 0524 FFF7FEFF 		bl	uart_putchar
+ 1328              	.LVL232:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1329              		.loc 1 34 0
+ 1330 0528 4148     		ldr	r0, .L51
+ 1331 052a 4421     		mov	r1, #68
+ 1332 052c FFF7FEFF 		bl	uart_putchar
+ 1333              	.LVL233:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1334              		.loc 1 35 0
+ 1335 0530 3F48     		ldr	r0, .L51
+ 1336 0532 0021     		mov	r1, #0
+ 1337 0534 FFF7FEFF 		bl	uart_putchar
+ 1338              	.LVL234:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1339              		.loc 1 32 0
+ 1340 0538 3D48     		ldr	r0, .L51
+ 1341 053a 5421     		mov	r1, #84
+ 1342 053c FFF7FEFF 		bl	uart_putchar
+ 1343              	.LVL235:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1344              		.loc 1 33 0
+ 1345 0540 3B48     		ldr	r0, .L51
+ 1346 0542 5421     		mov	r1, #84
+ 1347 0544 FFF7FEFF 		bl	uart_putchar
+ 1348              	.LVL236:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1349              		.loc 1 34 0
+ 1350 0548 3948     		ldr	r0, .L51
+ 1351 054a 4521     		mov	r1, #69
+ 1352 054c FFF7FEFF 		bl	uart_putchar
+ 1353              	.LVL237:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1354              		.loc 1 35 0
+ 1355 0550 3748     		ldr	r0, .L51
+ 1356 0552 0021     		mov	r1, #0
+ 1357 0554 FFF7FEFF 		bl	uart_putchar
+ 1358              	.LVL238:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1359              		.loc 1 32 0
+ 1360 0558 3548     		ldr	r0, .L51
+ 1361 055a 5421     		mov	r1, #84
+ 1362 055c FFF7FEFF 		bl	uart_putchar
+ 1363              	.LVL239:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1364              		.loc 1 33 0
+ 1365 0560 3348     		ldr	r0, .L51
+ 1366 0562 5421     		mov	r1, #84
+ 1367 0564 FFF7FEFF 		bl	uart_putchar
+ 1368              	.LVL240:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1369              		.loc 1 34 0
+ 1370 0568 3148     		ldr	r0, .L51
+ 1371 056a 2021     		mov	r1, #32
+ 1372 056c FFF7FEFF 		bl	uart_putchar
+ 1373              	.LVL241:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1374              		.loc 1 35 0
+ 1375 0570 2F48     		ldr	r0, .L51
+ 1376 0572 0021     		mov	r1, #0
+ 1377 0574 FFF7FEFF 		bl	uart_putchar
+ 1378              	.LVL242:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1379              		.loc 1 32 0
+ 1380 0578 2D48     		ldr	r0, .L51
+ 1381 057a 5421     		mov	r1, #84
+ 1382 057c FFF7FEFF 		bl	uart_putchar
+ 1383              	.LVL243:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1384              		.loc 1 33 0
+ 1385 0580 2B48     		ldr	r0, .L51
+ 1386 0582 5421     		mov	r1, #84
+ 1387 0584 FFF7FEFF 		bl	uart_putchar
+ 1388              	.LVL244:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1389              		.loc 1 34 0
+ 1390 0588 2948     		ldr	r0, .L51
+ 1391 058a 4121     		mov	r1, #65
+ 1392 058c FFF7FEFF 		bl	uart_putchar
+ 1393              	.LVL245:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1394              		.loc 1 35 0
+ 1395 0590 2748     		ldr	r0, .L51
+ 1396 0592 0021     		mov	r1, #0
+ 1397 0594 FFF7FEFF 		bl	uart_putchar
+ 1398              	.LVL246:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1399              		.loc 1 32 0
+ 1400 0598 2548     		ldr	r0, .L51
+ 1401 059a 5421     		mov	r1, #84
+ 1402 059c FFF7FEFF 		bl	uart_putchar
+ 1403              	.LVL247:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1404              		.loc 1 33 0
+ 1405 05a0 2348     		ldr	r0, .L51
+ 1406 05a2 5421     		mov	r1, #84
+ 1407 05a4 FFF7FEFF 		bl	uart_putchar
+ 1408              	.LVL248:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1409              		.loc 1 34 0
+ 1410 05a8 2148     		ldr	r0, .L51
+ 1411 05aa 4321     		mov	r1, #67
+ 1412 05ac FFF7FEFF 		bl	uart_putchar
+ 1413              	.LVL249:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1414              		.loc 1 35 0
+ 1415 05b0 1F48     		ldr	r0, .L51
+ 1416 05b2 0021     		mov	r1, #0
+ 1417 05b4 FFF7FEFF 		bl	uart_putchar
+ 1418              	.LVL250:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1419              		.loc 1 32 0
+ 1420 05b8 1D48     		ldr	r0, .L51
+ 1421 05ba 5421     		mov	r1, #84
+ 1422 05bc FFF7FEFF 		bl	uart_putchar
+ 1423              	.LVL251:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1424              		.loc 1 33 0
+ 1425 05c0 1B48     		ldr	r0, .L51
+ 1426 05c2 5421     		mov	r1, #84
+ 1427 05c4 FFF7FEFF 		bl	uart_putchar
+ 1428              	.LVL252:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1429              		.loc 1 34 0
+ 1430 05c8 1948     		ldr	r0, .L51
+ 1431 05ca 5421     		mov	r1, #84
+ 1432 05cc FFF7FEFF 		bl	uart_putchar
+ 1433              	.LVL253:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1434              		.loc 1 35 0
+ 1435 05d0 1748     		ldr	r0, .L51
+ 1436 05d2 0021     		mov	r1, #0
+ 1437 05d4 FFF7FEFF 		bl	uart_putchar
+ 1438              	.LVL254:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1439              		.loc 1 32 0
+ 1440 05d8 1548     		ldr	r0, .L51
+ 1441 05da 5421     		mov	r1, #84
+ 1442 05dc FFF7FEFF 		bl	uart_putchar
+ 1443              	.LVL255:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1444              		.loc 1 33 0
+ 1445 05e0 1348     		ldr	r0, .L51
+ 1446 05e2 5421     		mov	r1, #84
+ 1447 05e4 FFF7FEFF 		bl	uart_putchar
+ 1448              	.LVL256:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1449              		.loc 1 34 0
+ 1450 05e8 1148     		ldr	r0, .L51
+ 1451 05ea 4921     		mov	r1, #73
+ 1452 05ec FFF7FEFF 		bl	uart_putchar
+ 1453              	.LVL257:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1454              		.loc 1 35 0
+ 1455 05f0 0F48     		ldr	r0, .L51
+ 1456 05f2 0021     		mov	r1, #0
+ 1457 05f4 FFF7FEFF 		bl	uart_putchar
+ 1458              	.LVL258:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1459              		.loc 1 32 0
+ 1460 05f8 0D48     		ldr	r0, .L51
+ 1461 05fa 5421     		mov	r1, #84
+ 1462 05fc FFF7FEFF 		bl	uart_putchar
+ 1463              	.LVL259:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1464              		.loc 1 33 0
+ 1465 0600 0B48     		ldr	r0, .L51
+ 1466 0602 5421     		mov	r1, #84
+ 1467 0604 FFF7FEFF 		bl	uart_putchar
+ 1468              	.LVL260:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1469              		.loc 1 34 0
+ 1470 0608 0948     		ldr	r0, .L51
+ 1471 060a 5621     		mov	r1, #86
+ 1472 060c FFF7FEFF 		bl	uart_putchar
+ 1473              	.LVL261:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1474              		.loc 1 35 0
+ 1475 0610 0748     		ldr	r0, .L51
+ 1476 0612 0021     		mov	r1, #0
+ 1477 0614 FFF7FEFF 		bl	uart_putchar
+ 1478              	.LVL262:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1479              		.loc 1 32 0
+ 1480 0618 0548     		ldr	r0, .L51
+ 1481 061a 5421     		mov	r1, #84
+ 1482 061c FFF7FEFF 		bl	uart_putchar
+ 1483              	.LVL263:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1484              		.loc 1 33 0
+ 1485 0620 0348     		ldr	r0, .L51
+ 1486 0622 5421     		mov	r1, #84
+ 1487 0624 FFF7FEFF 		bl	uart_putchar
+ 1488              	.LVL264:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1489              		.loc 1 34 0
+ 1490 0628 0148     		ldr	r0, .L51
+ 1491 062a 4121     		mov	r1, #65
+ 1492 062c F9E5     		b	.L38
+ 1493              	.L52:
+ 1494 062e C046     		.align	2
+ 1495              	.L51:
+ 1496 0630 00C00640 		.word	1074184192
+ 1497 0634 00000000 		.word	.LC2
+ 1498              	.LVL265:
+ 1499              	.L44:
+ 1500              	.LBE57:
+ 1501              	.LBE56:
+ 1502              	.LBE55:
+ 1503              	.LBB58:
+ 1504              	.LBB59:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 1505              		.loc 1 28 0
+ 1506 0638 EF48     		ldr	r0, .L53
+ 1507 063a 4321     		mov	r1, #67
+ 1508 063c FFF7FEFF 		bl	uart_putchar
+ 1509              	.LVL266:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 1510              		.loc 1 29 0
+ 1511 0640 ED48     		ldr	r0, .L53
+ 1512 0642 4C21     		mov	r1, #76
+ 1513 0644 FFF7FEFF 		bl	uart_putchar
+ 1514              	.LVL267:
+ 1515              	.LBB60:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1516              		.loc 1 32 0
+ 1517 0648 EB48     		ldr	r0, .L53
+ 1518 064a 5421     		mov	r1, #84
+ 1519 064c FFF7FEFF 		bl	uart_putchar
+ 1520              	.LVL268:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1521              		.loc 1 33 0
+ 1522 0650 E948     		ldr	r0, .L53
+ 1523 0652 5421     		mov	r1, #84
+ 1524 0654 FFF7FEFF 		bl	uart_putchar
+ 1525              	.LVL269:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1526              		.loc 1 34 0
+ 1527 0658 E748     		ldr	r0, .L53
+ 1528 065a 4221     		mov	r1, #66
+ 1529 065c FFF7FEFF 		bl	uart_putchar
+ 1530              	.LVL270:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1531              		.loc 1 35 0
+ 1532 0660 E548     		ldr	r0, .L53
+ 1533 0662 0021     		mov	r1, #0
+ 1534 0664 FFF7FEFF 		bl	uart_putchar
+ 1535              	.LVL271:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1536              		.loc 1 32 0
+ 1537 0668 E348     		ldr	r0, .L53
+ 1538 066a 5421     		mov	r1, #84
+ 1539 066c FFF7FEFF 		bl	uart_putchar
+ 1540              	.LVL272:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1541              		.loc 1 33 0
+ 1542 0670 E148     		ldr	r0, .L53
+ 1543 0672 5421     		mov	r1, #84
+ 1544 0674 FFF7FEFF 		bl	uart_putchar
+ 1545              	.LVL273:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1546              		.loc 1 34 0
+ 1547 0678 DF48     		ldr	r0, .L53
+ 1548 067a 4F21     		mov	r1, #79
+ 1549 067c FFF7FEFF 		bl	uart_putchar
+ 1550              	.LVL274:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1551              		.loc 1 35 0
+ 1552 0680 DD48     		ldr	r0, .L53
+ 1553 0682 0021     		mov	r1, #0
+ 1554 0684 FFF7FEFF 		bl	uart_putchar
+ 1555              	.LVL275:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1556              		.loc 1 32 0
+ 1557 0688 DB48     		ldr	r0, .L53
+ 1558 068a 5421     		mov	r1, #84
+ 1559 068c FFF7FEFF 		bl	uart_putchar
+ 1560              	.LVL276:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1561              		.loc 1 33 0
+ 1562 0690 D948     		ldr	r0, .L53
+ 1563 0692 5421     		mov	r1, #84
+ 1564 0694 FFF7FEFF 		bl	uart_putchar
+ 1565              	.LVL277:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1566              		.loc 1 34 0
+ 1567 0698 D748     		ldr	r0, .L53
+ 1568 069a 5421     		mov	r1, #84
+ 1569 069c FFF7FEFF 		bl	uart_putchar
+ 1570              	.LVL278:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1571              		.loc 1 35 0
+ 1572 06a0 D548     		ldr	r0, .L53
+ 1573 06a2 0021     		mov	r1, #0
+ 1574 06a4 FFF7FEFF 		bl	uart_putchar
+ 1575              	.LVL279:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1576              		.loc 1 32 0
+ 1577 06a8 D348     		ldr	r0, .L53
+ 1578 06aa 5421     		mov	r1, #84
+ 1579 06ac FFF7FEFF 		bl	uart_putchar
+ 1580              	.LVL280:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1581              		.loc 1 33 0
+ 1582 06b0 D148     		ldr	r0, .L53
+ 1583 06b2 5421     		mov	r1, #84
+ 1584 06b4 FFF7FEFF 		bl	uart_putchar
+ 1585              	.LVL281:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1586              		.loc 1 34 0
+ 1587 06b8 CF48     		ldr	r0, .L53
+ 1588 06ba 4821     		mov	r1, #72
+ 1589 06bc FFF7FEFF 		bl	uart_putchar
+ 1590              	.LVL282:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1591              		.loc 1 35 0
+ 1592 06c0 CD48     		ldr	r0, .L53
+ 1593 06c2 0021     		mov	r1, #0
+ 1594 06c4 FFF7FEFF 		bl	uart_putchar
+ 1595              	.LVL283:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1596              		.loc 1 32 0
+ 1597 06c8 CB48     		ldr	r0, .L53
+ 1598 06ca 5421     		mov	r1, #84
+ 1599 06cc FFF7FEFF 		bl	uart_putchar
+ 1600              	.LVL284:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1601              		.loc 1 33 0
+ 1602 06d0 C948     		ldr	r0, .L53
+ 1603 06d2 5421     		mov	r1, #84
+ 1604 06d4 FFF7FEFF 		bl	uart_putchar
+ 1605              	.LVL285:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1606              		.loc 1 34 0
+ 1607 06d8 C748     		ldr	r0, .L53
+ 1608 06da 2021     		mov	r1, #32
+ 1609 06dc FFF7FEFF 		bl	uart_putchar
+ 1610              	.LVL286:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1611              		.loc 1 35 0
+ 1612 06e0 C548     		ldr	r0, .L53
+ 1613 06e2 0021     		mov	r1, #0
+ 1614 06e4 FFF7FEFF 		bl	uart_putchar
+ 1615              	.LVL287:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1616              		.loc 1 32 0
+ 1617 06e8 C348     		ldr	r0, .L53
+ 1618 06ea 5421     		mov	r1, #84
+ 1619 06ec FFF7FEFF 		bl	uart_putchar
+ 1620              	.LVL288:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1621              		.loc 1 33 0
+ 1622 06f0 C148     		ldr	r0, .L53
+ 1623 06f2 5421     		mov	r1, #84
+ 1624 06f4 FFF7FEFF 		bl	uart_putchar
+ 1625              	.LVL289:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1626              		.loc 1 34 0
+ 1627 06f8 BF48     		ldr	r0, .L53
+ 1628 06fa 4521     		mov	r1, #69
+ 1629 06fc FFF7FEFF 		bl	uart_putchar
+ 1630              	.LVL290:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1631              		.loc 1 35 0
+ 1632 0700 BD48     		ldr	r0, .L53
+ 1633 0702 0021     		mov	r1, #0
+ 1634 0704 FFF7FEFF 		bl	uart_putchar
+ 1635              	.LVL291:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1636              		.loc 1 32 0
+ 1637 0708 BB48     		ldr	r0, .L53
+ 1638 070a 5421     		mov	r1, #84
+ 1639 070c FFF7FEFF 		bl	uart_putchar
+ 1640              	.LVL292:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1641              		.loc 1 33 0
+ 1642 0710 B948     		ldr	r0, .L53
+ 1643 0712 5421     		mov	r1, #84
+ 1644 0714 FFF7FEFF 		bl	uart_putchar
+ 1645              	.LVL293:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1646              		.loc 1 34 0
+ 1647 0718 B748     		ldr	r0, .L53
+ 1648 071a 4421     		mov	r1, #68
+ 1649 071c FFF7FEFF 		bl	uart_putchar
+ 1650              	.LVL294:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1651              		.loc 1 35 0
+ 1652 0720 B548     		ldr	r0, .L53
+ 1653 0722 0021     		mov	r1, #0
+ 1654 0724 FFF7FEFF 		bl	uart_putchar
+ 1655              	.LVL295:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1656              		.loc 1 32 0
+ 1657 0728 B348     		ldr	r0, .L53
+ 1658 072a 5421     		mov	r1, #84
+ 1659 072c FFF7FEFF 		bl	uart_putchar
+ 1660              	.LVL296:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1661              		.loc 1 33 0
+ 1662 0730 B148     		ldr	r0, .L53
+ 1663 0732 5421     		mov	r1, #84
+ 1664 0734 FFF7FEFF 		bl	uart_putchar
+ 1665              	.LVL297:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1666              		.loc 1 34 0
+ 1667 0738 AF48     		ldr	r0, .L53
+ 1668 073a 4721     		mov	r1, #71
+ 1669 073c FFF7FEFF 		bl	uart_putchar
+ 1670              	.LVL298:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1671              		.loc 1 35 0
+ 1672 0740 AD48     		ldr	r0, .L53
+ 1673 0742 0021     		mov	r1, #0
+ 1674 0744 FFF7FEFF 		bl	uart_putchar
+ 1675              	.LVL299:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1676              		.loc 1 32 0
+ 1677 0748 AB48     		ldr	r0, .L53
+ 1678 074a 5421     		mov	r1, #84
+ 1679 074c FFF7FEFF 		bl	uart_putchar
+ 1680              	.LVL300:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1681              		.loc 1 33 0
+ 1682 0750 A948     		ldr	r0, .L53
+ 1683 0752 5421     		mov	r1, #84
+ 1684 0754 FFF7FEFF 		bl	uart_putchar
+ 1685              	.LVL301:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1686              		.loc 1 34 0
+ 1687 0758 A748     		ldr	r0, .L53
+ 1688 075a 4521     		mov	r1, #69
+ 1689 075c FFF7FEFF 		bl	uart_putchar
+ 1690              	.LVL302:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1691              		.loc 1 35 0
+ 1692 0760 A548     		ldr	r0, .L53
+ 1693 0762 0021     		mov	r1, #0
+ 1694 0764 FFF7FEFF 		bl	uart_putchar
+ 1695              	.LVL303:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1696              		.loc 1 32 0
+ 1697 0768 A348     		ldr	r0, .L53
+ 1698 076a 5421     		mov	r1, #84
+ 1699 076c FFF7FEFF 		bl	uart_putchar
+ 1700              	.LVL304:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1701              		.loc 1 33 0
+ 1702 0770 A148     		ldr	r0, .L53
+ 1703 0772 5421     		mov	r1, #84
+ 1704 0774 FFF7FEFF 		bl	uart_putchar
+ 1705              	.LVL305:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1706              		.loc 1 34 0
+ 1707 0778 9F48     		ldr	r0, .L53
+ 1708 077a 5321     		mov	r1, #83
+ 1709              	.LVL306:
+ 1710              	.L39:
+ 1711 077c FFF7FEFF 		bl	uart_putchar
+ 1712              	.LVL307:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1713              		.loc 1 35 0
+ 1714 0780 9D48     		ldr	r0, .L53
+ 1715 0782 0021     		mov	r1, #0
+ 1716 0784 FFF7FEFF 		bl	uart_putchar
+ 1717              	.LVL308:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1718              		.loc 1 32 0
+ 1719 0788 9B48     		ldr	r0, .L53
+ 1720 078a 5421     		mov	r1, #84
+ 1721 078c FFF7FEFF 		bl	uart_putchar
+ 1722              	.LVL309:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1723              		.loc 1 33 0
+ 1724 0790 9948     		ldr	r0, .L53
+ 1725 0792 5421     		mov	r1, #84
+ 1726 0794 FFF7FEFF 		bl	uart_putchar
+ 1727              	.LVL310:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1728              		.loc 1 34 0
+ 1729 0798 9748     		ldr	r0, .L53
+ 1730 079a 2021     		mov	r1, #32
+ 1731 079c FFF7FEFF 		bl	uart_putchar
+ 1732              	.LVL311:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1733              		.loc 1 35 0
+ 1734 07a0 9548     		ldr	r0, .L53
+ 1735 07a2 0021     		mov	r1, #0
+ 1736 07a4 FFF7FEFF 		bl	uart_putchar
+ 1737              	.LVL312:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1738              		.loc 1 32 0
+ 1739 07a8 9348     		ldr	r0, .L53
+ 1740 07aa 5421     		mov	r1, #84
+ 1741 07ac FFF7FEFF 		bl	uart_putchar
+ 1742              	.LVL313:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1743              		.loc 1 33 0
+ 1744 07b0 9148     		ldr	r0, .L53
+ 1745 07b2 5421     		mov	r1, #84
+ 1746 07b4 FFF7FEFF 		bl	uart_putchar
+ 1747              	.LVL314:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1748              		.loc 1 34 0
+ 1749 07b8 8F48     		ldr	r0, .L53
+ 1750 07ba 4621     		mov	r1, #70
+ 1751 07bc FFF7FEFF 		bl	uart_putchar
+ 1752              	.LVL315:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1753              		.loc 1 35 0
+ 1754 07c0 8D48     		ldr	r0, .L53
+ 1755 07c2 0021     		mov	r1, #0
+ 1756 07c4 FFF7FEFF 		bl	uart_putchar
+ 1757              	.LVL316:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1758              		.loc 1 32 0
+ 1759 07c8 8B48     		ldr	r0, .L53
+ 1760 07ca 5421     		mov	r1, #84
+ 1761 07cc FFF7FEFF 		bl	uart_putchar
+ 1762              	.LVL317:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1763              		.loc 1 33 0
+ 1764 07d0 8948     		ldr	r0, .L53
+ 1765 07d2 5421     		mov	r1, #84
+ 1766 07d4 FFF7FEFF 		bl	uart_putchar
+ 1767              	.LVL318:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1768              		.loc 1 34 0
+ 1769 07d8 8748     		ldr	r0, .L53
+ 1770 07da 4F21     		mov	r1, #79
+ 1771 07dc FFF7FEFF 		bl	uart_putchar
+ 1772              	.LVL319:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1773              		.loc 1 35 0
+ 1774 07e0 8548     		ldr	r0, .L53
+ 1775 07e2 0021     		mov	r1, #0
+ 1776 07e4 FFF7FEFF 		bl	uart_putchar
+ 1777              	.LVL320:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1778              		.loc 1 32 0
+ 1779 07e8 8348     		ldr	r0, .L53
+ 1780 07ea 5421     		mov	r1, #84
+ 1781 07ec FFF7FEFF 		bl	uart_putchar
+ 1782              	.LVL321:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1783              		.loc 1 33 0
+ 1784 07f0 8148     		ldr	r0, .L53
+ 1785 07f2 5421     		mov	r1, #84
+ 1786 07f4 FFF7FEFF 		bl	uart_putchar
+ 1787              	.LVL322:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1788              		.loc 1 34 0
+ 1789 07f8 7F48     		ldr	r0, .L53
+ 1790 07fa 5521     		mov	r1, #85
+ 1791 07fc FFF7FEFF 		bl	uart_putchar
+ 1792              	.LVL323:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1793              		.loc 1 35 0
+ 1794 0800 7D48     		ldr	r0, .L53
+ 1795 0802 0021     		mov	r1, #0
+ 1796 0804 FFF7FEFF 		bl	uart_putchar
+ 1797              	.LVL324:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1798              		.loc 1 32 0
+ 1799 0808 7B48     		ldr	r0, .L53
+ 1800 080a 5421     		mov	r1, #84
+ 1801 080c FFF7FEFF 		bl	uart_putchar
+ 1802              	.LVL325:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1803              		.loc 1 33 0
+ 1804 0810 7948     		ldr	r0, .L53
+ 1805 0812 5421     		mov	r1, #84
+ 1806 0814 FFF7FEFF 		bl	uart_putchar
+ 1807              	.LVL326:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1808              		.loc 1 34 0
+ 1809 0818 7748     		ldr	r0, .L53
+ 1810 081a 4E21     		mov	r1, #78
+ 1811 081c FFF7FEFF 		bl	uart_putchar
+ 1812              	.LVL327:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1813              		.loc 1 35 0
+ 1814 0820 7548     		ldr	r0, .L53
+ 1815 0822 0021     		mov	r1, #0
+ 1816 0824 FFF7FEFF 		bl	uart_putchar
+ 1817              	.LVL328:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1818              		.loc 1 32 0
+ 1819 0828 7348     		ldr	r0, .L53
+ 1820 082a 5421     		mov	r1, #84
+ 1821 082c FFF7FEFF 		bl	uart_putchar
+ 1822              	.LVL329:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1823              		.loc 1 33 0
+ 1824 0830 7148     		ldr	r0, .L53
+ 1825 0832 5421     		mov	r1, #84
+ 1826 0834 FFF7FEFF 		bl	uart_putchar
+ 1827              	.LVL330:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1828              		.loc 1 34 0
+ 1829 0838 6F48     		ldr	r0, .L53
+ 1830 083a 4421     		mov	r1, #68
+ 1831 083c FFF7FEFF 		bl	uart_putchar
+ 1832              	.LVL331:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1833              		.loc 1 35 0
+ 1834 0840 6D48     		ldr	r0, .L53
+ 1835 0842 0021     		mov	r1, #0
+ 1836 0844 FFF7FEFF 		bl	uart_putchar
+ 1837              	.LVL332:
+ 1838 0848 FFF7FCFB 		bl	.L31	@ far jump
+ 1839              	.LVL333:
+ 1840              	.L45:
+ 1841              	.LBE60:
+ 1842              	.LBE59:
+ 1843              	.LBE58:
+ 1844              	.LBB61:
+ 1845              	.LBB62:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 1846              		.loc 1 28 0
+ 1847 084c 6A48     		ldr	r0, .L53
+ 1848 084e 4321     		mov	r1, #67
+ 1849 0850 FFF7FEFF 		bl	uart_putchar
+ 1850              	.LVL334:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 1851              		.loc 1 29 0
+ 1852 0854 6848     		ldr	r0, .L53
+ 1853 0856 4C21     		mov	r1, #76
+ 1854 0858 FFF7FEFF 		bl	uart_putchar
+ 1855              	.LVL335:
+ 1856              	.LBB63:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1857              		.loc 1 32 0
+ 1858 085c 6648     		ldr	r0, .L53
+ 1859 085e 5421     		mov	r1, #84
+ 1860 0860 FFF7FEFF 		bl	uart_putchar
+ 1861              	.LVL336:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1862              		.loc 1 33 0
+ 1863 0864 6448     		ldr	r0, .L53
+ 1864 0866 5421     		mov	r1, #84
+ 1865 0868 FFF7FEFF 		bl	uart_putchar
+ 1866              	.LVL337:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1867              		.loc 1 34 0
+ 1868 086c 6248     		ldr	r0, .L53
+ 1869 086e 4C21     		mov	r1, #76
+ 1870 0870 FFF7FEFF 		bl	uart_putchar
+ 1871              	.LVL338:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1872              		.loc 1 35 0
+ 1873 0874 6048     		ldr	r0, .L53
+ 1874 0876 0021     		mov	r1, #0
+ 1875 0878 FFF7FEFF 		bl	uart_putchar
+ 1876              	.LVL339:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1877              		.loc 1 32 0
+ 1878 087c 5E48     		ldr	r0, .L53
+ 1879 087e 5421     		mov	r1, #84
+ 1880 0880 FFF7FEFF 		bl	uart_putchar
+ 1881              	.LVL340:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1882              		.loc 1 33 0
+ 1883 0884 5C48     		ldr	r0, .L53
+ 1884 0886 5421     		mov	r1, #84
+ 1885 0888 FFF7FEFF 		bl	uart_putchar
+ 1886              	.LVL341:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1887              		.loc 1 34 0
+ 1888 088c 5A48     		ldr	r0, .L53
+ 1889 088e 4521     		mov	r1, #69
+ 1890 0890 FFF7FEFF 		bl	uart_putchar
+ 1891              	.LVL342:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1892              		.loc 1 35 0
+ 1893 0894 5848     		ldr	r0, .L53
+ 1894 0896 0021     		mov	r1, #0
+ 1895 0898 FFF7FEFF 		bl	uart_putchar
+ 1896              	.LVL343:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1897              		.loc 1 32 0
+ 1898 089c 5648     		ldr	r0, .L53
+ 1899 089e 5421     		mov	r1, #84
+ 1900 08a0 FFF7FEFF 		bl	uart_putchar
+ 1901              	.LVL344:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1902              		.loc 1 33 0
+ 1903 08a4 5448     		ldr	r0, .L53
+ 1904 08a6 5421     		mov	r1, #84
+ 1905 08a8 FFF7FEFF 		bl	uart_putchar
+ 1906              	.LVL345:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1907              		.loc 1 34 0
+ 1908 08ac 5248     		ldr	r0, .L53
+ 1909 08ae 4621     		mov	r1, #70
+ 1910              	.LVL346:
+ 1911              	.L40:
+ 1912              	.LBE63:
+ 1913              	.LBE62:
+ 1914              	.LBE61:
+ 1915              	.LBB64:
+ 1916              	.LBB65:
+ 1917              	.LBB66:
+ 1918 08b0 FFF7FEFF 		bl	uart_putchar
+ 1919              	.LVL347:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1920              		.loc 1 35 0
+ 1921 08b4 5048     		ldr	r0, .L53
+ 1922 08b6 0021     		mov	r1, #0
+ 1923 08b8 FFF7FEFF 		bl	uart_putchar
+ 1924              	.LVL348:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1925              		.loc 1 32 0
+ 1926 08bc 4E48     		ldr	r0, .L53
+ 1927 08be 5421     		mov	r1, #84
+ 1928 08c0 FFF7FEFF 		bl	uart_putchar
+ 1929              	.LVL349:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1930              		.loc 1 33 0
+ 1931 08c4 4C48     		ldr	r0, .L53
+ 1932 08c6 5421     		mov	r1, #84
+ 1933 08c8 FFF7FEFF 		bl	uart_putchar
+ 1934              	.LVL350:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1935              		.loc 1 34 0
+ 1936 08cc 4A48     		ldr	r0, .L53
+ 1937 08ce 5421     		mov	r1, #84
+ 1938 08d0 FFF7FEFF 		bl	uart_putchar
+ 1939              	.LVL351:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1940              		.loc 1 35 0
+ 1941 08d4 4848     		ldr	r0, .L53
+ 1942 08d6 0021     		mov	r1, #0
+ 1943 08d8 FFF7FEFF 		bl	uart_putchar
+ 1944              	.LVL352:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1945              		.loc 1 32 0
+ 1946 08dc 4648     		ldr	r0, .L53
+ 1947 08de 5421     		mov	r1, #84
+ 1948 08e0 FFF7FEFF 		bl	uart_putchar
+ 1949              	.LVL353:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1950              		.loc 1 33 0
+ 1951 08e4 4448     		ldr	r0, .L53
+ 1952 08e6 5421     		mov	r1, #84
+ 1953 08e8 FFF7FEFF 		bl	uart_putchar
+ 1954              	.LVL354:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1955              		.loc 1 34 0
+ 1956 08ec 4248     		ldr	r0, .L53
+ 1957 08ee 2021     		mov	r1, #32
+ 1958 08f0 FFF7FEFF 		bl	uart_putchar
+ 1959              	.LVL355:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1960              		.loc 1 35 0
+ 1961 08f4 4048     		ldr	r0, .L53
+ 1962 08f6 0021     		mov	r1, #0
+ 1963 08f8 FFF7FEFF 		bl	uart_putchar
+ 1964              	.LVL356:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1965              		.loc 1 32 0
+ 1966 08fc 3E48     		ldr	r0, .L53
+ 1967 08fe 5421     		mov	r1, #84
+ 1968 0900 FFF7FEFF 		bl	uart_putchar
+ 1969              	.LVL357:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1970              		.loc 1 33 0
+ 1971 0904 3C48     		ldr	r0, .L53
+ 1972 0906 5421     		mov	r1, #84
+ 1973 0908 FFF7FEFF 		bl	uart_putchar
+ 1974              	.LVL358:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1975              		.loc 1 34 0
+ 1976 090c 3A48     		ldr	r0, .L53
+ 1977 090e 4521     		mov	r1, #69
+ 1978 0910 FFF7FEFF 		bl	uart_putchar
+ 1979              	.LVL359:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 1980              		.loc 1 35 0
+ 1981 0914 3848     		ldr	r0, .L53
+ 1982 0916 0021     		mov	r1, #0
+ 1983 0918 FFF7FEFF 		bl	uart_putchar
+ 1984              	.LVL360:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1985              		.loc 1 32 0
+ 1986 091c 3648     		ldr	r0, .L53
+ 1987 091e 5421     		mov	r1, #84
+ 1988 0920 FFF7FEFF 		bl	uart_putchar
+ 1989              	.LVL361:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 1990              		.loc 1 33 0
+ 1991 0924 3448     		ldr	r0, .L53
+ 1992 0926 5421     		mov	r1, #84
+ 1993 0928 FFF7FEFF 		bl	uart_putchar
+ 1994              	.LVL362:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 1995              		.loc 1 34 0
+ 1996 092c 3248     		ldr	r0, .L53
+ 1997 092e 4421     		mov	r1, #68
+ 1998 0930 FFF7FEFF 		bl	uart_putchar
+ 1999              	.LVL363:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2000              		.loc 1 35 0
+ 2001 0934 3048     		ldr	r0, .L53
+ 2002 0936 0021     		mov	r1, #0
+ 2003 0938 FFF7FEFF 		bl	uart_putchar
+ 2004              	.LVL364:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2005              		.loc 1 32 0
+ 2006 093c 2E48     		ldr	r0, .L53
+ 2007 093e 5421     		mov	r1, #84
+ 2008 0940 FFF7FEFF 		bl	uart_putchar
+ 2009              	.LVL365:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2010              		.loc 1 33 0
+ 2011 0944 2C48     		ldr	r0, .L53
+ 2012 0946 5421     		mov	r1, #84
+ 2013 0948 FFF7FEFF 		bl	uart_putchar
+ 2014              	.LVL366:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2015              		.loc 1 34 0
+ 2016 094c 2A48     		ldr	r0, .L53
+ 2017 094e 4721     		mov	r1, #71
+ 2018 0950 FFF7FEFF 		bl	uart_putchar
+ 2019              	.LVL367:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2020              		.loc 1 35 0
+ 2021 0954 2848     		ldr	r0, .L53
+ 2022 0956 0021     		mov	r1, #0
+ 2023 0958 FFF7FEFF 		bl	uart_putchar
+ 2024              	.LVL368:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2025              		.loc 1 32 0
+ 2026 095c 2648     		ldr	r0, .L53
+ 2027 095e 5421     		mov	r1, #84
+ 2028 0960 FFF7FEFF 		bl	uart_putchar
+ 2029              	.LVL369:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2030              		.loc 1 33 0
+ 2031 0964 2448     		ldr	r0, .L53
+ 2032 0966 5421     		mov	r1, #84
+ 2033 0968 FFF7FEFF 		bl	uart_putchar
+ 2034              	.LVL370:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2035              		.loc 1 34 0
+ 2036 096c 2248     		ldr	r0, .L53
+ 2037 096e 4521     		mov	r1, #69
+ 2038 0970 04E7     		b	.L39
+ 2039              	.LVL371:
+ 2040              	.L46:
+ 2041              	.LBE66:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 2042              		.loc 1 28 0
+ 2043 0972 2148     		ldr	r0, .L53
+ 2044 0974 4321     		mov	r1, #67
+ 2045 0976 FFF7FEFF 		bl	uart_putchar
+ 2046              	.LVL372:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 2047              		.loc 1 29 0
+ 2048 097a 1F48     		ldr	r0, .L53
+ 2049 097c 4C21     		mov	r1, #76
+ 2050 097e FFF7FEFF 		bl	uart_putchar
+ 2051              	.LVL373:
+ 2052              	.LBB67:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2053              		.loc 1 32 0
+ 2054 0982 1D48     		ldr	r0, .L53
+ 2055 0984 5421     		mov	r1, #84
+ 2056 0986 FFF7FEFF 		bl	uart_putchar
+ 2057              	.LVL374:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2058              		.loc 1 33 0
+ 2059 098a 1B48     		ldr	r0, .L53
+ 2060 098c 5421     		mov	r1, #84
+ 2061 098e FFF7FEFF 		bl	uart_putchar
+ 2062              	.LVL375:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2063              		.loc 1 34 0
+ 2064 0992 1948     		ldr	r0, .L53
+ 2065 0994 5221     		mov	r1, #82
+ 2066 0996 FFF7FEFF 		bl	uart_putchar
+ 2067              	.LVL376:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2068              		.loc 1 35 0
+ 2069 099a 1748     		ldr	r0, .L53
+ 2070 099c 0021     		mov	r1, #0
+ 2071 099e FFF7FEFF 		bl	uart_putchar
+ 2072              	.LVL377:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2073              		.loc 1 32 0
+ 2074 09a2 1548     		ldr	r0, .L53
+ 2075 09a4 5421     		mov	r1, #84
+ 2076 09a6 FFF7FEFF 		bl	uart_putchar
+ 2077              	.LVL378:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2078              		.loc 1 33 0
+ 2079 09aa 1348     		ldr	r0, .L53
+ 2080 09ac 5421     		mov	r1, #84
+ 2081 09ae FFF7FEFF 		bl	uart_putchar
+ 2082              	.LVL379:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2083              		.loc 1 34 0
+ 2084 09b2 1148     		ldr	r0, .L53
+ 2085 09b4 4921     		mov	r1, #73
+ 2086 09b6 FFF7FEFF 		bl	uart_putchar
+ 2087              	.LVL380:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2088              		.loc 1 35 0
+ 2089 09ba 0F48     		ldr	r0, .L53
+ 2090 09bc 0021     		mov	r1, #0
+ 2091 09be FFF7FEFF 		bl	uart_putchar
+ 2092              	.LVL381:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2093              		.loc 1 32 0
+ 2094 09c2 0D48     		ldr	r0, .L53
+ 2095 09c4 5421     		mov	r1, #84
+ 2096 09c6 FFF7FEFF 		bl	uart_putchar
+ 2097              	.LVL382:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2098              		.loc 1 33 0
+ 2099 09ca 0B48     		ldr	r0, .L53
+ 2100 09cc 5421     		mov	r1, #84
+ 2101 09ce FFF7FEFF 		bl	uart_putchar
+ 2102              	.LVL383:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2103              		.loc 1 34 0
+ 2104 09d2 0948     		ldr	r0, .L53
+ 2105 09d4 4721     		mov	r1, #71
+ 2106 09d6 FFF7FEFF 		bl	uart_putchar
+ 2107              	.LVL384:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2108              		.loc 1 35 0
+ 2109 09da 0748     		ldr	r0, .L53
+ 2110 09dc 0021     		mov	r1, #0
+ 2111 09de FFF7FEFF 		bl	uart_putchar
+ 2112              	.LVL385:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2113              		.loc 1 32 0
+ 2114 09e2 0548     		ldr	r0, .L53
+ 2115 09e4 5421     		mov	r1, #84
+ 2116 09e6 FFF7FEFF 		bl	uart_putchar
+ 2117              	.LVL386:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2118              		.loc 1 33 0
+ 2119 09ea 0348     		ldr	r0, .L53
+ 2120 09ec 5421     		mov	r1, #84
+ 2121 09ee FFF7FEFF 		bl	uart_putchar
+ 2122              	.LVL387:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2123              		.loc 1 34 0
+ 2124 09f2 0148     		ldr	r0, .L53
+ 2125 09f4 4821     		mov	r1, #72
+ 2126 09f6 5BE7     		b	.L40
+ 2127              	.L54:
+ 2128              		.align	2
+ 2129              	.L53:
+ 2130 09f8 00C00640 		.word	1074184192
+ 2131              	.LVL388:
+ 2132              	.L47:
+ 2133              	.LBE67:
+ 2134              	.LBE65:
+ 2135              	.LBE64:
+ 2136              	.LBB68:
+ 2137              	.LBB69:
+  28:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'C');
+ 2138              		.loc 1 28 0
+ 2139 09fc 7448     		ldr	r0, .L55
+ 2140 09fe 4321     		mov	r1, #67
+ 2141 0a00 FFF7FEFF 		bl	uart_putchar
+ 2142              	.LVL389:
+  29:../Sources/LCD.c **** 	uart_putchar(UART2_BASE_PTR, 'L');
+ 2143              		.loc 1 29 0
+ 2144 0a04 7248     		ldr	r0, .L55
+ 2145 0a06 4C21     		mov	r1, #76
+ 2146 0a08 FFF7FEFF 		bl	uart_putchar
+ 2147              	.LVL390:
+ 2148              	.LBB70:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2149              		.loc 1 32 0
+ 2150 0a0c 7048     		ldr	r0, .L55
+ 2151 0a0e 5421     		mov	r1, #84
+ 2152 0a10 FFF7FEFF 		bl	uart_putchar
+ 2153              	.LVL391:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2154              		.loc 1 33 0
+ 2155 0a14 6E48     		ldr	r0, .L55
+ 2156 0a16 5421     		mov	r1, #84
+ 2157 0a18 FFF7FEFF 		bl	uart_putchar
+ 2158              	.LVL392:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2159              		.loc 1 34 0
+ 2160 0a1c 6C48     		ldr	r0, .L55
+ 2161 0a1e 4C21     		mov	r1, #76
+ 2162 0a20 FFF7FEFF 		bl	uart_putchar
+ 2163              	.LVL393:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2164              		.loc 1 35 0
+ 2165 0a24 6A48     		ldr	r0, .L55
+ 2166 0a26 0021     		mov	r1, #0
+ 2167 0a28 FFF7FEFF 		bl	uart_putchar
+ 2168              	.LVL394:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2169              		.loc 1 32 0
+ 2170 0a2c 6848     		ldr	r0, .L55
+ 2171 0a2e 5421     		mov	r1, #84
+ 2172 0a30 FFF7FEFF 		bl	uart_putchar
+ 2173              	.LVL395:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2174              		.loc 1 33 0
+ 2175 0a34 6648     		ldr	r0, .L55
+ 2176 0a36 5421     		mov	r1, #84
+ 2177 0a38 FFF7FEFF 		bl	uart_putchar
+ 2178              	.LVL396:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2179              		.loc 1 34 0
+ 2180 0a3c 6448     		ldr	r0, .L55
+ 2181 0a3e 4921     		mov	r1, #73
+ 2182 0a40 FFF7FEFF 		bl	uart_putchar
+ 2183              	.LVL397:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2184              		.loc 1 35 0
+ 2185 0a44 6248     		ldr	r0, .L55
+ 2186 0a46 0021     		mov	r1, #0
+ 2187 0a48 FFF7FEFF 		bl	uart_putchar
+ 2188              	.LVL398:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2189              		.loc 1 32 0
+ 2190 0a4c 6048     		ldr	r0, .L55
+ 2191 0a4e 5421     		mov	r1, #84
+ 2192 0a50 FFF7FEFF 		bl	uart_putchar
+ 2193              	.LVL399:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2194              		.loc 1 33 0
+ 2195 0a54 5E48     		ldr	r0, .L55
+ 2196 0a56 5421     		mov	r1, #84
+ 2197 0a58 FFF7FEFF 		bl	uart_putchar
+ 2198              	.LVL400:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2199              		.loc 1 34 0
+ 2200 0a5c 5C48     		ldr	r0, .L55
+ 2201 0a5e 4E21     		mov	r1, #78
+ 2202 0a60 FFF7FEFF 		bl	uart_putchar
+ 2203              	.LVL401:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2204              		.loc 1 35 0
+ 2205 0a64 5A48     		ldr	r0, .L55
+ 2206 0a66 0021     		mov	r1, #0
+ 2207 0a68 FFF7FEFF 		bl	uart_putchar
+ 2208              	.LVL402:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2209              		.loc 1 32 0
+ 2210 0a6c 5848     		ldr	r0, .L55
+ 2211 0a6e 5421     		mov	r1, #84
+ 2212 0a70 FFF7FEFF 		bl	uart_putchar
+ 2213              	.LVL403:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2214              		.loc 1 33 0
+ 2215 0a74 5648     		ldr	r0, .L55
+ 2216 0a76 5421     		mov	r1, #84
+ 2217 0a78 FFF7FEFF 		bl	uart_putchar
+ 2218              	.LVL404:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2219              		.loc 1 34 0
+ 2220 0a7c 5448     		ldr	r0, .L55
+ 2221 0a7e 4521     		mov	r1, #69
+ 2222 0a80 FFF7FEFF 		bl	uart_putchar
+ 2223              	.LVL405:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2224              		.loc 1 35 0
+ 2225 0a84 5248     		ldr	r0, .L55
+ 2226 0a86 0021     		mov	r1, #0
+ 2227 0a88 FFF7FEFF 		bl	uart_putchar
+ 2228              	.LVL406:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2229              		.loc 1 32 0
+ 2230 0a8c 5048     		ldr	r0, .L55
+ 2231 0a8e 5421     		mov	r1, #84
+ 2232 0a90 FFF7FEFF 		bl	uart_putchar
+ 2233              	.LVL407:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2234              		.loc 1 33 0
+ 2235 0a94 4E48     		ldr	r0, .L55
+ 2236 0a96 5421     		mov	r1, #84
+ 2237 0a98 FFF7FEFF 		bl	uart_putchar
+ 2238              	.LVL408:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2239              		.loc 1 34 0
+ 2240 0a9c 4C48     		ldr	r0, .L55
+ 2241 0a9e 2021     		mov	r1, #32
+ 2242 0aa0 FFF7FEFF 		bl	uart_putchar
+ 2243              	.LVL409:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2244              		.loc 1 35 0
+ 2245 0aa4 4A48     		ldr	r0, .L55
+ 2246 0aa6 0021     		mov	r1, #0
+ 2247 0aa8 FFF7FEFF 		bl	uart_putchar
+ 2248              	.LVL410:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2249              		.loc 1 32 0
+ 2250 0aac 4848     		ldr	r0, .L55
+ 2251 0aae 5421     		mov	r1, #84
+ 2252 0ab0 FFF7FEFF 		bl	uart_putchar
+ 2253              	.LVL411:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2254              		.loc 1 33 0
+ 2255 0ab4 4648     		ldr	r0, .L55
+ 2256 0ab6 5421     		mov	r1, #84
+ 2257 0ab8 FFF7FEFF 		bl	uart_putchar
+ 2258              	.LVL412:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2259              		.loc 1 34 0
+ 2260 0abc 4448     		ldr	r0, .L55
+ 2261 0abe 5421     		mov	r1, #84
+ 2262 0ac0 FFF7FEFF 		bl	uart_putchar
+ 2263              	.LVL413:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2264              		.loc 1 35 0
+ 2265 0ac4 4248     		ldr	r0, .L55
+ 2266 0ac6 0021     		mov	r1, #0
+ 2267 0ac8 FFF7FEFF 		bl	uart_putchar
+ 2268              	.LVL414:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2269              		.loc 1 32 0
+ 2270 0acc 4048     		ldr	r0, .L55
+ 2271 0ace 5421     		mov	r1, #84
+ 2272 0ad0 FFF7FEFF 		bl	uart_putchar
+ 2273              	.LVL415:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2274              		.loc 1 33 0
+ 2275 0ad4 3E48     		ldr	r0, .L55
+ 2276 0ad6 5421     		mov	r1, #84
+ 2277 0ad8 FFF7FEFF 		bl	uart_putchar
+ 2278              	.LVL416:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2279              		.loc 1 34 0
+ 2280 0adc 3C48     		ldr	r0, .L55
+ 2281 0ade 4521     		mov	r1, #69
+ 2282 0ae0 FFF7FEFF 		bl	uart_putchar
+ 2283              	.LVL417:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2284              		.loc 1 35 0
+ 2285 0ae4 3A48     		ldr	r0, .L55
+ 2286 0ae6 0021     		mov	r1, #0
+ 2287 0ae8 FFF7FEFF 		bl	uart_putchar
+ 2288              	.LVL418:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2289              		.loc 1 32 0
+ 2290 0aec 3848     		ldr	r0, .L55
+ 2291 0aee 5421     		mov	r1, #84
+ 2292 0af0 FFF7FEFF 		bl	uart_putchar
+ 2293              	.LVL419:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2294              		.loc 1 33 0
+ 2295 0af4 3648     		ldr	r0, .L55
+ 2296 0af6 5421     		mov	r1, #84
+ 2297 0af8 FFF7FEFF 		bl	uart_putchar
+ 2298              	.LVL420:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2299              		.loc 1 34 0
+ 2300 0afc 3448     		ldr	r0, .L55
+ 2301 0afe 4D21     		mov	r1, #77
+ 2302 0b00 FFF7FEFF 		bl	uart_putchar
+ 2303              	.LVL421:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2304              		.loc 1 35 0
+ 2305 0b04 3248     		ldr	r0, .L55
+ 2306 0b06 0021     		mov	r1, #0
+ 2307 0b08 FFF7FEFF 		bl	uart_putchar
+ 2308              	.LVL422:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2309              		.loc 1 32 0
+ 2310 0b0c 3048     		ldr	r0, .L55
+ 2311 0b0e 5421     		mov	r1, #84
+ 2312 0b10 FFF7FEFF 		bl	uart_putchar
+ 2313              	.LVL423:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2314              		.loc 1 33 0
+ 2315 0b14 2E48     		ldr	r0, .L55
+ 2316 0b16 5421     		mov	r1, #84
+ 2317 0b18 FFF7FEFF 		bl	uart_putchar
+ 2318              	.LVL424:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2319              		.loc 1 34 0
+ 2320 0b1c 2C48     		ldr	r0, .L55
+ 2321 0b1e 5021     		mov	r1, #80
+ 2322 0b20 FFF7FEFF 		bl	uart_putchar
+ 2323              	.LVL425:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2324              		.loc 1 35 0
+ 2325 0b24 2A48     		ldr	r0, .L55
+ 2326 0b26 0021     		mov	r1, #0
+ 2327 0b28 FFF7FEFF 		bl	uart_putchar
+ 2328              	.LVL426:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2329              		.loc 1 32 0
+ 2330 0b2c 2848     		ldr	r0, .L55
+ 2331 0b2e 5421     		mov	r1, #84
+ 2332 0b30 FFF7FEFF 		bl	uart_putchar
+ 2333              	.LVL427:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2334              		.loc 1 33 0
+ 2335 0b34 2648     		ldr	r0, .L55
+ 2336 0b36 5421     		mov	r1, #84
+ 2337 0b38 FFF7FEFF 		bl	uart_putchar
+ 2338              	.LVL428:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2339              		.loc 1 34 0
+ 2340 0b3c 2448     		ldr	r0, .L55
+ 2341 0b3e 2021     		mov	r1, #32
+ 2342 0b40 FFF7FEFF 		bl	uart_putchar
+ 2343              	.LVL429:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2344              		.loc 1 35 0
+ 2345 0b44 2248     		ldr	r0, .L55
+ 2346 0b46 0021     		mov	r1, #0
+ 2347 0b48 FFF7FEFF 		bl	uart_putchar
+ 2348              	.LVL430:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2349              		.loc 1 32 0
+ 2350 0b4c 2048     		ldr	r0, .L55
+ 2351 0b4e 5421     		mov	r1, #84
+ 2352 0b50 FFF7FEFF 		bl	uart_putchar
+ 2353              	.LVL431:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2354              		.loc 1 33 0
+ 2355 0b54 1E48     		ldr	r0, .L55
+ 2356 0b56 5421     		mov	r1, #84
+ 2357 0b58 FFF7FEFF 		bl	uart_putchar
+ 2358              	.LVL432:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2359              		.loc 1 34 0
+ 2360 0b5c 1C48     		ldr	r0, .L55
+ 2361 0b5e 4C21     		mov	r1, #76
+ 2362 0b60 FFF7FEFF 		bl	uart_putchar
+ 2363              	.LVL433:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2364              		.loc 1 35 0
+ 2365 0b64 1A48     		ldr	r0, .L55
+ 2366 0b66 0021     		mov	r1, #0
+ 2367 0b68 FFF7FEFF 		bl	uart_putchar
+ 2368              	.LVL434:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2369              		.loc 1 32 0
+ 2370 0b6c 1848     		ldr	r0, .L55
+ 2371 0b6e 5421     		mov	r1, #84
+ 2372 0b70 FFF7FEFF 		bl	uart_putchar
+ 2373              	.LVL435:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2374              		.loc 1 33 0
+ 2375 0b74 1648     		ldr	r0, .L55
+ 2376 0b76 5421     		mov	r1, #84
+ 2377 0b78 FFF7FEFF 		bl	uart_putchar
+ 2378              	.LVL436:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2379              		.loc 1 34 0
+ 2380 0b7c 1448     		ldr	r0, .L55
+ 2381 0b7e 4F21     		mov	r1, #79
+ 2382 0b80 FFF7FEFF 		bl	uart_putchar
+ 2383              	.LVL437:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2384              		.loc 1 35 0
+ 2385 0b84 1248     		ldr	r0, .L55
+ 2386 0b86 0021     		mov	r1, #0
+ 2387 0b88 FFF7FEFF 		bl	uart_putchar
+ 2388              	.LVL438:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2389              		.loc 1 32 0
+ 2390 0b8c 1048     		ldr	r0, .L55
+ 2391 0b8e 5421     		mov	r1, #84
+ 2392 0b90 FFF7FEFF 		bl	uart_putchar
+ 2393              	.LVL439:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2394              		.loc 1 33 0
+ 2395 0b94 0E48     		ldr	r0, .L55
+ 2396 0b96 5421     		mov	r1, #84
+ 2397 0b98 FFF7FEFF 		bl	uart_putchar
+ 2398              	.LVL440:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2399              		.loc 1 34 0
+ 2400 0b9c 0C48     		ldr	r0, .L55
+ 2401 0b9e 5321     		mov	r1, #83
+ 2402 0ba0 FFF7FEFF 		bl	uart_putchar
+ 2403              	.LVL441:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2404              		.loc 1 35 0
+ 2405 0ba4 0A48     		ldr	r0, .L55
+ 2406 0ba6 0021     		mov	r1, #0
+ 2407 0ba8 FFF7FEFF 		bl	uart_putchar
+ 2408              	.LVL442:
+  32:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2409              		.loc 1 32 0
+ 2410 0bac 0848     		ldr	r0, .L55
+ 2411 0bae 5421     		mov	r1, #84
+ 2412 0bb0 FFF7FEFF 		bl	uart_putchar
+ 2413              	.LVL443:
+  33:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 'T');
+ 2414              		.loc 1 33 0
+ 2415 0bb4 0648     		ldr	r0, .L55
+ 2416 0bb6 5421     		mov	r1, #84
+ 2417 0bb8 FFF7FEFF 		bl	uart_putchar
+ 2418              	.LVL444:
+  34:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, string[i]);
+ 2419              		.loc 1 34 0
+ 2420 0bbc 0448     		ldr	r0, .L55
+ 2421 0bbe 5421     		mov	r1, #84
+ 2422 0bc0 FFF7FEFF 		bl	uart_putchar
+ 2423              	.LVL445:
+  35:../Sources/LCD.c **** 		uart_putchar(UART2_BASE_PTR, 0x00);
+ 2424              		.loc 1 35 0
+ 2425 0bc4 0248     		ldr	r0, .L55
+ 2426 0bc6 0021     		mov	r1, #0
+ 2427 0bc8 FFF7FEFF 		bl	uart_putchar
+ 2428              	.LVL446:
+ 2429 0bcc FFF73AFA 		bl	.L31	@ far jump
+ 2430              	.L56:
+ 2431              		.align	2
+ 2432              	.L55:
+ 2433 0bd0 00C00640 		.word	1074184192
+ 2434              	.LBE70:
+ 2435              	.LBE69:
+ 2436              	.LBE68:
+ 2437              		.cfi_endproc
+ 2438              	.LFE3:
+ 2440              		.section	.text.itoa,"ax",%progbits
+ 2441              		.align	2
+ 2442              		.global	itoa
+ 2443              		.code	16
+ 2444              		.thumb_func
+ 2446              	itoa:
+ 2447              	.LFB4:
+ 111:../Sources/LCD.c **** {
+ 2448              		.loc 1 111 0
+ 2449              		.cfi_startproc
+ 2450              	.LVL447:
+ 2451 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 2452              	.LCFI5:
+ 2453              		.cfi_def_cfa_offset 20
+ 2454              		.cfi_offset 4, -20
+ 2455              		.cfi_offset 5, -16
+ 2456              		.cfi_offset 6, -12
+ 2457              		.cfi_offset 7, -8
+ 2458              		.cfi_offset 14, -4
+ 2459 0002 C217     		asr	r2, r0, #31
+ 2460 0004 4746     		mov	r7, r8
+ 2461 0006 8518     		add	r5, r0, r2
+ 2462 0008 80B4     		push	{r7}
+ 2463              	.LCFI6:
+ 2464              		.cfi_def_cfa_offset 24
+ 2465              		.cfi_offset 8, -24
+ 111:../Sources/LCD.c **** {
+ 2466              		.loc 1 111 0
+ 2467 000a 8046     		mov	r8, r0
+ 2468 000c 0C1C     		mov	r4, r1
+ 2469 000e 5540     		eor	r5, r2
+ 2470 0010 0026     		mov	r6, #0
+ 2471 0012 00E0     		b	.L58
+ 2472              	.LVL448:
+ 2473              	.L62:
+ 118:../Sources/LCD.c ****         s[i++] = n % 10 + '0';   /* get next digit */
+ 2474              		.loc 1 118 0
+ 2475 0014 3E1C     		mov	r6, r7
+ 2476              	.LVL449:
+ 2477              	.L58:
+ 118:../Sources/LCD.c ****         s[i++] = n % 10 + '0';   /* get next digit */
+ 2478              		.loc 1 118 0 is_stmt 0
+ 2479 0016 281C     		mov	r0, r5
+ 2480 0018 0A21     		mov	r1, #10
+ 2481 001a FFF7FEFF 		bl	__aeabi_idivmod
+ 2482              	.LVL450:
+ 2483 001e 3031     		add	r1, r1, #48
+ 2484 0020 A155     		strb	r1, [r4, r6]
+ 119:../Sources/LCD.c ****     } while ((n /= 10) > 0);     /* delete it */
+ 2485              		.loc 1 119 0 is_stmt 1
+ 2486 0022 281C     		mov	r0, r5
+ 2487 0024 0A21     		mov	r1, #10
+ 2488 0026 FFF7FEFF 		bl	__aeabi_idiv
+ 2489              	.LVL451:
+ 118:../Sources/LCD.c ****         s[i++] = n % 10 + '0';   /* get next digit */
+ 2490              		.loc 1 118 0
+ 2491 002a 771C     		add	r7, r6, #1
+ 2492              	.LVL452:
+ 119:../Sources/LCD.c ****     } while ((n /= 10) > 0);     /* delete it */
+ 2493              		.loc 1 119 0
+ 2494 002c 051E     		sub	r5, r0, #0
+ 2495              	.LVL453:
+ 2496 002e F1DC     		bgt	.L62
+ 120:../Sources/LCD.c ****     if (sign < 0)
+ 2497              		.loc 1 120 0
+ 2498 0030 4346     		mov	r3, r8
+ 2499 0032 002B     		cmp	r3, #0
+ 2500 0034 02DA     		bge	.L59
+ 2501              	.LVL454:
+ 121:../Sources/LCD.c ****         s[i++] = '-';
+ 2502              		.loc 1 121 0
+ 2503 0036 2D21     		mov	r1, #45
+ 2504 0038 E155     		strb	r1, [r4, r7]
+ 2505 003a B71C     		add	r7, r6, #2
+ 2506              	.LVL455:
+ 2507              	.L59:
+ 122:../Sources/LCD.c ****     s[i] = '\0';
+ 2508              		.loc 1 122 0
+ 2509 003c 0026     		mov	r6, #0
+ 2510 003e E655     		strb	r6, [r4, r7]
+ 2511              	.LVL456:
+ 2512              	.LBB73:
+ 2513              	.LBB74:
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 2514              		.loc 1 132 0
+ 2515 0040 201C     		mov	r0, r4
+ 2516              	.LVL457:
+ 2517 0042 FFF7FEFF 		bl	strlen
+ 2518              	.LVL458:
+ 2519 0046 451E     		sub	r5, r0, #1
+ 2520              	.LVL459:
+ 2521 0048 0022     		mov	r2, #0
+ 2522 004a 002D     		cmp	r5, #0
+ 2523 004c 07DD     		ble	.L57
+ 2524              	.LVL460:
+ 2525              	.L64:
+ 133:../Sources/LCD.c ****         c = s[i];
+ 2526              		.loc 1 133 0
+ 2527 004e A35C     		ldrb	r3, [r4, r2]
+ 2528              	.LVL461:
+ 134:../Sources/LCD.c ****         s[i] = s[j];
+ 2529              		.loc 1 134 0
+ 2530 0050 605D     		ldrb	r0, [r4, r5]
+ 2531 0052 A054     		strb	r0, [r4, r2]
+ 2532              		.loc 1 135 0
+ 2533 0054 6355     		strb	r3, [r4, r5]
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 2534              		.loc 1 132 0
+ 2535 0056 0132     		add	r2, r2, #1
+ 2536              	.LVL462:
+ 2537 0058 013D     		sub	r5, r5, #1
+ 2538              	.LVL463:
+ 2539 005a AA42     		cmp	r2, r5
+ 2540 005c F7DB     		blt	.L64
+ 2541              	.LVL464:
+ 2542              	.L57:
+ 2543              	.LBE74:
+ 2544              	.LBE73:
+ 124:../Sources/LCD.c **** }
+ 2545              		.loc 1 124 0
+ 2546              		@ sp needed for prologue
+ 2547              	.LVL465:
+ 2548              	.LVL466:
+ 2549              	.LVL467:
+ 2550              	.LVL468:
+ 2551 005e 04BC     		pop	{r2}
+ 2552 0060 9046     		mov	r8, r2
+ 2553 0062 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 2554              		.cfi_endproc
+ 2555              	.LFE4:
+ 2557              		.section	.text.reverse,"ax",%progbits
+ 2558              		.align	2
+ 2559              		.global	reverse
+ 2560              		.code	16
+ 2561              		.thumb_func
+ 2563              	reverse:
+ 2564              	.LFB5:
+ 128:../Sources/LCD.c **** {
+ 2565              		.loc 1 128 0
+ 2566              		.cfi_startproc
+ 2567              	.LVL469:
+ 2568 0000 10B5     		push	{r4, lr}
+ 2569              	.LCFI7:
+ 2570              		.cfi_def_cfa_offset 8
+ 2571              		.cfi_offset 4, -8
+ 2572              		.cfi_offset 14, -4
+ 128:../Sources/LCD.c **** {
+ 2573              		.loc 1 128 0
+ 2574 0002 041C     		mov	r4, r0
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 2575              		.loc 1 132 0
+ 2576 0004 FFF7FEFF 		bl	strlen
+ 2577              	.LVL470:
+ 2578 0008 431E     		sub	r3, r0, #1
+ 2579              	.LVL471:
+ 2580 000a 0022     		mov	r2, #0
+ 2581 000c 002B     		cmp	r3, #0
+ 2582 000e 07DD     		ble	.L66
+ 2583              	.LVL472:
+ 2584              	.L70:
+ 133:../Sources/LCD.c ****         c = s[i];
+ 2585              		.loc 1 133 0
+ 2586 0010 A15C     		ldrb	r1, [r4, r2]
+ 2587              	.LVL473:
+ 134:../Sources/LCD.c ****         s[i] = s[j];
+ 2588              		.loc 1 134 0
+ 2589 0012 E05C     		ldrb	r0, [r4, r3]
+ 2590 0014 A054     		strb	r0, [r4, r2]
+ 2591              		.loc 1 135 0
+ 2592 0016 E154     		strb	r1, [r4, r3]
+ 132:../Sources/LCD.c ****     for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+ 2593              		.loc 1 132 0
+ 2594 0018 0132     		add	r2, r2, #1
+ 2595              	.LVL474:
+ 2596 001a 013B     		sub	r3, r3, #1
+ 2597              	.LVL475:
+ 2598 001c 9A42     		cmp	r2, r3
+ 2599 001e F7DB     		blt	.L70
+ 2600              	.LVL476:
+ 2601              	.L66:
+ 136:../Sources/LCD.c ****     }
+ 137:../Sources/LCD.c **** }
+ 2602              		.loc 1 137 0
+ 2603              		@ sp needed for prologue
+ 2604              	.LVL477:
+ 2605 0020 10BD     		pop	{r4, pc}
+ 2606              		.cfi_endproc
+ 2607              	.LFE5:
+ 2609 0022 C046     		.section	.rodata.str1.4,"aMS",%progbits,1
+ 2610              		.align	2
+ 2611              	.LC2:
+ 2612 0000 43524F53 		.ascii	"CROSS SECTION DETECTED\000"
+ 2612      53205345 
+ 2612      4354494F 
+ 2612      4E204445 
+ 2612      54454354 
+ 2613 0017 00       		.text
+ 2614              	.Letext0:
+ 2615              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 2616              		.file 3 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
+ 2617              		.file 4 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
+DEFINED SYMBOLS
+                            *ABS*:00000000 LCD.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:18     .text.LCDinit:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:23     .text.LCDinit:00000000 LCDinit
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:85     .text.LCDinit:00000050 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:90     .text.LCDwriteString:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:95     .text.LCDwriteString:00000000 LCDwriteString
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:166    .text.LCDwriteString:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:173    .text.LCDwriteVariable:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:178    .text.LCDwriteVariable:00000000 LCDwriteVariable
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:431    .text.LCDwriteVariable:00000118 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:436    .text.LCDwriteState:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:441    .text.LCDwriteState:00000000 LCDwriteState
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:886    .text.LCDwriteState:00000290 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:895    .text.LCDwriteState:00000294 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:1496   .text.LCDwriteState:00000630 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:1506   .text.LCDwriteState:00000638 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2130   .text.LCDwriteState:000009f8 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2139   .text.LCDwriteState:000009fc $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2433   .text.LCDwriteState:00000bd0 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2441   .text.itoa:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2446   .text.itoa:00000000 itoa
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2558   .text.reverse:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2563   .text.reverse:00000000 reverse
+C:\Users\BENTR_~1\AppData\Local\Temp\ccfHUiYC.s:2610   .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+uart_putchar
+strlen
+__aeabi_idivmod
+__aeabi_idiv

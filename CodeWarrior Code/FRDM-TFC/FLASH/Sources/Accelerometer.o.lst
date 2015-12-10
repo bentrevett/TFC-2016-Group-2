@@ -742,30 +742,30 @@
  606              		.file 5 "C:/Users/bentr_000/Google Drive/GitHub/TFC-Group2-2016/CodeWarrior Code/FRDM-TFC/Project_
 DEFINED SYMBOLS
                             *ABS*:00000000 Accelerometer.c
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:23     .text.zeroAccelerometer:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:28     .text.zeroAccelerometer:00000000 zeroAccelerometer
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:302    .text.zeroAccelerometer:00000148 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:313    .text.Init_Accelerometer:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:318    .text.Init_Accelerometer:00000000 Init_Accelerometer
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:357    .text.Init_Accelerometer:0000002c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:363    .text.getXAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:368    .text.getXAcc:00000000 getXAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:425    .text.getXAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:432    .text.getYAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:437    .text.getYAcc:00000000 getYAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:494    .text.getYAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:501    .text.getZAcc:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:506    .text.getZAcc:00000000 getZAcc
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:563    .text.getZAcc:00000048 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:570    .bss.xBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:574    .bss.xBias:00000000 xBias
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:577    .bss.yBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:581    .bss.yBias:00000000 yBias
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:584    .rodata.str1.4:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:588    .bss.zBias:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:592    .bss.zBias:00000000 zBias
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:595    .bss.buf:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc7EWOnz.s:599    .bss.buf:00000000 buf
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:23     .text.zeroAccelerometer:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:28     .text.zeroAccelerometer:00000000 zeroAccelerometer
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:302    .text.zeroAccelerometer:00000148 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:313    .text.Init_Accelerometer:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:318    .text.Init_Accelerometer:00000000 Init_Accelerometer
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:357    .text.Init_Accelerometer:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:363    .text.getXAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:368    .text.getXAcc:00000000 getXAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:425    .text.getXAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:432    .text.getYAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:437    .text.getYAcc:00000000 getYAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:494    .text.getYAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:501    .text.getZAcc:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:506    .text.getZAcc:00000000 getZAcc
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:563    .text.getZAcc:00000048 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:570    .bss.xBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:574    .bss.xBias:00000000 xBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:577    .bss.yBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:581    .bss.yBias:00000000 yBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:584    .rodata.str1.4:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:588    .bss.zBias:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:592    .bss.zBias:00000000 zBias
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:595    .bss.buf:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccN85WJN.s:599    .bss.buf:00000000 buf
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS

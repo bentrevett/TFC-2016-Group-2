@@ -11,6 +11,7 @@ C_SRCS_QUOTED += \
 "../Sources/AutoExposure.c" \
 "../Sources/EdgeDetection.c" \
 "../Sources/I2C.c" \
+"../Sources/LCD.c" \
 "../Sources/LineDetectionDouble.c" \
 "../Sources/Probability.c" \
 "../Sources/ServoMapping.c" \
@@ -26,6 +27,7 @@ C_SRCS += \
 ../Sources/AutoExposure.c \
 ../Sources/EdgeDetection.c \
 ../Sources/I2C.c \
+../Sources/LCD.c \
 ../Sources/LineDetectionDouble.c \
 ../Sources/Probability.c \
 ../Sources/ServoMapping.c \
@@ -41,6 +43,7 @@ OBJS += \
 ./Sources/AutoExposure.o \
 ./Sources/EdgeDetection.o \
 ./Sources/I2C.o \
+./Sources/LCD.o \
 ./Sources/LineDetectionDouble.o \
 ./Sources/Probability.o \
 ./Sources/ServoMapping.o \
@@ -56,6 +59,7 @@ OBJS_QUOTED += \
 "./Sources/AutoExposure.o" \
 "./Sources/EdgeDetection.o" \
 "./Sources/I2C.o" \
+"./Sources/LCD.o" \
 "./Sources/LineDetectionDouble.o" \
 "./Sources/Probability.o" \
 "./Sources/ServoMapping.o" \
@@ -71,6 +75,7 @@ C_DEPS += \
 ./Sources/AutoExposure.d \
 ./Sources/EdgeDetection.d \
 ./Sources/I2C.d \
+./Sources/LCD.d \
 ./Sources/LineDetectionDouble.d \
 ./Sources/Probability.d \
 ./Sources/ServoMapping.d \
@@ -86,6 +91,7 @@ OBJS_OS_FORMAT += \
 ./Sources/AutoExposure.o \
 ./Sources/EdgeDetection.o \
 ./Sources/I2C.o \
+./Sources/LCD.o \
 ./Sources/LineDetectionDouble.o \
 ./Sources/Probability.o \
 ./Sources/ServoMapping.o \
@@ -101,6 +107,7 @@ C_DEPS_QUOTED += \
 "./Sources/AutoExposure.d" \
 "./Sources/EdgeDetection.d" \
 "./Sources/I2C.d" \
+"./Sources/LCD.d" \
 "./Sources/LineDetectionDouble.d" \
 "./Sources/Probability.d" \
 "./Sources/ServoMapping.d" \
@@ -152,9 +159,17 @@ Sources/I2C.o: ../Sources/I2C.c
 	@echo 'Finished building: $<'
 	@echo ' '
 
-Sources/LineDetectionDouble.o: ../Sources/LineDetectionDouble.c
+Sources/LCD.o: ../Sources/LCD.c
 	@echo 'Building file: $<'
 	@echo 'Executing target #6 $<'
+	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
+	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/LCD.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/LCD.o"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+Sources/LineDetectionDouble.o: ../Sources/LineDetectionDouble.c
+	@echo 'Building file: $<'
+	@echo 'Executing target #7 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/LineDetectionDouble.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/LineDetectionDouble.o"
 	@echo 'Finished building: $<'
@@ -162,7 +177,7 @@ Sources/LineDetectionDouble.o: ../Sources/LineDetectionDouble.c
 
 Sources/Probability.o: ../Sources/Probability.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #7 $<'
+	@echo 'Executing target #8 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/Probability.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/Probability.o"
 	@echo 'Finished building: $<'
@@ -170,7 +185,7 @@ Sources/Probability.o: ../Sources/Probability.c
 
 Sources/ServoMapping.o: ../Sources/ServoMapping.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #8 $<'
+	@echo 'Executing target #9 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/ServoMapping.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/ServoMapping.o"
 	@echo 'Finished building: $<'
@@ -178,7 +193,7 @@ Sources/ServoMapping.o: ../Sources/ServoMapping.c
 
 Sources/SpeedControl.o: ../Sources/SpeedControl.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #9 $<'
+	@echo 'Executing target #10 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/SpeedControl.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/SpeedControl.o"
 	@echo 'Finished building: $<'
@@ -186,7 +201,7 @@ Sources/SpeedControl.o: ../Sources/SpeedControl.c
 
 Sources/SpeedSensor.o: ../Sources/SpeedSensor.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #10 $<'
+	@echo 'Executing target #11 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/SpeedSensor.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/SpeedSensor.o"
 	@echo 'Finished building: $<'
@@ -194,7 +209,7 @@ Sources/SpeedSensor.o: ../Sources/SpeedSensor.c
 
 Sources/SteeringControl.o: ../Sources/SteeringControl.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #11 $<'
+	@echo 'Executing target #12 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/SteeringControl.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/SteeringControl.o"
 	@echo 'Finished building: $<'
@@ -202,7 +217,7 @@ Sources/SteeringControl.o: ../Sources/SteeringControl.c
 
 Sources/TargetSpeedControl.o: ../Sources/TargetSpeedControl.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #12 $<'
+	@echo 'Executing target #13 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/TargetSpeedControl.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/TargetSpeedControl.o"
 	@echo 'Finished building: $<'
@@ -210,7 +225,7 @@ Sources/TargetSpeedControl.o: ../Sources/TargetSpeedControl.c
 
 Sources/main.o: ../Sources/main.c
 	@echo 'Building file: $<'
-	@echo 'Executing target #13 $<'
+	@echo 'Executing target #14 $<'
 	@echo 'Invoking: ARM Ltd Windows GCC C Compiler'
 	"$(ARMSourceryDirEnv)/arm-none-eabi-gcc" "$<" @"Sources/main.args" -Wa,-adhlns="$@.lst" -MMD -MP -MF"$(@:%.o=%.d)" -o"Sources/main.o"
 	@echo 'Finished building: $<'
