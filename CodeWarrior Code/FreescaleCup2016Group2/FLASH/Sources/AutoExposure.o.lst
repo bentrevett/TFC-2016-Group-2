@@ -1,0 +1,328 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"AutoExposure.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.getTotalIntensity,"ax",%progbits
+  18              		.align	2
+  19              		.global	getTotalIntensity
+  20              		.code	16
+  21              		.thumb_func
+  23              	getTotalIntensity:
+  24              	.LFB0:
+  25              		.file 1 "../Sources/AutoExposure.c"
+   1:../Sources/AutoExposure.c **** /*
+   2:../Sources/AutoExposure.c ****  * AutoExposure.c
+   3:../Sources/AutoExposure.c ****  *
+   4:../Sources/AutoExposure.c ****  *  Created on: Dec 10, 2013
+   5:../Sources/AutoExposure.c ****  *      Author: admin
+   6:../Sources/AutoExposure.c ****  */
+   7:../Sources/AutoExposure.c **** 
+   8:../Sources/AutoExposure.c **** #include "TFC/TFC.h"
+   9:../Sources/AutoExposure.c **** #include "Settings.h"
+  10:../Sources/AutoExposure.c **** 
+  11:../Sources/AutoExposure.c **** int32_t error = 0;
+  12:../Sources/AutoExposure.c **** int32_t previousError = 0;
+  13:../Sources/AutoExposure.c **** int32_t dError = 0;
+  14:../Sources/AutoExposure.c **** int32_t errorSum = 0;
+  15:../Sources/AutoExposure.c **** int32_t newExposure = 10000;
+  16:../Sources/AutoExposure.c **** 
+  17:../Sources/AutoExposure.c **** uint32_t getTotalIntensity(volatile uint16_t* LineScanImage)
+  18:../Sources/AutoExposure.c **** {
+  26              		.loc 1 18 0
+  27              		.cfi_startproc
+  28              	.LVL0:
+  29 0000 10B5     		push	{r4, lr}
+  30              	.LCFI0:
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+  34              	.LBB2:
+  19:../Sources/AutoExposure.c **** 	uint32_t pixelTotal = 0;
+  20:../Sources/AutoExposure.c **** 
+  21:../Sources/AutoExposure.c **** 	for (uint8_t k = 0; k < 128; k++)
+  35              		.loc 1 21 0
+  36 0002 8024     		mov	r4, #128
+  37              	.LBE2:
+  18:../Sources/AutoExposure.c **** {
+  38              		.loc 1 18 0
+  39 0004 0023     		mov	r3, #0
+  19:../Sources/AutoExposure.c **** 	uint32_t pixelTotal = 0;
+  40              		.loc 1 19 0
+  41 0006 0022     		mov	r2, #0
+  42              	.LBB3:
+  43              		.loc 1 21 0
+  44 0008 6400     		lsl	r4, r4, #1
+  45              	.LVL1:
+  46              	.L2:
+  47              	.LBE3:
+  17:../Sources/AutoExposure.c **** uint32_t getTotalIntensity(volatile uint16_t* LineScanImage)
+  48              		.loc 1 17 0
+  49 000a C118     		add	r1, r0, r3
+  50              	.LBB4:
+  22:../Sources/AutoExposure.c **** 	{
+  23:../Sources/AutoExposure.c **** 		pixelTotal += LineScanImage[k];
+  51              		.loc 1 23 0
+  52 000c 0988     		ldrh	r1, [r1]
+  53 000e 0233     		add	r3, r3, #2
+  54 0010 5218     		add	r2, r2, r1
+  55              	.LBE4:
+  17:../Sources/AutoExposure.c **** uint32_t getTotalIntensity(volatile uint16_t* LineScanImage)
+  56              		.loc 1 17 0
+  57 0012 C118     		add	r1, r0, r3
+  58              	.LBB5:
+  59              		.loc 1 23 0
+  60 0014 0988     		ldrh	r1, [r1]
+  61 0016 0233     		add	r3, r3, #2
+  62 0018 5218     		add	r2, r2, r1
+  63              	.LVL2:
+  21:../Sources/AutoExposure.c **** 	for (uint8_t k = 0; k < 128; k++)
+  64              		.loc 1 21 0
+  65 001a A342     		cmp	r3, r4
+  66 001c F5D1     		bne	.L2
+  67              	.LBE5:
+  24:../Sources/AutoExposure.c **** 	}
+  25:../Sources/AutoExposure.c **** 
+  26:../Sources/AutoExposure.c **** 	return pixelTotal;
+  27:../Sources/AutoExposure.c **** }
+  68              		.loc 1 27 0
+  69 001e 101C     		mov	r0, r2
+  70              	.LVL3:
+  71              		@ sp needed for prologue
+  72 0020 10BD     		pop	{r4, pc}
+  73              		.cfi_endproc
+  74              	.LFE0:
+  76              		.global	__aeabi_i2f
+  77              		.global	__aeabi_ui2f
+  78              		.global	__aeabi_fdiv
+  79              		.global	__aeabi_f2iz
+  80              		.global	__aeabi_fmul
+  81              		.global	__aeabi_fadd
+  82 0022 C046     		.section	.text.calculateNewExposure,"ax",%progbits
+  83              		.align	2
+  84              		.global	calculateNewExposure
+  85              		.code	16
+  86              		.thumb_func
+  88              	calculateNewExposure:
+  89              	.LFB1:
+  28:../Sources/AutoExposure.c **** 
+  29:../Sources/AutoExposure.c **** 
+  30:../Sources/AutoExposure.c **** int32_t calculateNewExposure(int32_t totalIntensity, int32_t targetTotalIntensity)
+  31:../Sources/AutoExposure.c **** {
+  90              		.loc 1 31 0
+  91              		.cfi_startproc
+  92              	.LVL4:
+  93 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  94              	.LCFI1:
+  95              		.cfi_def_cfa_offset 24
+  96              		.cfi_offset 3, -24
+  97              		.cfi_offset 4, -20
+  98              		.cfi_offset 5, -16
+  99              		.cfi_offset 6, -12
+ 100              		.cfi_offset 7, -8
+ 101              		.cfi_offset 14, -4
+  32:../Sources/AutoExposure.c **** 	previousError = error;
+ 102              		.loc 1 32 0
+ 103 0002 264C     		ldr	r4, .L12
+ 104 0004 264B     		ldr	r3, .L12+4
+ 105 0006 2568     		ldr	r5, [r4]
+  33:../Sources/AutoExposure.c **** 	error = targetTotalIntensity - totalIntensity;
+ 106              		.loc 1 33 0
+ 107 0008 0E1A     		sub	r6, r1, r0
+  32:../Sources/AutoExposure.c **** 	previousError = error;
+ 108              		.loc 1 32 0
+ 109 000a 1D60     		str	r5, [r3]
+ 110              		.loc 1 33 0
+ 111 000c 2660     		str	r6, [r4]
+  34:../Sources/AutoExposure.c **** 	dError = (error - previousError) / (TFC_getLineScanExposureTime() / 1000000.0f);
+ 112              		.loc 1 34 0
+ 113 000e FFF7FEFF 		bl	TFC_getLineScanExposureTime
+ 114              	.LVL5:
+ 115 0012 071C     		mov	r7, r0
+ 116 0014 701B     		sub	r0, r6, r5
+ 117 0016 FFF7FEFF 		bl	__aeabi_i2f
+ 118              	.LVL6:
+ 119 001a 051C     		add	r5, r0, #0
+ 120 001c 381C     		mov	r0, r7
+ 121 001e FFF7FEFF 		bl	__aeabi_ui2f
+ 122              	.LVL7:
+ 123 0022 2049     		ldr	r1, .L12+8
+ 124 0024 FFF7FEFF 		bl	__aeabi_fdiv
+ 125              	.LVL8:
+ 126 0028 011C     		add	r1, r0, #0
+ 127 002a 281C     		add	r0, r5, #0
+ 128 002c FFF7FEFF 		bl	__aeabi_fdiv
+ 129              	.LVL9:
+ 130 0030 FFF7FEFF 		bl	__aeabi_f2iz
+ 131              	.LVL10:
+ 132 0034 1C49     		ldr	r1, .L12+12
+  35:../Sources/AutoExposure.c **** 	errorSum += error * (TFC_getLineScanExposureTime() / 1000000.0f);
+ 133              		.loc 1 35 0
+ 134 0036 1D4D     		ldr	r5, .L12+16
+  34:../Sources/AutoExposure.c **** 	dError = (error - previousError) / (TFC_getLineScanExposureTime() / 1000000.0f);
+ 135              		.loc 1 34 0
+ 136 0038 0860     		str	r0, [r1]
+ 137              		.loc 1 35 0
+ 138 003a 2868     		ldr	r0, [r5]
+ 139 003c FFF7FEFF 		bl	__aeabi_i2f
+ 140              	.LVL11:
+ 141 0040 061C     		add	r6, r0, #0
+ 142 0042 2068     		ldr	r0, [r4]
+ 143 0044 FFF7FEFF 		bl	__aeabi_i2f
+ 144              	.LVL12:
+ 145 0048 071C     		add	r7, r0, #0
+ 146 004a FFF7FEFF 		bl	TFC_getLineScanExposureTime
+ 147              	.LVL13:
+ 148 004e FFF7FEFF 		bl	__aeabi_ui2f
+ 149              	.LVL14:
+ 150 0052 1449     		ldr	r1, .L12+8
+ 151 0054 FFF7FEFF 		bl	__aeabi_fdiv
+ 152              	.LVL15:
+ 153 0058 011C     		add	r1, r0, #0
+ 154 005a 381C     		add	r0, r7, #0
+ 155 005c FFF7FEFF 		bl	__aeabi_fmul
+ 156              	.LVL16:
+ 157 0060 011C     		add	r1, r0, #0
+ 158 0062 301C     		add	r0, r6, #0
+ 159 0064 FFF7FEFF 		bl	__aeabi_fadd
+ 160              	.LVL17:
+ 161 0068 FFF7FEFF 		bl	__aeabi_f2iz
+ 162              	.LVL18:
+ 163 006c 2860     		str	r0, [r5]
+  36:../Sources/AutoExposure.c **** 
+  37:../Sources/AutoExposure.c **** 	newExposure += (int32_t) ((float) error * Kp_EXPOSURE);
+ 164              		.loc 1 37 0
+ 165 006e 2068     		ldr	r0, [r4]
+ 166 0070 FFF7FEFF 		bl	__aeabi_i2f
+ 167              	.LVL19:
+ 168 0074 0E49     		ldr	r1, .L12+20
+ 169 0076 FFF7FEFF 		bl	__aeabi_fmul
+ 170              	.LVL20:
+ 171 007a FFF7FEFF 		bl	__aeabi_f2iz
+ 172              	.LVL21:
+ 173 007e 0D4C     		ldr	r4, .L12+24
+  38:../Sources/AutoExposure.c **** 
+  39:../Sources/AutoExposure.c **** 	if (newExposure > MAX_EXPOSURE)
+ 174              		.loc 1 39 0
+ 175 0080 0D4B     		ldr	r3, .L12+28
+  37:../Sources/AutoExposure.c **** 	newExposure += (int32_t) ((float) error * Kp_EXPOSURE);
+ 176              		.loc 1 37 0
+ 177 0082 2268     		ldr	r2, [r4]
+ 178 0084 8018     		add	r0, r0, r2
+ 179              		.loc 1 39 0
+ 180 0086 9842     		cmp	r0, r3
+ 181 0088 05DC     		bgt	.L11
+  40:../Sources/AutoExposure.c **** 	{
+  41:../Sources/AutoExposure.c **** 		newExposure = MAX_EXPOSURE;
+  42:../Sources/AutoExposure.c **** 	}
+  43:../Sources/AutoExposure.c **** 	else if (newExposure < MIN_EXPOSURE)
+ 182              		.loc 1 43 0
+ 183 008a 0C49     		ldr	r1, .L12+32
+ 184 008c 8842     		cmp	r0, r1
+ 185 008e 00DC     		bgt	.L10
+  44:../Sources/AutoExposure.c **** 	{
+  45:../Sources/AutoExposure.c **** 		newExposure = MIN_EXPOSURE;
+ 186              		.loc 1 45 0
+ 187 0090 0B48     		ldr	r0, .L12+36
+ 188              	.L10:
+ 189 0092 2060     		str	r0, [r4]
+ 190              	.L8:
+  46:../Sources/AutoExposure.c **** 	}
+  47:../Sources/AutoExposure.c **** 
+  48:../Sources/AutoExposure.c **** 	return newExposure;
+  49:../Sources/AutoExposure.c **** }
+ 191              		.loc 1 49 0
+ 192              		@ sp needed for prologue
+ 193 0094 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 194              	.L11:
+  41:../Sources/AutoExposure.c **** 		newExposure = MAX_EXPOSURE;
+ 195              		.loc 1 41 0
+ 196 0096 2360     		str	r3, [r4]
+ 197 0098 181C     		mov	r0, r3
+ 198 009a FBE7     		b	.L8
+ 199              	.L13:
+ 200              		.align	2
+ 201              	.L12:
+ 202 009c 00000000 		.word	.LANCHOR0
+ 203 00a0 00000000 		.word	.LANCHOR1
+ 204 00a4 00247449 		.word	1232348160
+ 205 00a8 00000000 		.word	.LANCHOR2
+ 206 00ac 00000000 		.word	.LANCHOR3
+ 207 00b0 0AD7233C 		.word	1008981770
+ 208 00b4 00000000 		.word	.LANCHOR4
+ 209 00b8 10270000 		.word	10000
+ 210 00bc 6F170000 		.word	5999
+ 211 00c0 70170000 		.word	6000
+ 212              		.cfi_endproc
+ 213              	.LFE1:
+ 215              		.global	newExposure
+ 216              		.global	errorSum
+ 217              		.global	dError
+ 218              		.global	previousError
+ 219              		.global	error
+ 220              		.section	.bss.previousError,"aw",%nobits
+ 221              		.align	2
+ 222              		.set	.LANCHOR1,. + 0
+ 225              	previousError:
+ 226 0000 00000000 		.space	4
+ 227              		.section	.bss.error,"aw",%nobits
+ 228              		.align	2
+ 229              		.set	.LANCHOR0,. + 0
+ 232              	error:
+ 233 0000 00000000 		.space	4
+ 234              		.section	.data.newExposure,"aw",%progbits
+ 235              		.align	2
+ 236              		.set	.LANCHOR4,. + 0
+ 239              	newExposure:
+ 240 0000 10270000 		.word	10000
+ 241              		.section	.bss.errorSum,"aw",%nobits
+ 242              		.align	2
+ 243              		.set	.LANCHOR3,. + 0
+ 246              	errorSum:
+ 247 0000 00000000 		.space	4
+ 248              		.section	.bss.dError,"aw",%nobits
+ 249              		.align	2
+ 250              		.set	.LANCHOR2,. + 0
+ 253              	dError:
+ 254 0000 00000000 		.space	4
+ 255              		.text
+ 256              	.Letext0:
+ 257              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+DEFINED SYMBOLS
+                            *ABS*:00000000 AutoExposure.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:18     .text.getTotalIntensity:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:23     .text.getTotalIntensity:00000000 getTotalIntensity
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:83     .text.calculateNewExposure:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:88     .text.calculateNewExposure:00000000 calculateNewExposure
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:202    .text.calculateNewExposure:0000009c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:239    .data.newExposure:00000000 newExposure
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:246    .bss.errorSum:00000000 errorSum
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:253    .bss.dError:00000000 dError
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:225    .bss.previousError:00000000 previousError
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:232    .bss.error:00000000 error
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:221    .bss.previousError:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:228    .bss.error:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:235    .data.newExposure:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:242    .bss.errorSum:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccoBWqEN.s:249    .bss.dError:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_i2f
+__aeabi_ui2f
+__aeabi_fdiv
+__aeabi_f2iz
+__aeabi_fmul
+__aeabi_fadd
+TFC_getLineScanExposureTime

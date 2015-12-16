@@ -1,0 +1,689 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Probability.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_fcmpeq
+  18              		.global	__aeabi_fdiv
+  19              		.global	__aeabi_fmul
+  20              		.global	__aeabi_f2d
+  21              		.global	__aeabi_dmul
+  22              		.global	__aeabi_dadd
+  23              		.global	__aeabi_ui2d
+  24              		.global	__aeabi_ddiv
+  25              		.global	__aeabi_d2f
+  26              		.section	.text.getProbability,"ax",%progbits
+  27              		.align	2
+  28              		.global	getProbability
+  29              		.code	16
+  30              		.thumb_func
+  32              	getProbability:
+  33              	.LFB0:
+  34              		.file 1 "../Sources/Probability.c"
+   1:../Sources/Probability.c **** /*
+   2:../Sources/Probability.c ****  * Probability.c
+   3:../Sources/Probability.c ****  *
+   4:../Sources/Probability.c ****  *  Created on: Dec 9, 2013
+   5:../Sources/Probability.c ****  *      Author: admin
+   6:../Sources/Probability.c ****  */
+   7:../Sources/Probability.c **** 
+   8:../Sources/Probability.c **** #include "Probability.h"
+   9:../Sources/Probability.c **** 
+  10:../Sources/Probability.c **** 
+  11:../Sources/Probability.c **** struct probabilityTables_s probabilityTables = {.filledEntries = 0};
+  12:../Sources/Probability.c **** 
+  13:../Sources/Probability.c **** //Find the probability of a value being correct given a mean and standard deviation
+  14:../Sources/Probability.c **** float getProbability(int8_t value, float standardDeviation, int8_t mean)
+  15:../Sources/Probability.c **** {
+  35              		.loc 1 15 0
+  36              		.cfi_startproc
+  37              	.LVL0:
+  38 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 20
+  41              		.cfi_offset 4, -20
+  42              		.cfi_offset 5, -16
+  43              		.cfi_offset 6, -12
+  44              		.cfi_offset 7, -8
+  45              		.cfi_offset 14, -4
+  46 0002 5646     		mov	r6, sl
+  47 0004 5F46     		mov	r7, fp
+  48 0006 4D46     		mov	r5, r9
+  49 0008 4446     		mov	r4, r8
+  50 000a F0B4     		push	{r4, r5, r6, r7}
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 36
+  53              		.cfi_offset 8, -36
+  54              		.cfi_offset 9, -32
+  55              		.cfi_offset 10, -28
+  56              		.cfi_offset 11, -24
+  57 000c 87B0     		sub	sp, sp, #28
+  58              	.LCFI2:
+  59              		.cfi_def_cfa_offset 64
+  60              		.loc 1 15 0
+  61 000e 0490     		str	r0, [sp, #16]
+  62 0010 6D48     		ldr	r0, .L29+16
+  63              	.LVL1:
+  64 0012 0592     		str	r2, [sp, #20]
+  65 0014 0678     		ldrb	r6, [r0]
+  66 0016 8A46     		mov	sl, r1
+  67              	.LVL2:
+  68              	.L10:
+  69              	.LBB6:
+  16:../Sources/Probability.c **** 	for(uint8_t i = 0; i < probabilityTables.filledEntries; i++)
+  70              		.loc 1 16 0
+  71 0018 002E     		cmp	r6, #0
+  72 001a 40D0     		beq	.L2
+  17:../Sources/Probability.c **** 	{
+  18:../Sources/Probability.c **** 		if(probabilityTables.entries[i].standardDeviation == standardDeviation)
+  73              		.loc 1 18 0
+  74 001c 6A49     		ldr	r1, .L29+16
+  75 001e 4868     		ldr	r0, [r1, #4]
+  76 0020 5146     		mov	r1, sl
+  77 0022 FFF7FEFF 		bl	__aeabi_fcmpeq
+  78              	.LVL3:
+  79 0026 0028     		cmp	r0, #0
+  80 0028 00D0     		beq	.LCB50
+  81 002a ADE0     		b	.L28	@long jump
+  82              	.LCB50:
+  83 002c 664B     		ldr	r3, .L29+16
+  84 002e 8222     		mov	r2, #130
+  85 0030 9400     		lsl	r4, r2, #2
+  86 0032 1C19     		add	r4, r3, r4
+  87 0034 0127     		mov	r7, #1
+  88 0036 F307     		lsl	r3, r6, #31
+  89 0038 0DD4     		bmi	.L26
+  90              	.LVL4:
+  16:../Sources/Probability.c **** 	for(uint8_t i = 0; i < probabilityTables.filledEntries; i++)
+  91              		.loc 1 16 0
+  92 003a BE42     		cmp	r6, r7
+  93 003c 2CD9     		bls	.L25
+  94 003e 6249     		ldr	r1, .L29+16
+  95 0040 624B     		ldr	r3, .L29+20
+  96              		.loc 1 18 0
+  97 0042 2068     		ldr	r0, [r4]
+  98 0044 CC18     		add	r4, r1, r3
+  99 0046 5146     		mov	r1, sl
+ 100 0048 0125     		mov	r5, #1
+ 101 004a 0227     		mov	r7, #2
+ 102 004c FFF7FEFF 		bl	__aeabi_fcmpeq
+ 103              	.LVL5:
+ 104 0050 0028     		cmp	r0, #0
+ 105 0052 00D0     		beq	.LCB75
+ 106 0054 99E0     		b	.L3	@long jump
+ 107              	.LCB75:
+ 108              	.L26:
+ 109 0056 B046     		mov	r8, r6
+ 110 0058 5646     		mov	r6, sl
+ 111 005a 18E0     		b	.L5
+ 112              	.LVL6:
+ 113              	.L7:
+ 114 005c 8120     		mov	r0, #129
+ 115 005e 7A1C     		add	r2, r7, #1
+ 116 0060 8300     		lsl	r3, r0, #2
+ 117 0062 311C     		add	r1, r6, #0
+ 118 0064 2068     		ldr	r0, [r4]
+ 119 0066 3D1C     		mov	r5, r7
+ 120 0068 9246     		mov	sl, r2
+ 121 006a E718     		add	r7, r4, r3
+ 122 006c FFF7FEFF 		bl	__aeabi_fcmpeq
+ 123              	.LVL7:
+ 124 0070 0028     		cmp	r0, #0
+ 125 0072 00D0     		beq	.LCB98
+ 126 0074 89E0     		b	.L3	@long jump
+ 127              	.LCB98:
+ 128 0076 8121     		mov	r1, #129
+ 129 0078 CA00     		lsl	r2, r1, #3
+ 130 007a 5546     		mov	r5, sl
+ 131 007c 3868     		ldr	r0, [r7]
+ 132 007e 311C     		add	r1, r6, #0
+ 133 0080 6F1C     		add	r7, r5, #1
+ 134 0082 A418     		add	r4, r4, r2
+ 135 0084 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 136              	.LVL8:
+ 137 0088 0028     		cmp	r0, #0
+ 138 008a 00D0     		beq	.LCB110
+ 139 008c 7DE0     		b	.L3	@long jump
+ 140              	.LCB110:
+ 141              	.L5:
+  16:../Sources/Probability.c **** 	for(uint8_t i = 0; i < probabilityTables.filledEntries; i++)
+ 142              		.loc 1 16 0
+ 143 008e FDB2     		uxtb	r5, r7
+ 144 0090 A845     		cmp	r8, r5
+ 145 0092 E3D8     		bhi	.L7
+ 146 0094 B246     		mov	sl, r6
+ 147 0096 4646     		mov	r6, r8
+ 148              	.LVL9:
+ 149              	.L25:
+ 150              	.LBE6:
+  19:../Sources/Probability.c **** 		{
+  20:../Sources/Probability.c **** 			return probabilityTables.entries[i].probabilities[abs(value - mean)];
+  21:../Sources/Probability.c **** 		}
+  22:../Sources/Probability.c **** 	}
+  23:../Sources/Probability.c **** 	//No entry for this SD found, generate table
+  24:../Sources/Probability.c **** 	
+  25:../Sources/Probability.c **** 	if(probabilityTables.filledEntries < MAX_NUMBER_OF_PROBABILITY_TABLES)
+ 151              		.loc 1 25 0
+ 152 0098 072E     		cmp	r6, #7
+ 153 009a 00D9     		bls	.LCB126
+ 154 009c 89E0     		b	.L8	@long jump
+ 155              	.LCB126:
+ 156              	.L2:
+  26:../Sources/Probability.c **** 	{
+  27:../Sources/Probability.c **** 	//	TERMINAL_PRINTF("Generating probability table for a standard deviation of %i\n", (int16_t)(stan
+  28:../Sources/Probability.c **** 		generateProbabilityTable(&probabilityTables.entries[probabilityTables.filledEntries], standardDev
+ 157              		.loc 1 28 0
+ 158 009e F701     		lsl	r7, r6, #7
+ 159 00a0 B819     		add	r0, r7, r6
+ 160 00a2 494C     		ldr	r4, .L29+16
+ 161 00a4 8200     		lsl	r2, r0, #2
+ 162 00a6 A118     		add	r1, r4, r2
+ 163              	.LBB7:
+ 164              	.LBB8:
+  29:../Sources/Probability.c **** 		probabilityTables.filledEntries++;
+  30:../Sources/Probability.c **** 	}
+  31:../Sources/Probability.c **** 	else
+  32:../Sources/Probability.c **** 	{
+  33:../Sources/Probability.c **** 	//	TERMINAL_PRINTF("Insufficient space for probability arrays, halting");
+  34:../Sources/Probability.c **** 		while(1);
+  35:../Sources/Probability.c **** 	}
+  36:../Sources/Probability.c **** 	//Should successfully get a probability this time
+  37:../Sources/Probability.c **** 	return getProbability(value, standardDeviation, mean);
+  38:../Sources/Probability.c **** 	
+  39:../Sources/Probability.c **** 	//Should never reach here
+  40:../Sources/Probability.c ****     //	TERMINAL_PRINTF("Overflowed probabilities array\n");
+  41:../Sources/Probability.c **** 	while(1);
+  42:../Sources/Probability.c **** 	return -1;
+  43:../Sources/Probability.c **** }
+  44:../Sources/Probability.c **** 
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+  47:../Sources/Probability.c **** 	{
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 165              		.loc 1 48 0
+ 166 00a8 FE23     		mov	r3, #254
+ 167              	.LBE8:
+ 168              	.LBE7:
+  28:../Sources/Probability.c **** 		generateProbabilityTable(&probabilityTables.entries[probabilityTables.filledEntries], standardDev
+ 169              		.loc 1 28 0
+ 170 00aa 0431     		add	r1, r1, #4
+ 171              	.LBB13:
+ 172              	.LBB9:
+ 173              		.loc 1 48 0
+ 174 00ac 9805     		lsl	r0, r3, #22
+ 175              	.LBE9:
+ 176              	.LBE13:
+  28:../Sources/Probability.c **** 		generateProbabilityTable(&probabilityTables.entries[probabilityTables.filledEntries], standardDev
+ 177              		.loc 1 28 0
+ 178 00ae 8B46     		mov	fp, r1
+ 179              	.LVL10:
+ 180              	.LBB14:
+ 181              	.LBB10:
+ 182              		.loc 1 48 0
+ 183 00b0 5146     		mov	r1, sl
+ 184              	.LVL11:
+ 185 00b2 FFF7FEFF 		bl	__aeabi_fdiv
+ 186              	.LVL12:
+ 187 00b6 4649     		ldr	r1, .L29+24
+ 188 00b8 FFF7FEFF 		bl	__aeabi_fmul
+ 189              	.LVL13:
+ 190 00bc FFF7FEFF 		bl	__aeabi_f2d
+ 191              	.LVL14:
+ 192 00c0 0090     		str	r0, [sp]
+ 193 00c2 0191     		str	r1, [sp, #4]
+ 194 00c4 5046     		mov	r0, sl
+ 195 00c6 FFF7FEFF 		bl	__aeabi_f2d
+ 196              	.LVL15:
+ 197 00ca 021C     		mov	r2, r0
+ 198 00cc 0B1C     		mov	r3, r1
+ 199 00ce FFF7FEFF 		bl	__aeabi_dmul
+ 200              	.LVL16:
+ 201 00d2 021C     		mov	r2, r0
+ 202 00d4 0B1C     		mov	r3, r1
+ 203 00d6 FFF7FEFF 		bl	__aeabi_dadd
+ 204              	.LVL17:
+  14:../Sources/Probability.c **** float getProbability(int8_t value, float standardDeviation, int8_t mean)
+ 205              		.loc 1 14 0
+ 206 00da 0425     		mov	r5, #4
+ 207              		.loc 1 48 0
+ 208 00dc 061C     		mov	r6, r0
+  14:../Sources/Probability.c **** float getProbability(int8_t value, float standardDeviation, int8_t mean)
+ 209              		.loc 1 14 0
+ 210 00de A946     		mov	r9, r5
+ 211              	.LBE10:
+ 212              	.LBE14:
+ 213              	.LBB15:
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 214              		.loc 1 46 0
+ 215 00e0 0020     		mov	r0, #0
+ 216              	.LBE15:
+ 217              	.LBB16:
+ 218              	.LBB11:
+ 219              		.loc 1 48 0
+ 220 00e2 0F1C     		mov	r7, r1
+  14:../Sources/Probability.c **** float getProbability(int8_t value, float standardDeviation, int8_t mean)
+ 221              		.loc 1 14 0
+ 222 00e4 D944     		add	r9, r9, fp
+ 223              	.LBE11:
+ 224              	.LBE16:
+ 225              	.LBB17:
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 226              		.loc 1 46 0
+ 227 00e6 8046     		mov	r8, r0
+ 228              	.LVL18:
+ 229              	.L9:
+ 230              	.LBE17:
+ 231              	.LBB18:
+ 232              	.LBB12:
+ 233              		.loc 1 48 0
+ 234 00e8 4046     		mov	r0, r8
+ 235 00ea FFF7FEFF 		bl	__aeabi_ui2d
+ 236              	.LVL19:
+ 237 00ee 021C     		mov	r2, r0
+ 238 00f0 0B1C     		mov	r3, r1
+ 239 00f2 FFF7FEFF 		bl	__aeabi_dmul
+ 240              	.LVL20:
+ 241 00f6 8024     		mov	r4, #128
+ 242 00f8 2306     		lsl	r3, r4, #24
+ 243 00fa 021C     		mov	r2, r0
+ 244 00fc C918     		add	r1, r1, r3
+ 245 00fe 101C     		mov	r0, r2
+ 246 0100 3B1C     		mov	r3, r7
+ 247 0102 321C     		mov	r2, r6
+ 248 0104 FFF7FEFF 		bl	__aeabi_ddiv
+ 249              	.LVL21:
+ 250 0108 021C     		mov	r2, r0
+ 251 010a 0B1C     		mov	r3, r1
+ 252 010c 2B49     		ldr	r1, .L29+4
+ 253 010e 2A48     		ldr	r0, .L29
+ 254 0110 FFF7FEFF 		bl	pow
+ 255              	.LVL22:
+ 256 0114 321C     		mov	r2, r6
+ 257 0116 041C     		mov	r4, r0
+ 258 0118 0D1C     		mov	r5, r1
+ 259 011a 3B1C     		mov	r3, r7
+ 260 011c 2848     		ldr	r0, .L29+8
+ 261 011e 2949     		ldr	r1, .L29+12
+ 262 0120 FFF7FEFF 		bl	__aeabi_ddiv
+ 263              	.LVL23:
+ 264 0124 021C     		mov	r2, r0
+ 265 0126 0B1C     		mov	r3, r1
+ 266 0128 2449     		ldr	r1, .L29+4
+ 267 012a 2348     		ldr	r0, .L29
+ 268 012c FFF7FEFF 		bl	pow
+ 269              	.LVL24:
+ 270 0130 221C     		mov	r2, r4
+ 271 0132 2B1C     		mov	r3, r5
+ 272 0134 0290     		str	r0, [sp, #8]
+ 273 0136 0391     		str	r1, [sp, #12]
+ 274 0138 0098     		ldr	r0, [sp]
+ 275 013a 0199     		ldr	r1, [sp, #4]
+ 276 013c FFF7FEFF 		bl	__aeabi_dmul
+ 277              	.LVL25:
+ 278 0140 029A     		ldr	r2, [sp, #8]
+ 279 0142 039B     		ldr	r3, [sp, #12]
+ 280 0144 041C     		mov	r4, r0
+ 281 0146 0D1C     		mov	r5, r1
+ 282 0148 0098     		ldr	r0, [sp]
+ 283 014a 0199     		ldr	r1, [sp, #4]
+ 284 014c FFF7FEFF 		bl	__aeabi_dmul
+ 285              	.LVL26:
+ 286 0150 021C     		mov	r2, r0
+ 287 0152 0B1C     		mov	r3, r1
+ 288 0154 201C     		mov	r0, r4
+ 289 0156 291C     		mov	r1, r5
+ 290 0158 FFF7FEFF 		bl	__aeabi_ddiv
+ 291              	.LVL27:
+ 292 015c FFF7FEFF 		bl	__aeabi_d2f
+ 293              	.LVL28:
+ 294 0160 4A46     		mov	r2, r9
+ 295 0162 0432     		add	r2, r2, #4
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 296              		.loc 1 46 0
+ 297 0164 4146     		mov	r1, r8
+ 298              		.loc 1 48 0
+ 299 0166 9146     		mov	r9, r2
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 300              		.loc 1 46 0
+ 301 0168 0131     		add	r1, r1, #1
+ 302              		.loc 1 48 0
+ 303 016a 043A     		sub	r2, r2, #4
+ 304 016c 01C2     		stmia	r2!, {r0}
+  49:../Sources/Probability.c **** 		probabilitiesTable->standardDeviation = standardDeviation;
+ 305              		.loc 1 49 0
+ 306 016e 5B46     		mov	r3, fp
+ 307 0170 5046     		mov	r0, sl
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 308              		.loc 1 46 0
+ 309 0172 CCB2     		uxtb	r4, r1
+ 310              		.loc 1 49 0
+ 311 0174 1860     		str	r0, [r3]
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 312              		.loc 1 46 0
+ 313 0176 A046     		mov	r8, r4
+ 314              	.LVL29:
+ 315 0178 7F2C     		cmp	r4, #127
+ 316 017a B5D1     		bne	.L9
+ 317              	.LVL30:
+ 318              	.LBE12:
+ 319              	.LBE18:
+  29:../Sources/Probability.c **** 		probabilityTables.filledEntries++;
+ 320              		.loc 1 29 0
+ 321 017c 124F     		ldr	r7, .L29+16
+ 322 017e 3E78     		ldrb	r6, [r7]
+ 323 0180 0136     		add	r6, r6, #1
+ 324 0182 F6B2     		uxtb	r6, r6
+ 325 0184 3E70     		strb	r6, [r7]
+  37:../Sources/Probability.c **** 	return getProbability(value, standardDeviation, mean);
+ 326              		.loc 1 37 0
+ 327 0186 47E7     		b	.L10
+ 328              	.LVL31:
+ 329              	.L28:
+ 330              	.LBB19:
+  18:../Sources/Probability.c **** 		if(probabilityTables.entries[i].standardDeviation == standardDeviation)
+ 331              		.loc 1 18 0
+ 332 0188 0025     		mov	r5, #0
+ 333              	.LVL32:
+ 334              	.L3:
+  20:../Sources/Probability.c **** 			return probabilityTables.entries[i].probabilities[abs(value - mean)];
+ 335              		.loc 1 20 0
+ 336 018a 049E     		ldr	r6, [sp, #16]
+ 337 018c 0598     		ldr	r0, [sp, #20]
+ 338 018e EA01     		lsl	r2, r5, #7
+ 339 0190 371A     		sub	r7, r6, r0
+ 340 0192 FB17     		asr	r3, r7, #31
+ 341 0194 F918     		add	r1, r7, r3
+ 342 0196 5940     		eor	r1, r3
+ 343 0198 5519     		add	r5, r2, r5
+ 344 019a 0B48     		ldr	r0, .L29+16
+ 345 019c 6C18     		add	r4, r5, r1
+ 346 019e A600     		lsl	r6, r4, #2
+ 347 01a0 8719     		add	r7, r0, r6
+ 348 01a2 B868     		ldr	r0, [r7, #8]
+ 349              	.LBE19:
+  43:../Sources/Probability.c **** }
+ 350              		.loc 1 43 0
+ 351 01a4 07B0     		add	sp, sp, #28
+ 352              		@ sp needed for prologue
+ 353 01a6 3CBC     		pop	{r2, r3, r4, r5}
+ 354 01a8 9046     		mov	r8, r2
+ 355 01aa 9946     		mov	r9, r3
+ 356 01ac A246     		mov	sl, r4
+ 357 01ae AB46     		mov	fp, r5
+ 358 01b0 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 359              	.LVL33:
+ 360              	.L8:
+ 361              	.L24:
+ 362 01b2 FEE7     		b	.L24
+ 363              	.L30:
+ 364 01b4 C046C046 		.align	3
+ 365              	.L29:
+ 366 01b8 000000A0 		.word	-1610612736
+ 367 01bc 09BF0540 		.word	1074118409
+ 368 01c0 00000000 		.word	0
+ 369 01c4 00000080 		.word	-2147483648
+ 370 01c8 00000000 		.word	.LANCHOR0
+ 371 01cc 0C040000 		.word	1036
+ 372 01d0 DD41CC3E 		.word	1053573597
+ 373              		.cfi_endproc
+ 374              	.LFE0:
+ 376 01d4 C046C046 		.section	.text.generateProbabilityTable,"ax",%progbits
+ 377              		.align	2
+ 378              		.global	generateProbabilityTable
+ 379              		.code	16
+ 380              		.thumb_func
+ 382              	generateProbabilityTable:
+ 383              	.LFB1:
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+ 384              		.loc 1 45 0
+ 385              		.cfi_startproc
+ 386              	.LVL34:
+ 387 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 388              	.LCFI3:
+ 389              		.cfi_def_cfa_offset 20
+ 390              		.cfi_offset 4, -20
+ 391              		.cfi_offset 5, -16
+ 392              		.cfi_offset 6, -12
+ 393              		.cfi_offset 7, -8
+ 394              		.cfi_offset 14, -4
+ 395 0002 5F46     		mov	r7, fp
+ 396 0004 5646     		mov	r6, sl
+ 397 0006 4D46     		mov	r5, r9
+ 398 0008 4446     		mov	r4, r8
+ 399 000a F0B4     		push	{r4, r5, r6, r7}
+ 400              	.LCFI4:
+ 401              		.cfi_def_cfa_offset 36
+ 402              		.cfi_offset 8, -36
+ 403              		.cfi_offset 9, -32
+ 404              		.cfi_offset 10, -28
+ 405              		.cfi_offset 11, -24
+ 406 000c 8346     		mov	fp, r0
+ 407              	.LBB20:
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 408              		.loc 1 48 0
+ 409 000e FE20     		mov	r0, #254
+ 410              	.LVL35:
+ 411              	.LBE20:
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+ 412              		.loc 1 45 0
+ 413 0010 85B0     		sub	sp, sp, #20
+ 414              	.LCFI5:
+ 415              		.cfi_def_cfa_offset 56
+ 416              	.LBB21:
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 417              		.loc 1 48 0
+ 418 0012 8005     		lsl	r0, r0, #22
+ 419              	.LBE21:
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+ 420              		.loc 1 45 0
+ 421 0014 8A46     		mov	sl, r1
+ 422              	.LBB22:
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 423              		.loc 1 48 0
+ 424 0016 FFF7FEFF 		bl	__aeabi_fdiv
+ 425              	.LVL36:
+ 426 001a 3949     		ldr	r1, .L34+16
+ 427 001c FFF7FEFF 		bl	__aeabi_fmul
+ 428              	.LVL37:
+ 429 0020 FFF7FEFF 		bl	__aeabi_f2d
+ 430              	.LVL38:
+ 431 0024 0090     		str	r0, [sp]
+ 432 0026 0191     		str	r1, [sp, #4]
+ 433 0028 5046     		mov	r0, sl
+ 434 002a FFF7FEFF 		bl	__aeabi_f2d
+ 435              	.LVL39:
+ 436 002e 021C     		mov	r2, r0
+ 437 0030 0B1C     		mov	r3, r1
+ 438 0032 FFF7FEFF 		bl	__aeabi_dmul
+ 439              	.LVL40:
+ 440 0036 021C     		mov	r2, r0
+ 441 0038 0B1C     		mov	r3, r1
+ 442 003a FFF7FEFF 		bl	__aeabi_dadd
+ 443              	.LVL41:
+ 444 003e 0F1C     		mov	r7, r1
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+ 445              		.loc 1 45 0
+ 446 0040 0421     		mov	r1, #4
+ 447 0042 8946     		mov	r9, r1
+ 448              	.LBE22:
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 449              		.loc 1 46 0
+ 450 0044 0022     		mov	r2, #0
+ 451              	.LBB23:
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 452              		.loc 1 48 0
+ 453 0046 061C     		mov	r6, r0
+  45:../Sources/Probability.c **** void generateProbabilityTable(struct probabilityTable_s* probabilitiesTable, float standardDeviatio
+ 454              		.loc 1 45 0
+ 455 0048 D944     		add	r9, r9, fp
+ 456              	.LBE23:
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 457              		.loc 1 46 0
+ 458 004a 9046     		mov	r8, r2
+ 459              	.LVL42:
+ 460              	.L32:
+ 461              	.LBB24:
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 462              		.loc 1 48 0
+ 463 004c 4046     		mov	r0, r8
+ 464 004e FFF7FEFF 		bl	__aeabi_ui2d
+ 465              	.LVL43:
+ 466 0052 021C     		mov	r2, r0
+ 467 0054 0B1C     		mov	r3, r1
+ 468 0056 FFF7FEFF 		bl	__aeabi_dmul
+ 469              	.LVL44:
+ 470 005a 8023     		mov	r3, #128
+ 471 005c 1D06     		lsl	r5, r3, #24
+ 472 005e 041C     		mov	r4, r0
+ 473 0060 4919     		add	r1, r1, r5
+ 474 0062 201C     		mov	r0, r4
+ 475 0064 321C     		mov	r2, r6
+ 476 0066 3B1C     		mov	r3, r7
+ 477 0068 FFF7FEFF 		bl	__aeabi_ddiv
+ 478              	.LVL45:
+ 479 006c 021C     		mov	r2, r0
+ 480 006e 0B1C     		mov	r3, r1
+ 481 0070 2049     		ldr	r1, .L34+4
+ 482 0072 1F48     		ldr	r0, .L34
+ 483 0074 FFF7FEFF 		bl	pow
+ 484              	.LVL46:
+ 485 0078 321C     		mov	r2, r6
+ 486 007a 041C     		mov	r4, r0
+ 487 007c 0D1C     		mov	r5, r1
+ 488 007e 3B1C     		mov	r3, r7
+ 489 0080 1D48     		ldr	r0, .L34+8
+ 490 0082 1E49     		ldr	r1, .L34+12
+ 491 0084 FFF7FEFF 		bl	__aeabi_ddiv
+ 492              	.LVL47:
+ 493 0088 021C     		mov	r2, r0
+ 494 008a 0B1C     		mov	r3, r1
+ 495 008c 1949     		ldr	r1, .L34+4
+ 496 008e 1848     		ldr	r0, .L34
+ 497 0090 FFF7FEFF 		bl	pow
+ 498              	.LVL48:
+ 499 0094 221C     		mov	r2, r4
+ 500 0096 2B1C     		mov	r3, r5
+ 501 0098 0290     		str	r0, [sp, #8]
+ 502 009a 0391     		str	r1, [sp, #12]
+ 503 009c 0098     		ldr	r0, [sp]
+ 504 009e 0199     		ldr	r1, [sp, #4]
+ 505 00a0 FFF7FEFF 		bl	__aeabi_dmul
+ 506              	.LVL49:
+ 507 00a4 029A     		ldr	r2, [sp, #8]
+ 508 00a6 039B     		ldr	r3, [sp, #12]
+ 509 00a8 041C     		mov	r4, r0
+ 510 00aa 0D1C     		mov	r5, r1
+ 511 00ac 0098     		ldr	r0, [sp]
+ 512 00ae 0199     		ldr	r1, [sp, #4]
+ 513 00b0 FFF7FEFF 		bl	__aeabi_dmul
+ 514              	.LVL50:
+ 515 00b4 021C     		mov	r2, r0
+ 516 00b6 0B1C     		mov	r3, r1
+ 517 00b8 201C     		mov	r0, r4
+ 518 00ba 291C     		mov	r1, r5
+ 519 00bc FFF7FEFF 		bl	__aeabi_ddiv
+ 520              	.LVL51:
+ 521 00c0 FFF7FEFF 		bl	__aeabi_d2f
+ 522              	.LVL52:
+ 523 00c4 4A46     		mov	r2, r9
+ 524 00c6 0432     		add	r2, r2, #4
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 525              		.loc 1 46 0
+ 526 00c8 4146     		mov	r1, r8
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 527              		.loc 1 48 0
+ 528 00ca 9146     		mov	r9, r2
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 529              		.loc 1 46 0
+ 530 00cc 0131     		add	r1, r1, #1
+  48:../Sources/Probability.c **** 		probabilitiesTable->probabilities[i] = (0.39894f*(1.0f/standardDeviation)*pow(e,(-pow((i),2.0f))/
+ 531              		.loc 1 48 0
+ 532 00ce 043A     		sub	r2, r2, #4
+ 533 00d0 01C2     		stmia	r2!, {r0}
+ 534              		.loc 1 49 0
+ 535 00d2 5B46     		mov	r3, fp
+ 536 00d4 5046     		mov	r0, sl
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 537              		.loc 1 46 0
+ 538 00d6 CCB2     		uxtb	r4, r1
+ 539              		.loc 1 49 0
+ 540 00d8 1860     		str	r0, [r3]
+  46:../Sources/Probability.c **** 	for(uint8_t i = 0; i < 127; i++)
+ 541              		.loc 1 46 0
+ 542 00da A046     		mov	r8, r4
+ 543              	.LVL53:
+ 544 00dc 7F2C     		cmp	r4, #127
+ 545 00de B5D1     		bne	.L32
+ 546              	.LVL54:
+ 547              	.LBE24:
+  50:../Sources/Probability.c **** 	}
+  51:../Sources/Probability.c **** }
+ 548              		.loc 1 51 0
+ 549 00e0 05B0     		add	sp, sp, #20
+ 550              		@ sp needed for prologue
+ 551 00e2 3CBC     		pop	{r2, r3, r4, r5}
+ 552 00e4 9046     		mov	r8, r2
+ 553 00e6 9946     		mov	r9, r3
+ 554 00e8 A246     		mov	sl, r4
+ 555 00ea AB46     		mov	fp, r5
+ 556 00ec F0BD     		pop	{r4, r5, r6, r7, pc}
+ 557              	.L35:
+ 558 00ee C046     		.align	3
+ 559              	.L34:
+ 560 00f0 000000A0 		.word	-1610612736
+ 561 00f4 09BF0540 		.word	1074118409
+ 562 00f8 00000000 		.word	0
+ 563 00fc 00000080 		.word	-2147483648
+ 564 0100 DD41CC3E 		.word	1053573597
+ 565              		.cfi_endproc
+ 566              	.LFE1:
+ 568              		.global	probabilityTables
+ 569 0104 C046C046 		.section	.bss.probabilityTables,"aw",%nobits
+ 570              		.align	2
+ 571              		.set	.LANCHOR0,. + 0
+ 574              	probabilityTables:
+ 575 0000 00000000 		.space	4132
+ 575      00000000 
+ 575      00000000 
+ 575      00000000 
+ 575      00000000 
+ 576              		.text
+ 577              	.Letext0:
+ 578              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 579              		.file 3 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/Probability.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Probability.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:27     .text.getProbability:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:32     .text.getProbability:00000000 getProbability
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:366    .text.getProbability:000001b8 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:377    .text.generateProbabilityTable:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:382    .text.generateProbabilityTable:00000000 generateProbabilityTable
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:560    .text.generateProbabilityTable:000000f0 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:574    .bss.probabilityTables:00000000 probabilityTables
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:570    .bss.probabilityTables:00000000 $d
+                     .debug_frame:00000010 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:376    .text.getProbability:000001d4 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccBRlo4p.s:569    .text.generateProbabilityTable:00000104 $t
+
+UNDEFINED SYMBOLS
+__aeabi_fcmpeq
+__aeabi_fdiv
+__aeabi_fmul
+__aeabi_f2d
+__aeabi_dmul
+__aeabi_dadd
+__aeabi_ui2d
+__aeabi_ddiv
+__aeabi_d2f
+pow
