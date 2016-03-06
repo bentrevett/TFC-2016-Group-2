@@ -54,22 +54,6 @@ Switch_1	Stop Line reset
 
 #include "main.h"
 
-#define CHANNEL_0 0
-#define CHANNEL_1 1
-#define PUSH_BUTTON_1 1
-#define PUSH_BUTTON_2 2
-
-
-
-#define BLUETOOTH_FLAG	-128
-
-#define FLOAT_TO_CHAR(x)	(x >= 0.0) ? (signed char)(x + 0.5) : (signed char)(x - 0.5)		
-#define LIMIT_255(x)		(x <= 254.5f && x >= 0.0f && !(x >= 127.5f && x <= 128.5f)) ? x : ((x > 255.0f) ? 255.0f : ((x >= 127.5f && x <= 128.5f) ? 127.0f : 0.0f))
-#define LIMIT_ABS_127(x)	(x <= 126.9f && x >= -126.9f) ? x : ((x > 126.9f) ? 126.9f : -126.9f)
-
-#define LINE_SCAN_IMAGE(x)	LINE_SCAN_IMAGE_EXAPND(x)	// Second level of indirection needed to expand x defined as macro
-#define LINE_SCAN_IMAGE_EXAPND(x)	LineScanImage##x
-
 // carState struct initialization - keeps the main parameters of the car state
 static carState_s carState =
 {   .motorState = FORCED_DISABLED, .UARTSpeedState = UNDEFINED, 
@@ -79,18 +63,14 @@ static carState_s carState =
 
 uint16_t loop_time = 0, loop_begin = 0;
 float batteryLevel = 0;
-static float targetSpeed = 0;
-float incline_speed;
+float targetSpeed = 0;
 float speedL = 0;
 float speedR = 0;
 static float servoValue = 0;
-extern int32_t newExposure;
-float max_speed_percent = 50;
-uint8_t received_byte1 = 0; //received byte from bluetooth 0 to 255
-uint8_t received_byte2 = 0;
-uint8_t count = 0; //bluetooth count
 static uint8_t stoplineJustDetected = 0;
 float friction_correct = 0;
+float maxSpeedPercent = 50;
+float accel=0;
 
 #ifdef S_MODE_ENABLE
 uint8_t s_mode_enable = 1;
@@ -118,17 +98,9 @@ uint32_t test_time  = 0;
 
 int main(void)
 {
+	
 	TFC_Init(&carState);
 	
-	while(TFC_Ticker[5]<=10000){ //need 1 second wait for LCD display
-		}
-	
-	#ifdef ACCELEROMETER_ENABLE
-		Init_I2C();
-		Init_MMA8451Q();
-	#endif
-		
-		
 	while (1)
 	{
 		loop_begin = TFC_Ticker[5];
@@ -142,12 +114,11 @@ int main(void)
 		
 		evaluateMotorState(&carState);		// Checks DIP switch
 		
-		LEDfeedback(&carState);				// Gives feedback for car state by the 4 LEDs
+		//LEDfeedback(&carState);				// Gives feedback for car state by the 4 LEDs
 		
-		TERMINAL_PRINTF("%X,", getSpeed(CHANNEL_1));
 		
 		#ifndef RACE_MODE_CONTROLS
-			switch ((TFC_GetDIP_Switch() >> 1) & 0x03) //
+			switch ((TFC_GetDIP_Switch() >> 1) & 0x03)
 			{
 			default:
 			case 0:
@@ -189,13 +160,63 @@ int main(void)
 			lineFollowingMode(&carState);
 		#endif
 		
-		
 		loop_time = TFC_Ticker[5] - loop_begin;
 	}
 	
 	return 0;
 }
 
+void TFC_Init(carState_s* carState)
+{
+	TFC_InitClock();
+	TFC_InitSysTick();
+	TFC_InitGPIO();
+	TFC_InitServos();
+	TFC_InitMotorPWM();
+	TFC_InitADCs(carState);
+	TFC_InitLineScanCamera();
+
+#ifdef ACCELEROMETER_ENABLE
+	Init_I2C();
+	Init_Accelerometer();
+#endif
+	
+	#ifdef CHANGE_BLUETOOTH_BAUD_RATE
+		TFC_InitUARTs(SDA_SERIAL_BAUD, 38400);	// 38400 is default for the BL module in AT mode 2
+		int dummy_timee = TFC_Ticker[0];
+		while(TFC_Ticker[0] - dummy_timee < 30000)
+		{}
+		TFC_BluetoothModuleSetBaud(BLUETOOTH_BAUD);		// Need to manually power the AT pin on the module
+	#endif
+
+	TFC_InitUARTs(SDA_SERIAL_BAUD, 9600);
+	
+#ifdef LCD_ENABLE
+	LCDinit();
+	LCDwriteString("hello");
+#endif
+	
+	
+	TFC_InitUARTs(SDA_SERIAL_BAUD, 115200);
+	#ifdef TERMINAL_ENABLED
+		TFC_InitTerminal();
+	#endif
+		
+	TFC_HBRIDGE_ENABLE;
+	TFC_SetMotorPWM(0, 0);
+	TFC_InitSpeedSensor();
+	preloadProbabilityTables(); //Prevents probability tables for stop line evaluation from being created too late
+	generateKernel();
+	
+	#ifdef RACE_MODE_CONTROLS
+	PORTA_PCR2 &= 0xFFFFF8FF;
+	PORTA_PCR2 |= 0x00000300;
+	disable_irq(INT_UART0-16);
+	carState->UARTSpeedState = DUAL_SPEED_NO_UART;
+	#endif
+	
+	TFC_SetServo(0, -SERVO_MOUNT_DIRECTION*STEERING_OFFSET);
+}
 
 void lineFollowingMode(carState_s* carState)
 {
@@ -208,6 +229,7 @@ void lineFollowingMode(carState_s* carState)
 		carState->lineDetectionState = LINE_LOST;
 	}
 
+
 	if (TFC_Ticker[6] >= 1000)	// Read battery every 100 ms
 	{
 		TFC_Ticker[6] = 0;
@@ -218,37 +240,47 @@ void lineFollowingMode(carState_s* carState)
 	if (TFC_Ticker[4] >= 50)	// Send telemetry every 5 ms
 	{
 		TFC_Ticker[4] = 0;
-		telemetrySendData();
-		telemetryReadData();
+		//telemetrySendData();
+		//telemetryReadData();
+		cameraFeed(0);
 	}
 	#endif
 	
-	if(TFC_Ticker[5]>=50){ 
-			TFC_Ticker[5]=0;
-			LCDwriteState(carState); 				//gives feedback for car state by the LCD display
+	#ifdef LCD_ENABLE
+	if(TFC_Ticker[5]>=5){
+		TFC_Ticker[5]=0;
+		LCDfeedback(carState);
 	}
+	#endif
+	
 	
 	#ifdef ACCELEROMETER_ENABLE
 		if(TFC_Ticker[8]>=1000){
 			TFC_Ticker[8]=0;
-			//accel_z=getZAcc();
-			if(getZAcc<-1){
-				incline_speed=max_speed_percent-25;
+			accel=getXAcc();
+			if(accel>2){
+				GPIOB_PSOR |= (1<<8);
+				GPIOB_PSOR |= (1<<9);
+				GPIOB_PSOR |= (1<<10);
+				GPIOB_PSOR |= (1<<11);
 			}
 			else{
-				incline_speed=max_speed_percent;
-				}
+				GPIOB_PCOR |= (1<<8);
+							GPIOB_PCOR |= (1<<9);
+							GPIOB_PCOR |= (1<<10);
+							GPIOB_PCOR |= (1<<11);
+			}
 		}
 	#endif
 	#ifndef ACCELEROMETER_ENABLE
-		incline_speed=max_speed_percent;
 	#endif
-	if (carState->lineScanState == LINESCAN_IMAGE_READY)
+	
+		if (carState->lineScanState == LINESCAN_IMAGE_READY)
 	{
 		steeringControlUpdate = LINESCAN_IMAGE_READY;	
-	//	test_begin = TFC_Ticker[5];
+
 		findLine(LineScanImage0, LineScanImage1, carState);
-	//	test_time = TFC_Ticker[5] - test_begin;
+
 		processRaceLine(carState);
 	}
 		
@@ -256,16 +288,6 @@ void lineFollowingMode(carState_s* carState)
 	{
 		TFC_Ticker[0] = 0;
 		servoValue = getDesiredServoValue(carState->raceLineCenter, 0, &steeringControlUpdate);
-		
-		//to make up for vehicle not turning left enough
-		if(servoValue>0){
-					servoValue+=servoValue+0.015f;
-					if(servoValue>STEERING_LIMIT_UPPER)
-					{
-						servoValue=STEERING_LIMIT_UPPER;
-					}
-				
-				}
 		
 		TFC_SetServo(0, servoValue - SERVO_MOUNT_DIRECTION*STEERING_OFFSET);
 		servoValue = servoValueAverage(servoValue);		// Low-pass of servoValue to be used for the radius mapping
@@ -288,7 +310,7 @@ void lineFollowingMode(carState_s* carState)
 		
 		float activeDifferentialModifier[] =
 			{ getActiveDifferentialModifier(servoValue, CHANNEL_0), getActiveDifferentialModifier(servoValue, CHANNEL_1) };
-		
+
 		// Speed measurement depending on the particular mode which is used
 		#if (SPEED_DETECTION_MODE == 0)
 			speedR = getSpeed(CHANNEL_0);
@@ -306,9 +328,10 @@ void lineFollowingMode(carState_s* carState)
 
 		if (carState->UARTSpeedState == DUAL_SPEED_NO_UART)
 		{
-			TFC_SetMotorPWM( //(max_speed_percent/100)
-					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[0], speedR, isANewmeasurementAvailable(CHANNEL_0), CHANNEL_0),
-					(incline_speed/100)*getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[1], speedL, isANewmeasurementAvailable(CHANNEL_1), CHANNEL_1));
+			TFC_SetMotorPWM(0.3f,0.3f);
+			//TFC_SetMotorPWM( //(maxSpeedPercent/100) (inclineSpeed/100)
+			//	getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[0], speedR, isANewmeasurementAvailable(CHANNEL_0), CHANNEL_0),
+				//	getDesiredMotorPWM(targetSpeed * activeDifferentialModifier[1], speedL, isANewmeasurementAvailable(CHANNEL_1), CHANNEL_1));
 		}
 		else if (carState->UARTSpeedState == SINGLE_SPEED_SINGLE_UART)
 		{
@@ -323,7 +346,14 @@ void lineFollowingMode(carState_s* carState)
 	else if (carState->lineDetectionState == STOPLINE_DETECTED)
 	{
 		if(stopline_enable == 1)
-		{	
+		{
+			//added this while bit
+			while(1){
+				TFC_SetServo(0,0);
+				TFC_HBRIDGE_DISABLE;
+				TFC_SetMotorPWM(0, 0);
+			}
+			
 			static uint32_t stoplineDetectedMoment = 0;
 			static uint32_t stopDelayTime = 0;
 			
@@ -410,47 +440,6 @@ void derivativeFocussingMode(carState_s* carState)
 	}
 }
 
-
-void TFC_Init(carState_s* carState)
-{
-	TFC_InitClock();
-	TFC_InitSysTick();
-	TFC_InitGPIO();
-	TFC_InitServos();
-	TFC_InitMotorPWM();
-	TFC_InitADCs(carState);
-	TFC_InitLineScanCamera();
-	
-	#ifdef CHANGE_BLUETOOTH_BAUD_RATE
-		TFC_InitUARTs(SDA_SERIAL_BAUD, 38400);	// 38400 is default for the BL module in AT mode 2
-		int dummy_timee = TFC_Ticker[0];
-		while(TFC_Ticker[0] - dummy_timee < 30000)
-		{}
-		TFC_BluetoothModuleSetBaud(BLUETOOTH_BAUD);		// Need to manually power the AT pin on the module
-	#endif
-	
-	TFC_InitUARTs(SDA_SERIAL_BAUD, 9600);
-	
-	#ifdef TERMINAL_ENABLED
-		TFC_InitTerminal();
-	#endif
-		
-	TFC_HBRIDGE_DISABLE;
-	TFC_SetMotorPWM(0, 0);
-	TFC_InitSpeedSensor();
-	preloadProbabilityTables(); //Prevents probability tables for stop line evaluation from being created too late
-	generateKernel();
-	
-	#ifdef RACE_MODE_CONTROLS
-	PORTA_PCR2 &= 0xFFFFF8FF;
-	PORTA_PCR2 |= 0x00000300;
-	disable_irq(INT_UART0-16);
-	carState->UARTSpeedState = DUAL_SPEED_NO_UART;
-	#endif
-	
-	TFC_SetServo(0, -SERVO_MOUNT_DIRECTION*STEERING_OFFSET);
-}
-
 void TFC_Task()
 {
 #if defined(TERMINAL_USE_SDA_SERIAL)
@@ -492,78 +481,6 @@ void evaluateUARTorSpeed(carState_s* carState)
 	}
 }
 
-void LEDfeedback(carState_s* carState)
-{
-	if(batteryLevel > LOW_BATTERY)
-	{
-		if(carState->lineDetectionState == STOPLINE_DETECTED)	// Also set in lineFollowingMode()
-		{
-			GPIOB_PCOR |= (1<<8);
-			GPIOB_PCOR |= (1<<9);
-			GPIOB_PSOR |= (1<<10);
-			GPIOB_PSOR |= (1<<11);
-		}
-		#ifdef CROSS_DETECTION_ENABLE
-		else if(carState->crossSection == YES)
-		{
-			GPIOB_PSOR |= (1<<8);
-			GPIOB_PCOR |= (1<<9);
-			GPIOB_PCOR |= (1<<10);
-			GPIOB_PSOR |= (1<<11);
-		}
-		#endif
-		else if(carState->sMode == S_MODE_ON)
-		{
-			GPIOB_PCOR |= (1<<8);
-			GPIOB_PSOR |= (1<<9);
-			GPIOB_PSOR |= (1<<10);
-			GPIOB_PCOR |= (1<<11);
-		}
-		else if(carState->detectedType == DOUBLE_EDGE)
-		{
-			GPIOB_PSOR |= (1<<8);
-			GPIOB_PSOR |= (1<<9);
-			GPIOB_PCOR |= (1<<10);
-			GPIOB_PCOR |= (1<<11);
-		}
-		else if (carState->edge == LEFT_EDGE)
-		{	
-			GPIOB_PSOR |= (1<<8);
-			GPIOB_PCOR |= (1<<9);
-			GPIOB_PCOR |= (1<<10);
-			GPIOB_PCOR |= (1<<11);
-		}
-		else if (carState->edge == RIGHT_EDGE)
-		{	
-			GPIOB_PCOR |= (1<<8);
-			GPIOB_PSOR |= (1<<9);
-			GPIOB_PCOR |= (1<<10);
-			GPIOB_PCOR |= (1<<11);
-		}
-		else if (carState->lineDetectionState == LINE_TEMPORARILY_LOST)
-		{	
-			GPIOB_PCOR |= (1<<8);
-			GPIOB_PCOR |= (1<<9);
-			GPIOB_PSOR |= (1<<10);
-			GPIOB_PCOR |= (1<<11);
-		}
-		else if (carState->lineDetectionState == LINE_LOST)
-		{	
-			GPIOB_PCOR |= (1<<8);
-			GPIOB_PCOR |= (1<<9);
-			GPIOB_PCOR |= (1<<10);
-			GPIOB_PSOR |= (1<<11);
-		}
-	}
-	else
-	{
-		GPIOB_PSOR |= (1<<8);
-		GPIOB_PSOR |= (1<<9);
-		GPIOB_PSOR |= (1<<10);
-		GPIOB_PSOR |= (1<<11);		
-	}
-}
-
 void servoAlignment()		// Helps setting the servo offset value by debugging
 {
 	if (TFC_Ticker[0] >= 200)
@@ -572,114 +489,6 @@ void servoAlignment()		// Helps setting the servo offset value by debugging
 		float offset = 30000 * 0.15f;
 		TFC_SetServo(0, offset);
 	}
-}
-
-void telemetrySendData()
-{
-	uart_putchar(UART2_BASE_PTR, BLUETOOTH_FLAG);
-	
-	// 1 - Track Centre Detected by the Camera
-	uart_putchar(UART2_BASE_PTR, (signed char)carState.lineCenter);
-	// 2 - Calculated Target Speed
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
-	// 3 - Speed of the right wheel
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
-	// 4 - Speed of the left wheel
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
-	// 5 - PWM output to right motor
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_0)));
-	// 6 - PWM output to left motor
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_1)));
-	// 7 - Current of the right motor
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
-	// 8 - Current of the left motor
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
-	// 9 - Servo Value
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*servoValue));
-	// 10 - Detected edge type - Left:100, Right:-100, Track: 0, None:50
-	uart_putchar(UART2_BASE_PTR, (signed char)(carState.edge==NO_EDGE)?(50):((carState.edge==BOTH_EDGE)?(0):((carState.edge==LEFT_EDGE)?(100):(-100))));
-	// 11 - Camera Exposure Time, 1 unit = 0.1 ms
-	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
-	// 12 - Loop time
-	uart_putchar(UART2_BASE_PTR, (signed char)loop_time);
-	// 13 - Line Distance
-	uart_putchar(UART2_BASE_PTR, (signed char)carState.lineDistance);
-}
-
-void telemetryReadData(){
-	
-	if(count==0){
-		//if something is on the UART, get it and put it in received_byte
-		if(uart_getchar_present(UART2_BASE_PTR)){
-			received_byte1 = uart_getchar(UART2_BASE_PTR);
-			GPIOB_PSOR |= (1<<8);
-			GPIOB_PSOR |= (1<<9);
-			GPIOB_PSOR |= (1<<10);
-			GPIOB_PSOR |= (1<<11);
-			count++;
-		}
-	}
-	else if(count>0){
-		if(uart_getchar_present(UART2_BASE_PTR)){
-			received_byte2 = uart_getchar(UART2_BASE_PTR);
-			count=0;
-		}
-	}
-	
-	if(received_byte1!=0 && received_byte2!=0){
-		switch(received_byte1){
-		case 255: //SPEED
-			BluetoothSetSpeed(received_byte2);
-			break;
-		case 251: //LED
-			BluetoothSetLED(received_byte2);
-			break;
-		}
-		//received_byte1=0;
-		//received_byte2=0;
-	}
-	
-}
-
-void BluetoothSetSpeed(uint8_t i){
-	max_speed_percent=i;
-		if(max_speed_percent>100){
-			max_speed_percent=100;
-		}
-}
-
-void BluetoothSetLED(uint8_t i){	
-		switch(i){
-			case 1: 
-				GPIOB_PSOR |= (1<<8);
-				GPIOB_PCOR |= (1<<9);
-				GPIOB_PCOR |= (1<<10);
-				GPIOB_PCOR |= (1<<11);
-				break;
-			case 2:
-				GPIOB_PCOR |= (1<<8);
-				GPIOB_PSOR |= (1<<9);
-				GPIOB_PCOR |= (1<<10);
-				GPIOB_PCOR |= (1<<11);
-				break;
-			case 3:
-				GPIOB_PCOR |= (1<<8);
-				GPIOB_PCOR |= (1<<9);
-				GPIOB_PSOR |= (1<<10);
-				GPIOB_PCOR |= (1<<11);			
-				break;
-			case 4: 
-				GPIOB_PCOR |= (1<<8);
-				GPIOB_PCOR |= (1<<9);
-				GPIOB_PCOR |= (1<<10);
-				GPIOB_PSOR |= (1<<11);
-				break;
-			default:
-				GPIOB_PCOR |= (1<<8);
-				GPIOB_PCOR |= (1<<9);
-				GPIOB_PCOR |= (1<<10);
-				GPIOB_PCOR |= (1<<11);
-			}
 }
 
 void processRaceLine(carState_s* carState)
@@ -729,5 +538,3 @@ float servoValueAverage(float servoValue)
 	previousServoValue = SERVO_LOWPASS_COEFF*previousServoValue + (1-SERVO_LOWPASS_COEFF)*servoValue;
 	return previousServoValue;
 }
-
-

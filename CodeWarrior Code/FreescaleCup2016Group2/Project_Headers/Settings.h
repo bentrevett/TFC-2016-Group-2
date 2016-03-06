@@ -18,11 +18,12 @@ extern uint8_t stopline_enable;
 										// DIP1 Motors, DIP2 S-Mode, DIP3 Cross Detection, DIP4 Stopline Detection 
 										// POT_1 Max Speed		POT_2 Friction Coeff Correction
 
-//#define ACCELEROMETER_ENABLE
-#define TELEMETRY_ENABLE
+#define ACCELEROMETER_ENABLE
+//#define TELEMETRY_ENABLE
+#define LCD_ENABLE
 
 #define TARGET_TOTAL_INTENSITY 300000	// Sets the target intensity of the camera image
-#define LOW_BATTERY				 7.5f	// LED low battery threshold, 7.5V = 6 x 1.25V per cell
+#define LOW_BATTERY				 7.0f	// LED low battery threshold, 7.5V = 6 x 1.25V per cell
 #define LOOK_AHEAD_DISTANCE		0.40f	// Measured in (m) from the front end of the car (used only for stopline timing)
 										// Reduce to make the car stopping quicker after stopline detected
 
@@ -84,7 +85,7 @@ extern uint8_t stopline_enable;
 #define MAX_LOST_LINE_DURATION	5000	// Time to stop after losing the line, 1s = 10000
 
 	// Cross Section Detection
-#define CROSS_DETECTION_ENABLE				// Uncomment to enable Cross Section Detection
+//#define CROSS_DETECTION_ENABLE				// Uncomment to enable Cross Section Detection
 #define CROSS_DERIVATIVE_THRESHOLD  4.5f	// Increase for less false positives
 #define CROSS_MIN_SPEED				3.0f	// Minimum speed to detect cross section
 #define CROSS_MINIMUM_DISTANCE		69		// Minimum distance to the inside of the cross section
@@ -93,7 +94,7 @@ extern uint8_t stopline_enable;
 
 	// Straight Mode
 #define STRAIGHT_MODE_ENABLE				// Uncomment to enable Straight Mode
-#define STRAIGHT_DISTANCE_THRESHOLD	 81		// 81 ~ 140cm (20cm before main camera seeing corner) Min distance to trigger Straight Mode
+#define STRAIGHT_DISTANCE_THRESHOLD	 40		// 81 ~ 140cm (20cm before main camera seeing corner) Min distance to trigger Straight Mode
 #define STRAIGHT_ERROR_THRESHOLD	  6		// Max lineCenter error to trigger Straight Mode (pixels)
 #define STRAIGHT_CRITICAL_ERROR		  7		// Critical error to disable Straight Mode
 

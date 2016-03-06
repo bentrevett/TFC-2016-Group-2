@@ -1,0 +1,2665 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Telemetry.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_uidiv
+  18              		.section	.text.cameraFeed,"ax",%progbits
+  19              		.align	2
+  20              		.global	cameraFeed
+  21              		.code	16
+  22              		.thumb_func
+  24              	cameraFeed:
+  25              	.LFB0:
+  26              		.file 1 "../Sources/Telemetry.c"
+   1:../Sources/Telemetry.c **** /*
+   2:../Sources/Telemetry.c ****  * Telemetry.c
+   3:../Sources/Telemetry.c ****  *
+   4:../Sources/Telemetry.c ****  *  Created on: Jan 26, 2016
+   5:../Sources/Telemetry.c ****  *      Author: bentr_000
+   6:../Sources/Telemetry.c ****  */
+   7:../Sources/Telemetry.c **** 
+   8:../Sources/Telemetry.c **** #include "Telemetry.h"
+   9:../Sources/Telemetry.c **** 
+  10:../Sources/Telemetry.c **** #define BLUETOOTH_FLAG	-128
+  11:../Sources/Telemetry.c **** 
+  12:../Sources/Telemetry.c **** extern int32_t newExposure;
+  13:../Sources/Telemetry.c **** extern float servoValue;
+  14:../Sources/Telemetry.c **** extern carState_s carState;
+  15:../Sources/Telemetry.c **** extern uint16_t loop_time;
+  16:../Sources/Telemetry.c **** extern float targetSpeed;
+  17:../Sources/Telemetry.c **** extern float maxSpeedPercent;
+  18:../Sources/Telemetry.c **** 
+  19:../Sources/Telemetry.c **** uint8_t received_byte1 = 0; //received byte from bluetooth 0 to 255
+  20:../Sources/Telemetry.c **** uint8_t received_byte2 = 0;
+  21:../Sources/Telemetry.c **** uint8_t count = 0; //bluetooth count
+  22:../Sources/Telemetry.c **** 
+  23:../Sources/Telemetry.c **** void cameraFeed(int camera_number){
+  27              		.loc 1 23 0
+  28              		.cfi_startproc
+  29              	.LVL0:
+  30 0000 70B5     		push	{r4, r5, r6, lr}
+  31              	.LCFI0:
+  32              		.cfi_def_cfa_offset 16
+  33              		.cfi_offset 4, -16
+  34              		.cfi_offset 5, -12
+  35              		.cfi_offset 6, -8
+  36              		.cfi_offset 14, -4
+  24:../Sources/Telemetry.c **** 	
+  25:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, BLUETOOTH_FLAG);
+  37              		.loc 1 25 0
+  38 0002 8021     		mov	r1, #128
+  23:../Sources/Telemetry.c **** void cameraFeed(int camera_number){
+  39              		.loc 1 23 0
+  40 0004 051C     		mov	r5, r0
+  41              		.loc 1 25 0
+  42 0006 0F48     		ldr	r0, .L6
+  43              	.LVL1:
+  44 0008 FFF7FEFF 		bl	uart_putchar
+  45              	.LVL2:
+  46 000c 0E4E     		ldr	r6, .L6+4
+  26:../Sources/Telemetry.c **** 	
+  27:../Sources/Telemetry.c **** 	for(int i=0;i<128;i++){
+  47              		.loc 1 27 0
+  48 000e 0024     		mov	r4, #0
+  49 0010 ED01     		lsl	r5, r5, #7
+  50              	.LVL3:
+  51              	.L2:
+  52              	.LBB4:
+  28:../Sources/Telemetry.c **** 			uart_putchar(UART2_BASE_PTR, (LineScanImage0Buffer[camera_number][i]/100));
+  53              		.loc 1 28 0
+  54 0012 2B19     		add	r3, r5, r4
+  55 0014 5800     		lsl	r0, r3, #1
+  56 0016 305A     		ldrh	r0, [r6, r0]
+  57 0018 6421     		mov	r1, #100
+  58 001a FFF7FEFF 		bl	__aeabi_uidiv
+  59              	.LVL4:
+  27:../Sources/Telemetry.c **** 	for(int i=0;i<128;i++){
+  60              		.loc 1 27 0
+  61 001e 0134     		add	r4, r4, #1
+  62              		.loc 1 28 0
+  63 0020 C1B2     		uxtb	r1, r0
+  64 0022 0848     		ldr	r0, .L6
+  65 0024 FFF7FEFF 		bl	uart_putchar
+  66              	.LVL5:
+  67 0028 2919     		add	r1, r5, r4
+  68 002a 4A00     		lsl	r2, r1, #1
+  69 002c B05A     		ldrh	r0, [r6, r2]
+  70 002e 6421     		mov	r1, #100
+  71 0030 FFF7FEFF 		bl	__aeabi_uidiv
+  72              	.LVL6:
+  27:../Sources/Telemetry.c **** 	for(int i=0;i<128;i++){
+  73              		.loc 1 27 0
+  74 0034 0134     		add	r4, r4, #1
+  75              		.loc 1 28 0
+  76 0036 C1B2     		uxtb	r1, r0
+  77 0038 0248     		ldr	r0, .L6
+  78 003a FFF7FEFF 		bl	uart_putchar
+  79              	.LVL7:
+  27:../Sources/Telemetry.c **** 	for(int i=0;i<128;i++){
+  80              		.loc 1 27 0
+  81 003e 802C     		cmp	r4, #128
+  82 0040 E7D1     		bne	.L2
+  83              	.LBE4:
+  29:../Sources/Telemetry.c **** 		}	
+  30:../Sources/Telemetry.c **** }
+  84              		.loc 1 30 0
+  85              		@ sp needed for prologue
+  86              	.LVL8:
+  87 0042 70BD     		pop	{r4, r5, r6, pc}
+  88              	.L7:
+  89              		.align	2
+  90              	.L6:
+  91 0044 00C00640 		.word	1074184192
+  92 0048 00000000 		.word	LineScanImage0Buffer
+  93              		.cfi_endproc
+  94              	.LFE0:
+  96              		.global	__aeabi_fmul
+  97              		.global	__aeabi_fcmple
+  98              		.global	__aeabi_fcmpge
+  99              		.global	__aeabi_f2iz
+ 100              		.global	__aeabi_fcmpgt
+ 101              		.global	__aeabi_fcmpeq
+ 102              		.global	__aeabi_f2d
+ 103              		.global	__aeabi_dadd
+ 104              		.global	__aeabi_d2iz
+ 105              		.global	__aeabi_dsub
+ 106              		.global	__aeabi_i2f
+ 107              		.section	.text.telemetrySendData,"ax",%progbits
+ 108              		.align	2
+ 109              		.global	telemetrySendData
+ 110              		.code	16
+ 111              		.thumb_func
+ 113              	telemetrySendData:
+ 114              	.LFB1:
+  31:../Sources/Telemetry.c **** 
+  32:../Sources/Telemetry.c **** void telemetrySendData()
+  33:../Sources/Telemetry.c **** {
+ 115              		.loc 1 33 0
+ 116              		.cfi_startproc
+ 117 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 118              	.LCFI1:
+ 119              		.cfi_def_cfa_offset 24
+ 120              		.cfi_offset 3, -24
+ 121              		.cfi_offset 4, -20
+ 122              		.cfi_offset 5, -16
+ 123              		.cfi_offset 6, -12
+ 124              		.cfi_offset 7, -8
+ 125              		.cfi_offset 14, -4
+  34:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, BLUETOOTH_FLAG);
+ 126              		.loc 1 34 0
+ 127 0002 E348     		ldr	r0, .L313
+ 128 0004 8021     		mov	r1, #128
+ 129 0006 FFF7FEFF 		bl	uart_putchar
+ 130              	.LVL9:
+  35:../Sources/Telemetry.c **** 	
+  36:../Sources/Telemetry.c **** 	// 1 - Track Centre Detected by the Camera
+  37:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, (signed char)carState.lineCenter);
+ 131              		.loc 1 37 0
+ 132 000a E24C     		ldr	r4, .L313+4
+ 133 000c E048     		ldr	r0, .L313
+ 134 000e A17A     		ldrb	r1, [r4, #10]
+ 135 0010 FFF7FEFF 		bl	uart_putchar
+ 136              	.LVL10:
+  38:../Sources/Telemetry.c **** 	// 2 - Calculated Target Speed
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 137              		.loc 1 39 0
+ 138 0014 E04B     		ldr	r3, .L313+8
+ 139 0016 8221     		mov	r1, #130
+ 140 0018 C905     		lsl	r1, r1, #23
+ 141 001a 1868     		ldr	r0, [r3]
+ 142 001c FFF7FEFF 		bl	__aeabi_fmul
+ 143              	.LVL11:
+ 144 0020 DE49     		ldr	r1, .L313+12
+ 145 0022 051C     		add	r5, r0, #0
+ 146 0024 FFF7FEFF 		bl	__aeabi_fcmple
+ 147              	.LVL12:
+ 148 0028 0028     		cmp	r0, #0
+ 149 002a 00D1     		bne	.LCB107
+ 150 002c B3E0     		b	.L17	@long jump
+ 151              	.LCB107:
+ 152              		.loc 1 39 0 is_stmt 0
+ 153 002e 281C     		add	r0, r5, #0
+ 154 0030 0021     		mov	r1, #0
+ 155 0032 FFF7FEFF 		bl	__aeabi_fcmpge
+ 156              	.LVL13:
+ 157 0036 0028     		cmp	r0, #0
+ 158 0038 00D1     		bne	.LCB113
+ 159 003a BDE1     		b	.L11	@long jump
+ 160              	.LCB113:
+ 161              		.loc 1 39 0
+ 162 003c 281C     		add	r0, r5, #0
+ 163 003e D849     		ldr	r1, .L313+16
+ 164 0040 FFF7FEFF 		bl	__aeabi_fcmpge
+ 165              	.LVL14:
+ 166 0044 0028     		cmp	r0, #0
+ 167 0046 00D1     		bne	.LCB119
+ 168 0048 B0E1     		b	.L279	@long jump
+ 169              	.LCB119:
+ 170              		.loc 1 39 0
+ 171 004a 281C     		add	r0, r5, #0
+ 172 004c D549     		ldr	r1, .L313+20
+ 173 004e FFF7FEFF 		bl	__aeabi_fcmple
+ 174              	.LVL15:
+ 175 0052 7F26     		mov	r6, #127
+ 176 0054 071E     		sub	r7, r0, #0
+ 177 0056 17D1     		bne	.L15
+ 178              		.loc 1 39 0
+ 179 0058 281C     		add	r0, r5, #0
+ 180 005a 0021     		mov	r1, #0
+ 181 005c FFF7FEFF 		bl	__aeabi_fcmpeq
+ 182              	.LVL16:
+ 183 0060 0028     		cmp	r0, #0
+ 184 0062 00D1     		bne	.LCB133
+ 185 0064 A8E1     		b	.L11	@long jump
+ 186              	.LCB133:
+ 187              		.loc 1 39 0
+ 188 0066 002F     		cmp	r7, #0
+ 189 0068 00D1     		bne	.LCB135
+ 190 006a BAE1     		b	.L24	@long jump
+ 191              	.LCB135:
+ 192              		.loc 1 39 0
+ 193 006c 281C     		add	r0, r5, #0
+ 194 006e CE49     		ldr	r1, .L313+24
+ 195 0070 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 196              	.LVL17:
+ 197 0074 0028     		cmp	r0, #0
+ 198 0076 07D1     		bne	.L15
+ 199              		.loc 1 39 0
+ 200 0078 281C     		add	r0, r5, #0
+ 201 007a C949     		ldr	r1, .L313+16
+ 202 007c FFF7FEFF 		bl	__aeabi_fcmpge
+ 203              	.LVL18:
+ 204 0080 7E26     		mov	r6, #126
+ 205 0082 0028     		cmp	r0, #0
+ 206 0084 00D1     		bne	.LCB148
+ 207 0086 9BE0     		b	.L23	@long jump
+ 208              	.LCB148:
+ 209              	.L15:
+ 210              		.loc 1 39 0
+ 211 0088 311C     		mov	r1, r6
+ 212 008a C148     		ldr	r0, .L313
+ 213 008c FFF7FEFF 		bl	uart_putchar
+ 214              	.LVL19:
+  40:../Sources/Telemetry.c **** 	// 3 - Speed of the right wheel
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 215              		.loc 1 41 0 is_stmt 1
+ 216 0090 0020     		mov	r0, #0
+ 217 0092 FFF7FEFF 		bl	getSpeed
+ 218              	.LVL20:
+ 219 0096 8222     		mov	r2, #130
+ 220 0098 D105     		lsl	r1, r2, #23
+ 221 009a FFF7FEFF 		bl	__aeabi_fmul
+ 222              	.LVL21:
+ 223 009e BF49     		ldr	r1, .L313+12
+ 224 00a0 FFF7FEFF 		bl	__aeabi_fcmple
+ 225              	.LVL22:
+ 226 00a4 0028     		cmp	r0, #0
+ 227 00a6 00D1     		bne	.LCB165
+ 228 00a8 99E0     		b	.L28	@long jump
+ 229              	.LCB165:
+ 230              		.loc 1 41 0 is_stmt 0
+ 231 00aa 0020     		mov	r0, #0
+ 232 00ac FFF7FEFF 		bl	getSpeed
+ 233              	.LVL23:
+ 234 00b0 8223     		mov	r3, #130
+ 235 00b2 D905     		lsl	r1, r3, #23
+ 236 00b4 FFF7FEFF 		bl	__aeabi_fmul
+ 237              	.LVL24:
+ 238 00b8 0021     		mov	r1, #0
+ 239 00ba FFF7FEFF 		bl	__aeabi_fcmpge
+ 240              	.LVL25:
+ 241 00be 0028     		cmp	r0, #0
+ 242 00c0 00D1     		bne	.LCB177
+ 243 00c2 8CE0     		b	.L28	@long jump
+ 244              	.LCB177:
+ 245              		.loc 1 41 0
+ 246 00c4 0020     		mov	r0, #0
+ 247 00c6 FFF7FEFF 		bl	getSpeed
+ 248              	.LVL26:
+ 249 00ca 8221     		mov	r1, #130
+ 250 00cc C905     		lsl	r1, r1, #23
+ 251 00ce FFF7FEFF 		bl	__aeabi_fmul
+ 252              	.LVL27:
+ 253 00d2 B349     		ldr	r1, .L313+16
+ 254 00d4 FFF7FEFF 		bl	__aeabi_fcmpge
+ 255              	.LVL28:
+ 256 00d8 0028     		cmp	r0, #0
+ 257 00da 73D1     		bne	.L31
+ 258              	.L34:
+ 259              		.loc 1 41 0
+ 260 00dc 0020     		mov	r0, #0
+ 261 00de FFF7FEFF 		bl	getSpeed
+ 262              	.LVL29:
+ 263 00e2 8222     		mov	r2, #130
+ 264 00e4 D105     		lsl	r1, r2, #23
+ 265 00e6 FFF7FEFF 		bl	__aeabi_fmul
+ 266              	.LVL30:
+ 267 00ea 0021     		mov	r1, #0
+ 268 00ec FFF7FEFF 		bl	__aeabi_fcmpeq
+ 269              	.LVL31:
+ 270 00f0 0028     		cmp	r0, #0
+ 271 00f2 00D1     		bne	.LCB202
+ 272 00f4 81E0     		b	.L32	@long jump
+ 273              	.LCB202:
+ 274              		.loc 1 41 0
+ 275 00f6 0020     		mov	r0, #0
+ 276 00f8 FFF7FEFF 		bl	getSpeed
+ 277              	.LVL32:
+ 278 00fc 8223     		mov	r3, #130
+ 279 00fe D905     		lsl	r1, r3, #23
+ 280 0100 FFF7FEFF 		bl	__aeabi_fmul
+ 281              	.LVL33:
+ 282 0104 A549     		ldr	r1, .L313+12
+ 283 0106 FFF7FEFF 		bl	__aeabi_fcmple
+ 284              	.LVL34:
+ 285 010a 0028     		cmp	r0, #0
+ 286 010c 27D0     		beq	.L50
+ 287              		.loc 1 41 0
+ 288 010e 0020     		mov	r0, #0
+ 289 0110 FFF7FEFF 		bl	getSpeed
+ 290              	.LVL35:
+ 291 0114 8221     		mov	r1, #130
+ 292 0116 C905     		lsl	r1, r1, #23
+ 293 0118 FFF7FEFF 		bl	__aeabi_fmul
+ 294              	.LVL36:
+ 295 011c 0021     		mov	r1, #0
+ 296 011e FFF7FEFF 		bl	__aeabi_fcmpge
+ 297              	.LVL37:
+ 298 0122 0028     		cmp	r0, #0
+ 299 0124 1BD0     		beq	.L50
+ 300              		.loc 1 41 0
+ 301 0126 0020     		mov	r0, #0
+ 302 0128 8227     		mov	r7, #130
+ 303 012a FFF7FEFF 		bl	getSpeed
+ 304              	.LVL38:
+ 305 012e F905     		lsl	r1, r7, #23
+ 306 0130 FFF7FEFF 		bl	__aeabi_fmul
+ 307              	.LVL39:
+ 308 0134 9A49     		ldr	r1, .L313+16
+ 309 0136 FFF7FEFF 		bl	__aeabi_fcmpge
+ 310              	.LVL40:
+ 311 013a 0028     		cmp	r0, #0
+ 312 013c 01D1     		bne	.LCB238
+ 313 013e 00F027FD 		bl	.L54	@far jump
+ 314              	.LCB238:
+ 315              		.loc 1 41 0
+ 316 0142 0020     		mov	r0, #0
+ 317 0144 8225     		mov	r5, #130
+ 318 0146 FFF7FEFF 		bl	getSpeed
+ 319              	.LVL41:
+ 320 014a E905     		lsl	r1, r5, #23
+ 321 014c FFF7FEFF 		bl	__aeabi_fmul
+ 322              	.LVL42:
+ 323 0150 9449     		ldr	r1, .L313+20
+ 324 0152 FFF7FEFF 		bl	__aeabi_fcmple
+ 325              	.LVL43:
+ 326 0156 0028     		cmp	r0, #0
+ 327 0158 01D1     		bne	.LCB250
+ 328 015a 00F019FD 		bl	.L54	@far jump
+ 329              	.LCB250:
+ 330              	.L50:
+ 331              		.loc 1 41 0
+ 332 015e 0020     		mov	r0, #0
+ 333 0160 8226     		mov	r6, #130
+ 334 0162 FFF7FEFF 		bl	getSpeed
+ 335              	.LVL44:
+ 336 0166 F105     		lsl	r1, r6, #23
+ 337 0168 FFF7FEFF 		bl	__aeabi_fmul
+ 338              	.LVL45:
+ 339 016c 8E49     		ldr	r1, .L313+24
+ 340 016e FFF7FEFF 		bl	__aeabi_fcmpgt
+ 341              	.LVL46:
+ 342 0172 0028     		cmp	r0, #0
+ 343 0174 00D0     		beq	.LCB263
+ 344 0176 82E0     		b	.L49	@long jump
+ 345              	.LCB263:
+ 346              		.loc 1 41 0
+ 347 0178 FFF7FEFF 		bl	getSpeed
+ 348              	.LVL47:
+ 349 017c 8222     		mov	r2, #130
+ 350 017e D105     		lsl	r1, r2, #23
+ 351 0180 FFF7FEFF 		bl	__aeabi_fmul
+ 352              	.LVL48:
+ 353 0184 8649     		ldr	r1, .L313+16
+ 354 0186 FFF7FEFF 		bl	__aeabi_fcmpge
+ 355              	.LVL49:
+ 356 018a 0028     		cmp	r0, #0
+ 357 018c 01D0     		beq	.LCB274
+ 358 018e 00F03DFD 		bl	.L304	@far jump
+ 359              	.LCB274:
+ 360              	.L58:
+ 361              		.loc 1 41 0
+ 362 0192 0021     		mov	r1, #0
+ 363 0194 74E0     		b	.L43
+ 364              	.L17:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 365              		.loc 1 39 0 is_stmt 1
+ 366 0196 281C     		add	r0, r5, #0
+ 367 0198 8349     		ldr	r1, .L313+24
+ 368 019a FFF7FEFF 		bl	__aeabi_fcmpgt
+ 369              	.LVL50:
+ 370 019e 7F26     		mov	r6, #127
+ 371 01a0 0028     		cmp	r0, #0
+ 372 01a2 00D0     		beq	.LCB287
+ 373 01a4 70E7     		b	.L15	@long jump
+ 374              	.LCB287:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 375              		.loc 1 39 0 is_stmt 0
+ 376 01a6 281C     		add	r0, r5, #0
+ 377 01a8 7D49     		ldr	r1, .L313+16
+ 378 01aa FFF7FEFF 		bl	__aeabi_fcmpge
+ 379              	.LVL51:
+ 380 01ae 0028     		cmp	r0, #0
+ 381 01b0 06D0     		beq	.L23
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 382              		.loc 1 39 0
+ 383 01b2 281C     		add	r0, r5, #0
+ 384 01b4 7B49     		ldr	r1, .L313+20
+ 385 01b6 FFF7FEFF 		bl	__aeabi_fcmple
+ 386              	.LVL52:
+ 387 01ba 0028     		cmp	r0, #0
+ 388 01bc 00D0     		beq	.LCB299
+ 389 01be 63E7     		b	.L15	@long jump
+ 390              	.LCB299:
+ 391              	.L23:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 392              		.loc 1 39 0
+ 393 01c0 0026     		mov	r6, #0
+ 394 01c2 61E7     		b	.L15
+ 395              	.L31:
+ 396              		.loc 1 41 0 is_stmt 1
+ 397 01c4 0020     		mov	r0, #0
+ 398 01c6 8227     		mov	r7, #130
+ 399 01c8 FFF7FEFF 		bl	getSpeed
+ 400              	.LVL53:
+ 401 01cc F905     		lsl	r1, r7, #23
+ 402 01ce FFF7FEFF 		bl	__aeabi_fmul
+ 403              	.LVL54:
+ 404 01d2 7449     		ldr	r1, .L313+20
+ 405 01d4 FFF7FEFF 		bl	__aeabi_fcmple
+ 406              	.LVL55:
+ 407 01d8 0028     		cmp	r0, #0
+ 408 01da 00D1     		bne	.LCB317
+ 409 01dc 7EE7     		b	.L34	@long jump
+ 410              	.LCB317:
+ 411              	.L28:
+ 412              		.loc 1 41 0 is_stmt 0
+ 413 01de 0020     		mov	r0, #0
+ 414 01e0 8225     		mov	r5, #130
+ 415 01e2 FFF7FEFF 		bl	getSpeed
+ 416              	.LVL56:
+ 417 01e6 E905     		lsl	r1, r5, #23
+ 418 01e8 FFF7FEFF 		bl	__aeabi_fmul
+ 419              	.LVL57:
+ 420 01ec 6E49     		ldr	r1, .L313+24
+ 421 01ee FFF7FEFF 		bl	__aeabi_fcmpgt
+ 422              	.LVL58:
+ 423 01f2 0028     		cmp	r0, #0
+ 424 01f4 01D1     		bne	.LCB330
+ 425 01f6 00F04AFC 		bl	.L305	@far jump
+ 426              	.LCB330:
+ 427              	.L32:
+ 428              		.loc 1 41 0
+ 429 01fa 0020     		mov	r0, #0
+ 430 01fc FFF7FEFF 		bl	getSpeed
+ 431              	.LVL59:
+ 432 0200 8221     		mov	r1, #130
+ 433 0202 C905     		lsl	r1, r1, #23
+ 434 0204 FFF7FEFF 		bl	__aeabi_fmul
+ 435              	.LVL60:
+ 436 0208 6449     		ldr	r1, .L313+12
+ 437 020a FFF7FEFF 		bl	__aeabi_fcmple
+ 438              	.LVL61:
+ 439 020e 0028     		cmp	r0, #0
+ 440 0210 27D0     		beq	.L39
+ 441              		.loc 1 41 0
+ 442 0212 0020     		mov	r0, #0
+ 443 0214 8227     		mov	r7, #130
+ 444 0216 FFF7FEFF 		bl	getSpeed
+ 445              	.LVL62:
+ 446 021a F905     		lsl	r1, r7, #23
+ 447 021c FFF7FEFF 		bl	__aeabi_fmul
+ 448              	.LVL63:
+ 449 0220 0021     		mov	r1, #0
+ 450 0222 FFF7FEFF 		bl	__aeabi_fcmpge
+ 451              	.LVL64:
+ 452 0226 0028     		cmp	r0, #0
+ 453 0228 1BD0     		beq	.L39
+ 454              		.loc 1 41 0
+ 455 022a 0020     		mov	r0, #0
+ 456 022c 8225     		mov	r5, #130
+ 457 022e FFF7FEFF 		bl	getSpeed
+ 458              	.LVL65:
+ 459 0232 E905     		lsl	r1, r5, #23
+ 460 0234 FFF7FEFF 		bl	__aeabi_fmul
+ 461              	.LVL66:
+ 462 0238 5949     		ldr	r1, .L313+16
+ 463 023a FFF7FEFF 		bl	__aeabi_fcmpge
+ 464              	.LVL67:
+ 465 023e 0028     		cmp	r0, #0
+ 466 0240 01D1     		bne	.LCB367
+ 467 0242 00F0A5FC 		bl	.L54	@far jump
+ 468              	.LCB367:
+ 469              		.loc 1 41 0
+ 470 0246 0020     		mov	r0, #0
+ 471 0248 8226     		mov	r6, #130
+ 472 024a FFF7FEFF 		bl	getSpeed
+ 473              	.LVL68:
+ 474 024e F105     		lsl	r1, r6, #23
+ 475 0250 FFF7FEFF 		bl	__aeabi_fmul
+ 476              	.LVL69:
+ 477 0254 5349     		ldr	r1, .L313+20
+ 478 0256 FFF7FEFF 		bl	__aeabi_fcmple
+ 479              	.LVL70:
+ 480 025a 0028     		cmp	r0, #0
+ 481 025c 01D1     		bne	.LCB379
+ 482 025e 00F097FC 		bl	.L54	@far jump
+ 483              	.LCB379:
+ 484              	.L39:
+ 485              		.loc 1 41 0
+ 486 0262 0020     		mov	r0, #0
+ 487 0264 FFF7FEFF 		bl	getSpeed
+ 488              	.LVL71:
+ 489 0268 8222     		mov	r2, #130
+ 490 026a D105     		lsl	r1, r2, #23
+ 491 026c FFF7FEFF 		bl	__aeabi_fmul
+ 492              	.LVL72:
+ 493 0270 4D49     		ldr	r1, .L313+24
+ 494 0272 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 495              	.LVL73:
+ 496 0276 0028     		cmp	r0, #0
+ 497 0278 01D1     		bne	.LCB392
+ 498 027a 00F01AFC 		bl	.L282	@far jump
+ 499              	.LCB392:
+ 500              	.L49:
+ 501 027e 7F21     		mov	r1, #127
+ 502              	.L43:
+ 503              		.loc 1 41 0
+ 504 0280 4348     		ldr	r0, .L313
+ 505 0282 FFF7FEFF 		bl	uart_putchar
+ 506              	.LVL74:
+  42:../Sources/Telemetry.c **** 	// 4 - Speed of the left wheel
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 507              		.loc 1 43 0 is_stmt 1
+ 508 0286 8225     		mov	r5, #130
+ 509 0288 0120     		mov	r0, #1
+ 510 028a FFF7FEFF 		bl	getSpeed
+ 511              	.LVL75:
+ 512 028e E905     		lsl	r1, r5, #23
+ 513 0290 FFF7FEFF 		bl	__aeabi_fmul
+ 514              	.LVL76:
+ 515 0294 4149     		ldr	r1, .L313+12
+ 516 0296 FFF7FEFF 		bl	__aeabi_fcmple
+ 517              	.LVL77:
+ 518 029a 0028     		cmp	r0, #0
+ 519 029c 00D1     		bne	.LCB411
+ 520 029e B2E0     		b	.L60	@long jump
+ 521              	.LCB411:
+ 522              		.loc 1 43 0 is_stmt 0
+ 523 02a0 0120     		mov	r0, #1
+ 524 02a2 8226     		mov	r6, #130
+ 525 02a4 FFF7FEFF 		bl	getSpeed
+ 526              	.LVL78:
+ 527 02a8 F105     		lsl	r1, r6, #23
+ 528 02aa FFF7FEFF 		bl	__aeabi_fmul
+ 529              	.LVL79:
+ 530 02ae 0021     		mov	r1, #0
+ 531 02b0 FFF7FEFF 		bl	__aeabi_fcmpge
+ 532              	.LVL80:
+ 533 02b4 0028     		cmp	r0, #0
+ 534 02b6 00D1     		bne	.LCB423
+ 535 02b8 A5E0     		b	.L60	@long jump
+ 536              	.LCB423:
+ 537              		.loc 1 43 0
+ 538 02ba 0120     		mov	r0, #1
+ 539 02bc FFF7FEFF 		bl	getSpeed
+ 540              	.LVL81:
+ 541 02c0 8222     		mov	r2, #130
+ 542 02c2 D105     		lsl	r1, r2, #23
+ 543 02c4 FFF7FEFF 		bl	__aeabi_fmul
+ 544              	.LVL82:
+ 545 02c8 3549     		ldr	r1, .L313+16
+ 546 02ca FFF7FEFF 		bl	__aeabi_fcmpge
+ 547              	.LVL83:
+ 548 02ce 0028     		cmp	r0, #0
+ 549 02d0 00D0     		beq	.LCB435
+ 550 02d2 8BE0     		b	.L63	@long jump
+ 551              	.LCB435:
+ 552              	.L66:
+ 553              		.loc 1 43 0
+ 554 02d4 0120     		mov	r0, #1
+ 555 02d6 8225     		mov	r5, #130
+ 556 02d8 FFF7FEFF 		bl	getSpeed
+ 557              	.LVL84:
+ 558 02dc E905     		lsl	r1, r5, #23
+ 559 02de FFF7FEFF 		bl	__aeabi_fmul
+ 560              	.LVL85:
+ 561 02e2 0021     		mov	r1, #0
+ 562 02e4 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 563              	.LVL86:
+ 564 02e8 0028     		cmp	r0, #0
+ 565 02ea 00D1     		bne	.LCB448
+ 566 02ec 98E0     		b	.L64	@long jump
+ 567              	.LCB448:
+ 568              		.loc 1 43 0
+ 569 02ee 0120     		mov	r0, #1
+ 570 02f0 8226     		mov	r6, #130
+ 571 02f2 FFF7FEFF 		bl	getSpeed
+ 572              	.LVL87:
+ 573 02f6 F105     		lsl	r1, r6, #23
+ 574 02f8 FFF7FEFF 		bl	__aeabi_fmul
+ 575              	.LVL88:
+ 576 02fc 2749     		ldr	r1, .L313+12
+ 577 02fe FFF7FEFF 		bl	__aeabi_fcmple
+ 578              	.LVL89:
+ 579 0302 0028     		cmp	r0, #0
+ 580 0304 27D0     		beq	.L82
+ 581              		.loc 1 43 0
+ 582 0306 0120     		mov	r0, #1
+ 583 0308 FFF7FEFF 		bl	getSpeed
+ 584              	.LVL90:
+ 585 030c 8222     		mov	r2, #130
+ 586 030e D105     		lsl	r1, r2, #23
+ 587 0310 FFF7FEFF 		bl	__aeabi_fmul
+ 588              	.LVL91:
+ 589 0314 0021     		mov	r1, #0
+ 590 0316 FFF7FEFF 		bl	__aeabi_fcmpge
+ 591              	.LVL92:
+ 592 031a 0028     		cmp	r0, #0
+ 593 031c 1BD0     		beq	.L82
+ 594              		.loc 1 43 0
+ 595 031e 0120     		mov	r0, #1
+ 596 0320 FFF7FEFF 		bl	getSpeed
+ 597              	.LVL93:
+ 598 0324 8223     		mov	r3, #130
+ 599 0326 D905     		lsl	r1, r3, #23
+ 600 0328 FFF7FEFF 		bl	__aeabi_fmul
+ 601              	.LVL94:
+ 602 032c 1C49     		ldr	r1, .L313+16
+ 603 032e FFF7FEFF 		bl	__aeabi_fcmpge
+ 604              	.LVL95:
+ 605 0332 0028     		cmp	r0, #0
+ 606 0334 01D1     		bne	.LCB484
+ 607 0336 00F04BFC 		bl	.L86	@far jump
+ 608              	.LCB484:
+ 609              		.loc 1 43 0
+ 610 033a 0120     		mov	r0, #1
+ 611 033c FFF7FEFF 		bl	getSpeed
+ 612              	.LVL96:
+ 613 0340 8221     		mov	r1, #130
+ 614 0342 C905     		lsl	r1, r1, #23
+ 615 0344 FFF7FEFF 		bl	__aeabi_fmul
+ 616              	.LVL97:
+ 617 0348 1649     		ldr	r1, .L313+20
+ 618 034a FFF7FEFF 		bl	__aeabi_fcmple
+ 619              	.LVL98:
+ 620 034e 0028     		cmp	r0, #0
+ 621 0350 01D1     		bne	.LCB496
+ 622 0352 00F03DFC 		bl	.L86	@far jump
+ 623              	.LCB496:
+ 624              	.L82:
+ 625              		.loc 1 43 0
+ 626 0356 0120     		mov	r0, #1
+ 627 0358 8227     		mov	r7, #130
+ 628 035a FFF7FEFF 		bl	getSpeed
+ 629              	.LVL99:
+ 630 035e F905     		lsl	r1, r7, #23
+ 631 0360 FFF7FEFF 		bl	__aeabi_fmul
+ 632              	.LVL100:
+ 633 0364 1049     		ldr	r1, .L313+24
+ 634 0366 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 635              	.LVL101:
+ 636 036a 0028     		cmp	r0, #0
+ 637 036c 00D0     		beq	.LCB509
+ 638 036e 96E0     		b	.L81	@long jump
+ 639              	.LCB509:
+ 640              		.loc 1 43 0
+ 641 0370 0120     		mov	r0, #1
+ 642 0372 8225     		mov	r5, #130
+ 643 0374 FFF7FEFF 		bl	getSpeed
+ 644              	.LVL102:
+ 645 0378 E905     		lsl	r1, r5, #23
+ 646 037a FFF7FEFF 		bl	__aeabi_fmul
+ 647              	.LVL103:
+ 648 037e 0849     		ldr	r1, .L313+16
+ 649 0380 FFF7FEFF 		bl	__aeabi_fcmpge
+ 650              	.LVL104:
+ 651 0384 0028     		cmp	r0, #0
+ 652 0386 01D0     		beq	.LCB521
+ 653 0388 00F052FC 		bl	.L306	@far jump
+ 654              	.LCB521:
+ 655              	.L90:
+ 656              		.loc 1 43 0
+ 657 038c 0021     		mov	r1, #0
+ 658 038e 87E0     		b	.L75
+ 659              	.L314:
+ 660              		.align	2
+ 661              	.L313:
+ 662 0390 00C00640 		.word	1074184192
+ 663 0394 00000000 		.word	carState
+ 664 0398 00000000 		.word	targetSpeed
+ 665 039c 00807E43 		.word	1132363776
+ 666 03a0 0000FF42 		.word	1124007936
+ 667 03a4 00800043 		.word	1124106240
+ 668 03a8 00007F43 		.word	1132396544
+ 669              	.L279:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 670              		.loc 1 39 0 is_stmt 1
+ 671 03ac 281C     		add	r0, r5, #0
+ 672 03ae 0021     		mov	r1, #0
+ 673 03b0 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 674              	.LVL105:
+ 675 03b4 0028     		cmp	r0, #0
+ 676 03b6 14D1     		bne	.L24
+ 677              	.L11:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 678              		.loc 1 39 0 is_stmt 0
+ 679 03b8 281C     		add	r0, r5, #0
+ 680 03ba 0021     		mov	r1, #0
+ 681 03bc FFF7FEFF 		bl	__aeabi_fcmpge
+ 682              	.LVL106:
+ 683 03c0 0028     		cmp	r0, #0
+ 684 03c2 00D1     		bne	.LCB552
+ 685 03c4 E7E6     		b	.L17	@long jump
+ 686              	.LCB552:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 687              		.loc 1 39 0
+ 688 03c6 281C     		add	r0, r5, #0
+ 689 03c8 9149     		ldr	r1, .L315+8
+ 690 03ca FFF7FEFF 		bl	__aeabi_fcmpge
+ 691              	.LVL107:
+ 692 03ce 0028     		cmp	r0, #0
+ 693 03d0 07D0     		beq	.L24
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 694              		.loc 1 39 0
+ 695 03d2 281C     		add	r0, r5, #0
+ 696 03d4 8F49     		ldr	r1, .L315+12
+ 697 03d6 FFF7FEFF 		bl	__aeabi_fcmple
+ 698              	.LVL108:
+ 699 03da 7F26     		mov	r6, #127
+ 700 03dc 0028     		cmp	r0, #0
+ 701 03de 00D0     		beq	.LCB565
+ 702 03e0 52E6     		b	.L15	@long jump
+ 703              	.LCB565:
+ 704              	.L24:
+  39:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*targetSpeed)));
+ 705              		.loc 1 39 0
+ 706 03e2 281C     		add	r0, r5, #0
+ 707 03e4 FFF7FEFF 		bl	__aeabi_f2iz
+ 708              	.LVL109:
+ 709 03e8 C6B2     		uxtb	r6, r0
+ 710 03ea 4DE6     		b	.L15
+ 711              	.L63:
+ 712              		.loc 1 43 0 is_stmt 1
+ 713 03ec 0120     		mov	r0, #1
+ 714 03ee FFF7FEFF 		bl	getSpeed
+ 715              	.LVL110:
+ 716 03f2 8223     		mov	r3, #130
+ 717 03f4 D905     		lsl	r1, r3, #23
+ 718 03f6 FFF7FEFF 		bl	__aeabi_fmul
+ 719              	.LVL111:
+ 720 03fa 8649     		ldr	r1, .L315+12
+ 721 03fc FFF7FEFF 		bl	__aeabi_fcmple
+ 722              	.LVL112:
+ 723 0400 0028     		cmp	r0, #0
+ 724 0402 00D1     		bne	.LCB587
+ 725 0404 66E7     		b	.L66	@long jump
+ 726              	.LCB587:
+ 727              	.L60:
+ 728              		.loc 1 43 0 is_stmt 0
+ 729 0406 0120     		mov	r0, #1
+ 730 0408 FFF7FEFF 		bl	getSpeed
+ 731              	.LVL113:
+ 732 040c 8221     		mov	r1, #130
+ 733 040e C905     		lsl	r1, r1, #23
+ 734 0410 FFF7FEFF 		bl	__aeabi_fmul
+ 735              	.LVL114:
+ 736 0414 8049     		ldr	r1, .L315+16
+ 737 0416 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 738              	.LVL115:
+ 739 041a 0028     		cmp	r0, #0
+ 740 041c 00D1     		bne	.LCB600
+ 741 041e 25E3     		b	.L307	@long jump
+ 742              	.LCB600:
+ 743              	.L64:
+ 744              		.loc 1 43 0
+ 745 0420 0120     		mov	r0, #1
+ 746 0422 FFF7FEFF 		bl	getSpeed
+ 747              	.LVL116:
+ 748 0426 8222     		mov	r2, #130
+ 749 0428 D105     		lsl	r1, r2, #23
+ 750 042a FFF7FEFF 		bl	__aeabi_fmul
+ 751              	.LVL117:
+ 752 042e 7B49     		ldr	r1, .L315+20
+ 753 0430 FFF7FEFF 		bl	__aeabi_fcmple
+ 754              	.LVL118:
+ 755 0434 0028     		cmp	r0, #0
+ 756 0436 25D0     		beq	.L71
+ 757              		.loc 1 43 0
+ 758 0438 0120     		mov	r0, #1
+ 759 043a FFF7FEFF 		bl	getSpeed
+ 760              	.LVL119:
+ 761 043e 8223     		mov	r3, #130
+ 762 0440 D905     		lsl	r1, r3, #23
+ 763 0442 FFF7FEFF 		bl	__aeabi_fmul
+ 764              	.LVL120:
+ 765 0446 0021     		mov	r1, #0
+ 766 0448 FFF7FEFF 		bl	__aeabi_fcmpge
+ 767              	.LVL121:
+ 768 044c 0028     		cmp	r0, #0
+ 769 044e 19D0     		beq	.L71
+ 770              		.loc 1 43 0
+ 771 0450 0120     		mov	r0, #1
+ 772 0452 FFF7FEFF 		bl	getSpeed
+ 773              	.LVL122:
+ 774 0456 8221     		mov	r1, #130
+ 775 0458 C905     		lsl	r1, r1, #23
+ 776 045a FFF7FEFF 		bl	__aeabi_fmul
+ 777              	.LVL123:
+ 778 045e 6C49     		ldr	r1, .L315+8
+ 779 0460 FFF7FEFF 		bl	__aeabi_fcmpge
+ 780              	.LVL124:
+ 781 0464 0028     		cmp	r0, #0
+ 782 0466 00D1     		bne	.LCB637
+ 783 0468 B2E3     		b	.L86	@long jump
+ 784              	.LCB637:
+ 785              		.loc 1 43 0
+ 786 046a 0120     		mov	r0, #1
+ 787 046c 8227     		mov	r7, #130
+ 788 046e FFF7FEFF 		bl	getSpeed
+ 789              	.LVL125:
+ 790 0472 F905     		lsl	r1, r7, #23
+ 791 0474 FFF7FEFF 		bl	__aeabi_fmul
+ 792              	.LVL126:
+ 793 0478 6649     		ldr	r1, .L315+12
+ 794 047a FFF7FEFF 		bl	__aeabi_fcmple
+ 795              	.LVL127:
+ 796 047e 0028     		cmp	r0, #0
+ 797 0480 00D1     		bne	.LCB649
+ 798 0482 A5E3     		b	.L86	@long jump
+ 799              	.LCB649:
+ 800              	.L71:
+ 801              		.loc 1 43 0
+ 802 0484 0120     		mov	r0, #1
+ 803 0486 8225     		mov	r5, #130
+ 804 0488 FFF7FEFF 		bl	getSpeed
+ 805              	.LVL128:
+ 806 048c E905     		lsl	r1, r5, #23
+ 807 048e FFF7FEFF 		bl	__aeabi_fmul
+ 808              	.LVL129:
+ 809 0492 6149     		ldr	r1, .L315+16
+ 810 0494 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 811              	.LVL130:
+ 812 0498 0028     		cmp	r0, #0
+ 813 049a 00D1     		bne	.LCB662
+ 814 049c 28E3     		b	.L284	@long jump
+ 815              	.LCB662:
+ 816              	.L81:
+ 817 049e 7F21     		mov	r1, #127
+ 818              	.L75:
+ 819              		.loc 1 43 0
+ 820 04a0 5F48     		ldr	r0, .L315+24
+ 821 04a2 FFF7FEFF 		bl	uart_putchar
+ 822              	.LVL131:
+  44:../Sources/Telemetry.c **** 	// 5 - PWM output to right motor
+  45:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_0)));
+ 823              		.loc 1 45 0 is_stmt 1
+ 824 04a6 0020     		mov	r0, #0
+ 825 04a8 FFF7FEFF 		bl	TFC_GetMotorPWM
+ 826              	.LVL132:
+ 827 04ac 5D49     		ldr	r1, .L315+28
+ 828 04ae FFF7FEFF 		bl	__aeabi_fmul
+ 829              	.LVL133:
+ 830 04b2 0021     		mov	r1, #0
+ 831 04b4 FFF7FEFF 		bl	__aeabi_fcmpge
+ 832              	.LVL134:
+ 833 04b8 0028     		cmp	r0, #0
+ 834 04ba 00D1     		bne	.LCB680
+ 835 04bc A7E2     		b	.L285	@long jump
+ 836              	.LCB680:
+ 837              		.loc 1 45 0 is_stmt 0
+ 838 04be 0020     		mov	r0, #0
+ 839 04c0 FFF7FEFF 		bl	TFC_GetMotorPWM
+ 840              	.LVL135:
+ 841 04c4 5749     		ldr	r1, .L315+28
+ 842 04c6 FFF7FEFF 		bl	__aeabi_fmul
+ 843              	.LVL136:
+ 844 04ca FFF7FEFF 		bl	__aeabi_f2d
+ 845              	.LVL137:
+ 846 04ce 4F4B     		ldr	r3, .L315+4
+ 847 04d0 4D4A     		ldr	r2, .L315
+ 848 04d2 FFF7FEFF 		bl	__aeabi_dadd
+ 849              	.LVL138:
+ 850 04d6 FFF7FEFF 		bl	__aeabi_d2iz
+ 851              	.LVL139:
+ 852 04da C1B2     		uxtb	r1, r0
+ 853              	.L94:
+ 854              		.loc 1 45 0
+ 855 04dc 5048     		ldr	r0, .L315+24
+ 856 04de FFF7FEFF 		bl	uart_putchar
+ 857              	.LVL140:
+  46:../Sources/Telemetry.c **** 	// 6 - PWM output to left motor
+  47:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_1)));
+ 858              		.loc 1 47 0 is_stmt 1
+ 859 04e2 0120     		mov	r0, #1
+ 860 04e4 FFF7FEFF 		bl	TFC_GetMotorPWM
+ 861              	.LVL141:
+ 862 04e8 4E49     		ldr	r1, .L315+28
+ 863 04ea FFF7FEFF 		bl	__aeabi_fmul
+ 864              	.LVL142:
+ 865 04ee 0021     		mov	r1, #0
+ 866 04f0 FFF7FEFF 		bl	__aeabi_fcmpge
+ 867              	.LVL143:
+ 868 04f4 0028     		cmp	r0, #0
+ 869 04f6 00D1     		bne	.LCB711
+ 870 04f8 79E2     		b	.L286	@long jump
+ 871              	.LCB711:
+ 872              		.loc 1 47 0 is_stmt 0
+ 873 04fa 0120     		mov	r0, #1
+ 874 04fc FFF7FEFF 		bl	TFC_GetMotorPWM
+ 875              	.LVL144:
+ 876 0500 4849     		ldr	r1, .L315+28
+ 877 0502 FFF7FEFF 		bl	__aeabi_fmul
+ 878              	.LVL145:
+ 879 0506 FFF7FEFF 		bl	__aeabi_f2d
+ 880              	.LVL146:
+ 881 050a 404B     		ldr	r3, .L315+4
+ 882 050c 3E4A     		ldr	r2, .L315
+ 883 050e FFF7FEFF 		bl	__aeabi_dadd
+ 884              	.LVL147:
+ 885 0512 FFF7FEFF 		bl	__aeabi_d2iz
+ 886              	.LVL148:
+ 887 0516 C1B2     		uxtb	r1, r0
+ 888              	.L97:
+ 889              		.loc 1 47 0
+ 890 0518 4148     		ldr	r0, .L315+24
+ 891 051a FFF7FEFF 		bl	uart_putchar
+ 892              	.LVL149:
+  48:../Sources/Telemetry.c **** 	// 7 - Current of the right motor
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 893              		.loc 1 49 0 is_stmt 1
+ 894 051e 0020     		mov	r0, #0
+ 895 0520 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 896              	.LVL150:
+ 897 0524 4049     		ldr	r1, .L315+32
+ 898 0526 FFF7FEFF 		bl	__aeabi_fmul
+ 899              	.LVL151:
+ 900 052a 3C49     		ldr	r1, .L315+20
+ 901 052c FFF7FEFF 		bl	__aeabi_fcmple
+ 902              	.LVL152:
+ 903 0530 0028     		cmp	r0, #0
+ 904 0532 00D1     		bne	.LCB742
+ 905 0534 85E0     		b	.L98	@long jump
+ 906              	.LCB742:
+ 907              		.loc 1 49 0 is_stmt 0
+ 908 0536 0020     		mov	r0, #0
+ 909 0538 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 910              	.LVL153:
+ 911 053c 3A49     		ldr	r1, .L315+32
+ 912 053e FFF7FEFF 		bl	__aeabi_fmul
+ 913              	.LVL154:
+ 914 0542 0021     		mov	r1, #0
+ 915 0544 FFF7FEFF 		bl	__aeabi_fcmpge
+ 916              	.LVL155:
+ 917 0548 0028     		cmp	r0, #0
+ 918 054a 7AD0     		beq	.L98
+ 919              		.loc 1 49 0
+ 920 054c 0020     		mov	r0, #0
+ 921 054e FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 922              	.LVL156:
+ 923 0552 3549     		ldr	r1, .L315+32
+ 924 0554 FFF7FEFF 		bl	__aeabi_fmul
+ 925              	.LVL157:
+ 926 0558 2D49     		ldr	r1, .L315+8
+ 927 055a FFF7FEFF 		bl	__aeabi_fcmpge
+ 928              	.LVL158:
+ 929 055e 0028     		cmp	r0, #0
+ 930 0560 64D1     		bne	.L101
+ 931              	.L104:
+ 932              		.loc 1 49 0
+ 933 0562 0020     		mov	r0, #0
+ 934 0564 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 935              	.LVL159:
+ 936 0568 2F49     		ldr	r1, .L315+32
+ 937 056a FFF7FEFF 		bl	__aeabi_fmul
+ 938              	.LVL160:
+ 939 056e 0021     		mov	r1, #0
+ 940 0570 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 941              	.LVL161:
+ 942 0574 0028     		cmp	r0, #0
+ 943 0576 70D0     		beq	.L102
+ 944              		.loc 1 49 0
+ 945 0578 0020     		mov	r0, #0
+ 946 057a FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 947              	.LVL162:
+ 948 057e 2A49     		ldr	r1, .L315+32
+ 949 0580 FFF7FEFF 		bl	__aeabi_fmul
+ 950              	.LVL163:
+ 951 0584 2549     		ldr	r1, .L315+20
+ 952 0586 FFF7FEFF 		bl	__aeabi_fcmple
+ 953              	.LVL164:
+ 954 058a 0028     		cmp	r0, #0
+ 955 058c 22D0     		beq	.L120
+ 956              		.loc 1 49 0
+ 957 058e 0020     		mov	r0, #0
+ 958 0590 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 959              	.LVL165:
+ 960 0594 2449     		ldr	r1, .L315+32
+ 961 0596 FFF7FEFF 		bl	__aeabi_fmul
+ 962              	.LVL166:
+ 963 059a 0021     		mov	r1, #0
+ 964 059c FFF7FEFF 		bl	__aeabi_fcmpge
+ 965              	.LVL167:
+ 966 05a0 0028     		cmp	r0, #0
+ 967 05a2 17D0     		beq	.L120
+ 968              		.loc 1 49 0
+ 969 05a4 0020     		mov	r0, #0
+ 970 05a6 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 971              	.LVL168:
+ 972 05aa 1F49     		ldr	r1, .L315+32
+ 973 05ac FFF7FEFF 		bl	__aeabi_fmul
+ 974              	.LVL169:
+ 975 05b0 1749     		ldr	r1, .L315+8
+ 976 05b2 FFF7FEFF 		bl	__aeabi_fcmpge
+ 977              	.LVL170:
+ 978 05b6 0028     		cmp	r0, #0
+ 979 05b8 00D1     		bne	.LCB809
+ 980 05ba FFE2     		b	.L124	@long jump
+ 981              	.LCB809:
+ 982              		.loc 1 49 0
+ 983 05bc 0020     		mov	r0, #0
+ 984 05be FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 985              	.LVL171:
+ 986 05c2 1949     		ldr	r1, .L315+32
+ 987 05c4 FFF7FEFF 		bl	__aeabi_fmul
+ 988              	.LVL172:
+ 989 05c8 1249     		ldr	r1, .L315+12
+ 990 05ca FFF7FEFF 		bl	__aeabi_fcmple
+ 991              	.LVL173:
+ 992 05ce 0028     		cmp	r0, #0
+ 993 05d0 00D1     		bne	.LCB820
+ 994 05d2 F3E2     		b	.L124	@long jump
+ 995              	.LCB820:
+ 996              	.L120:
+ 997              		.loc 1 49 0
+ 998 05d4 0020     		mov	r0, #0
+ 999 05d6 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1000              	.LVL174:
+ 1001 05da 1349     		ldr	r1, .L315+32
+ 1002 05dc FFF7FEFF 		bl	__aeabi_fmul
+ 1003              	.LVL175:
+ 1004 05e0 0D49     		ldr	r1, .L315+16
+ 1005 05e2 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1006              	.LVL176:
+ 1007 05e6 0028     		cmp	r0, #0
+ 1008 05e8 71D1     		bne	.L119
+ 1009              		.loc 1 49 0
+ 1010 05ea FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1011              	.LVL177:
+ 1012 05ee 0E49     		ldr	r1, .L315+32
+ 1013 05f0 FFF7FEFF 		bl	__aeabi_fmul
+ 1014              	.LVL178:
+ 1015 05f4 0649     		ldr	r1, .L315+8
+ 1016 05f6 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1017              	.LVL179:
+ 1018 05fa 0028     		cmp	r0, #0
+ 1019 05fc 00D0     		beq	.LCB842
+ 1020 05fe 27E3     		b	.L308	@long jump
+ 1021              	.LCB842:
+ 1022              	.L128:
+ 1023              		.loc 1 49 0
+ 1024 0600 0021     		mov	r1, #0
+ 1025 0602 65E0     		b	.L113
+ 1026              	.L316:
+ 1027 0604 C046C046 		.align	3
+ 1028              	.L315:
+ 1029 0608 00000000 		.word	0
+ 1030 060c 0000E03F 		.word	1071644672
+ 1031 0610 0000FF42 		.word	1124007936
+ 1032 0614 00800043 		.word	1124106240
+ 1033 0618 00007F43 		.word	1132396544
+ 1034 061c 00807E43 		.word	1132363776
+ 1035 0620 00C00640 		.word	1074184192
+ 1036 0624 0000FC42 		.word	1123811328
+ 1037 0628 00007042 		.word	1114636288
+ 1038              	.L101:
+ 1039              		.loc 1 49 0
+ 1040 062c 0020     		mov	r0, #0
+ 1041 062e FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1042              	.LVL180:
+ 1043 0632 CF49     		ldr	r1, .L317+8
+ 1044 0634 FFF7FEFF 		bl	__aeabi_fmul
+ 1045              	.LVL181:
+ 1046 0638 CE49     		ldr	r1, .L317+12
+ 1047 063a FFF7FEFF 		bl	__aeabi_fcmple
+ 1048              	.LVL182:
+ 1049 063e 0028     		cmp	r0, #0
+ 1050 0640 8FD0     		beq	.L104
+ 1051              	.L98:
+ 1052              		.loc 1 49 0
+ 1053 0642 0020     		mov	r0, #0
+ 1054 0644 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1055              	.LVL183:
+ 1056 0648 C949     		ldr	r1, .L317+8
+ 1057 064a FFF7FEFF 		bl	__aeabi_fmul
+ 1058              	.LVL184:
+ 1059 064e CA49     		ldr	r1, .L317+16
+ 1060 0650 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1061              	.LVL185:
+ 1062 0654 0028     		cmp	r0, #0
+ 1063 0656 00D1     		bne	.LCB884
+ 1064 0658 F9E1     		b	.L309	@long jump
+ 1065              	.LCB884:
+ 1066              	.L102:
+ 1067              		.loc 1 49 0
+ 1068 065a 0020     		mov	r0, #0
+ 1069 065c FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1070              	.LVL186:
+ 1071 0660 C349     		ldr	r1, .L317+8
+ 1072 0662 FFF7FEFF 		bl	__aeabi_fmul
+ 1073              	.LVL187:
+ 1074 0666 C549     		ldr	r1, .L317+20
+ 1075 0668 FFF7FEFF 		bl	__aeabi_fcmple
+ 1076              	.LVL188:
+ 1077 066c 0028     		cmp	r0, #0
+ 1078 066e 22D0     		beq	.L109
+ 1079              		.loc 1 49 0
+ 1080 0670 0020     		mov	r0, #0
+ 1081 0672 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1082              	.LVL189:
+ 1083 0676 BE49     		ldr	r1, .L317+8
+ 1084 0678 FFF7FEFF 		bl	__aeabi_fmul
+ 1085              	.LVL190:
+ 1086 067c 0021     		mov	r1, #0
+ 1087 067e FFF7FEFF 		bl	__aeabi_fcmpge
+ 1088              	.LVL191:
+ 1089 0682 0028     		cmp	r0, #0
+ 1090 0684 17D0     		beq	.L109
+ 1091              		.loc 1 49 0
+ 1092 0686 0020     		mov	r0, #0
+ 1093 0688 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1094              	.LVL192:
+ 1095 068c B849     		ldr	r1, .L317+8
+ 1096 068e FFF7FEFF 		bl	__aeabi_fmul
+ 1097              	.LVL193:
+ 1098 0692 BB49     		ldr	r1, .L317+24
+ 1099 0694 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1100              	.LVL194:
+ 1101 0698 0028     		cmp	r0, #0
+ 1102 069a 00D1     		bne	.LCB918
+ 1103 069c 8EE2     		b	.L124	@long jump
+ 1104              	.LCB918:
+ 1105              		.loc 1 49 0
+ 1106 069e 0020     		mov	r0, #0
+ 1107 06a0 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1108              	.LVL195:
+ 1109 06a4 B249     		ldr	r1, .L317+8
+ 1110 06a6 FFF7FEFF 		bl	__aeabi_fmul
+ 1111              	.LVL196:
+ 1112 06aa B249     		ldr	r1, .L317+12
+ 1113 06ac FFF7FEFF 		bl	__aeabi_fcmple
+ 1114              	.LVL197:
+ 1115 06b0 0028     		cmp	r0, #0
+ 1116 06b2 00D1     		bne	.LCB929
+ 1117 06b4 82E2     		b	.L124	@long jump
+ 1118              	.LCB929:
+ 1119              	.L109:
+ 1120              		.loc 1 49 0
+ 1121 06b6 0020     		mov	r0, #0
+ 1122 06b8 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1123              	.LVL198:
+ 1124 06bc AC49     		ldr	r1, .L317+8
+ 1125 06be FFF7FEFF 		bl	__aeabi_fmul
+ 1126              	.LVL199:
+ 1127 06c2 AD49     		ldr	r1, .L317+16
+ 1128 06c4 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1129              	.LVL200:
+ 1130 06c8 0028     		cmp	r0, #0
+ 1131 06ca 00D1     		bne	.LCB941
+ 1132 06cc 46E2     		b	.L288	@long jump
+ 1133              	.LCB941:
+ 1134              	.L119:
+ 1135 06ce 7F21     		mov	r1, #127
+ 1136              	.L113:
+ 1137              		.loc 1 49 0
+ 1138 06d0 AC48     		ldr	r0, .L317+28
+ 1139 06d2 FFF7FEFF 		bl	uart_putchar
+ 1140              	.LVL201:
+  50:../Sources/Telemetry.c **** 	// 8 - Current of the left motor
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1141              		.loc 1 51 0 is_stmt 1
+ 1142 06d6 0120     		mov	r0, #1
+ 1143 06d8 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1144              	.LVL202:
+ 1145 06dc A449     		ldr	r1, .L317+8
+ 1146 06de FFF7FEFF 		bl	__aeabi_fmul
+ 1147              	.LVL203:
+ 1148 06e2 A649     		ldr	r1, .L317+20
+ 1149 06e4 FFF7FEFF 		bl	__aeabi_fcmple
+ 1150              	.LVL204:
+ 1151 06e8 0028     		cmp	r0, #0
+ 1152 06ea 72D0     		beq	.L130
+ 1153              		.loc 1 51 0 is_stmt 0
+ 1154 06ec 0120     		mov	r0, #1
+ 1155 06ee FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1156              	.LVL205:
+ 1157 06f2 9F49     		ldr	r1, .L317+8
+ 1158 06f4 FFF7FEFF 		bl	__aeabi_fmul
+ 1159              	.LVL206:
+ 1160 06f8 0021     		mov	r1, #0
+ 1161 06fa FFF7FEFF 		bl	__aeabi_fcmpge
+ 1162              	.LVL207:
+ 1163 06fe 0028     		cmp	r0, #0
+ 1164 0700 67D0     		beq	.L130
+ 1165              		.loc 1 51 0
+ 1166 0702 0120     		mov	r0, #1
+ 1167 0704 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1168              	.LVL208:
+ 1169 0708 9949     		ldr	r1, .L317+8
+ 1170 070a FFF7FEFF 		bl	__aeabi_fmul
+ 1171              	.LVL209:
+ 1172 070e 9C49     		ldr	r1, .L317+24
+ 1173 0710 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1174              	.LVL210:
+ 1175 0714 0028     		cmp	r0, #0
+ 1176 0716 51D1     		bne	.L133
+ 1177              	.L136:
+ 1178              		.loc 1 51 0
+ 1179 0718 0120     		mov	r0, #1
+ 1180 071a FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1181              	.LVL211:
+ 1182 071e 9449     		ldr	r1, .L317+8
+ 1183 0720 FFF7FEFF 		bl	__aeabi_fmul
+ 1184              	.LVL212:
+ 1185 0724 0021     		mov	r1, #0
+ 1186 0726 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 1187              	.LVL213:
+ 1188 072a 0028     		cmp	r0, #0
+ 1189 072c 5DD0     		beq	.L134
+ 1190              		.loc 1 51 0
+ 1191 072e 0120     		mov	r0, #1
+ 1192 0730 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1193              	.LVL214:
+ 1194 0734 8E49     		ldr	r1, .L317+8
+ 1195 0736 FFF7FEFF 		bl	__aeabi_fmul
+ 1196              	.LVL215:
+ 1197 073a 9049     		ldr	r1, .L317+20
+ 1198 073c FFF7FEFF 		bl	__aeabi_fcmple
+ 1199              	.LVL216:
+ 1200 0740 0028     		cmp	r0, #0
+ 1201 0742 22D0     		beq	.L152
+ 1202              		.loc 1 51 0
+ 1203 0744 0120     		mov	r0, #1
+ 1204 0746 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1205              	.LVL217:
+ 1206 074a 8949     		ldr	r1, .L317+8
+ 1207 074c FFF7FEFF 		bl	__aeabi_fmul
+ 1208              	.LVL218:
+ 1209 0750 0021     		mov	r1, #0
+ 1210 0752 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1211              	.LVL219:
+ 1212 0756 0028     		cmp	r0, #0
+ 1213 0758 17D0     		beq	.L152
+ 1214              		.loc 1 51 0
+ 1215 075a 0120     		mov	r0, #1
+ 1216 075c FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1217              	.LVL220:
+ 1218 0760 8349     		ldr	r1, .L317+8
+ 1219 0762 FFF7FEFF 		bl	__aeabi_fmul
+ 1220              	.LVL221:
+ 1221 0766 8649     		ldr	r1, .L317+24
+ 1222 0768 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1223              	.LVL222:
+ 1224 076c 0028     		cmp	r0, #0
+ 1225 076e 00D1     		bne	.LCB1026
+ 1226 0770 1AE2     		b	.L156	@long jump
+ 1227              	.LCB1026:
+ 1228              		.loc 1 51 0
+ 1229 0772 0120     		mov	r0, #1
+ 1230 0774 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1231              	.LVL223:
+ 1232 0778 7D49     		ldr	r1, .L317+8
+ 1233 077a FFF7FEFF 		bl	__aeabi_fmul
+ 1234              	.LVL224:
+ 1235 077e 7D49     		ldr	r1, .L317+12
+ 1236 0780 FFF7FEFF 		bl	__aeabi_fcmple
+ 1237              	.LVL225:
+ 1238 0784 0028     		cmp	r0, #0
+ 1239 0786 00D1     		bne	.LCB1037
+ 1240 0788 0EE2     		b	.L156	@long jump
+ 1241              	.LCB1037:
+ 1242              	.L152:
+ 1243              		.loc 1 51 0
+ 1244 078a 0120     		mov	r0, #1
+ 1245 078c FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1246              	.LVL226:
+ 1247 0790 7749     		ldr	r1, .L317+8
+ 1248 0792 FFF7FEFF 		bl	__aeabi_fmul
+ 1249              	.LVL227:
+ 1250 0796 7849     		ldr	r1, .L317+16
+ 1251 0798 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1252              	.LVL228:
+ 1253 079c 0028     		cmp	r0, #0
+ 1254 079e 5ED1     		bne	.L151
+ 1255              		.loc 1 51 0
+ 1256 07a0 0120     		mov	r0, #1
+ 1257 07a2 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1258              	.LVL229:
+ 1259 07a6 7249     		ldr	r1, .L317+8
+ 1260 07a8 FFF7FEFF 		bl	__aeabi_fmul
+ 1261              	.LVL230:
+ 1262 07ac 7449     		ldr	r1, .L317+24
+ 1263 07ae FFF7FEFF 		bl	__aeabi_fcmpge
+ 1264              	.LVL231:
+ 1265 07b2 0028     		cmp	r0, #0
+ 1266 07b4 00D0     		beq	.LCB1060
+ 1267 07b6 1AE2     		b	.L310	@long jump
+ 1268              	.LCB1060:
+ 1269              	.L160:
+ 1270              		.loc 1 51 0
+ 1271 07b8 0021     		mov	r1, #0
+ 1272 07ba 51E0     		b	.L145
+ 1273              	.L133:
+ 1274              		.loc 1 51 0
+ 1275 07bc 0120     		mov	r0, #1
+ 1276 07be FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1277              	.LVL232:
+ 1278 07c2 6B49     		ldr	r1, .L317+8
+ 1279 07c4 FFF7FEFF 		bl	__aeabi_fmul
+ 1280              	.LVL233:
+ 1281 07c8 6A49     		ldr	r1, .L317+12
+ 1282 07ca FFF7FEFF 		bl	__aeabi_fcmple
+ 1283              	.LVL234:
+ 1284 07ce 0028     		cmp	r0, #0
+ 1285 07d0 A2D0     		beq	.L136
+ 1286              	.L130:
+ 1287              		.loc 1 51 0
+ 1288 07d2 0120     		mov	r0, #1
+ 1289 07d4 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1290              	.LVL235:
+ 1291 07d8 6549     		ldr	r1, .L317+8
+ 1292 07da FFF7FEFF 		bl	__aeabi_fmul
+ 1293              	.LVL236:
+ 1294 07de 6649     		ldr	r1, .L317+16
+ 1295 07e0 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1296              	.LVL237:
+ 1297 07e4 0028     		cmp	r0, #0
+ 1298 07e6 00D1     		bne	.LCB1089
+ 1299 07e8 21E1     		b	.L311	@long jump
+ 1300              	.LCB1089:
+ 1301              	.L134:
+ 1302              		.loc 1 51 0
+ 1303 07ea 0120     		mov	r0, #1
+ 1304 07ec FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1305              	.LVL238:
+ 1306 07f0 5F49     		ldr	r1, .L317+8
+ 1307 07f2 FFF7FEFF 		bl	__aeabi_fmul
+ 1308              	.LVL239:
+ 1309 07f6 6149     		ldr	r1, .L317+20
+ 1310 07f8 FFF7FEFF 		bl	__aeabi_fcmple
+ 1311              	.LVL240:
+ 1312 07fc 0028     		cmp	r0, #0
+ 1313 07fe 22D0     		beq	.L141
+ 1314              		.loc 1 51 0
+ 1315 0800 0120     		mov	r0, #1
+ 1316 0802 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1317              	.LVL241:
+ 1318 0806 5A49     		ldr	r1, .L317+8
+ 1319 0808 FFF7FEFF 		bl	__aeabi_fmul
+ 1320              	.LVL242:
+ 1321 080c 0021     		mov	r1, #0
+ 1322 080e FFF7FEFF 		bl	__aeabi_fcmpge
+ 1323              	.LVL243:
+ 1324 0812 0028     		cmp	r0, #0
+ 1325 0814 17D0     		beq	.L141
+ 1326              		.loc 1 51 0
+ 1327 0816 0120     		mov	r0, #1
+ 1328 0818 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1329              	.LVL244:
+ 1330 081c 5449     		ldr	r1, .L317+8
+ 1331 081e FFF7FEFF 		bl	__aeabi_fmul
+ 1332              	.LVL245:
+ 1333 0822 5749     		ldr	r1, .L317+24
+ 1334 0824 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1335              	.LVL246:
+ 1336 0828 0028     		cmp	r0, #0
+ 1337 082a 00D1     		bne	.LCB1123
+ 1338 082c BCE1     		b	.L156	@long jump
+ 1339              	.LCB1123:
+ 1340              		.loc 1 51 0
+ 1341 082e 0120     		mov	r0, #1
+ 1342 0830 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1343              	.LVL247:
+ 1344 0834 4E49     		ldr	r1, .L317+8
+ 1345 0836 FFF7FEFF 		bl	__aeabi_fmul
+ 1346              	.LVL248:
+ 1347 083a 4E49     		ldr	r1, .L317+12
+ 1348 083c FFF7FEFF 		bl	__aeabi_fcmple
+ 1349              	.LVL249:
+ 1350 0840 0028     		cmp	r0, #0
+ 1351 0842 00D1     		bne	.LCB1134
+ 1352 0844 B0E1     		b	.L156	@long jump
+ 1353              	.LCB1134:
+ 1354              	.L141:
+ 1355              		.loc 1 51 0
+ 1356 0846 0120     		mov	r0, #1
+ 1357 0848 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1358              	.LVL250:
+ 1359 084c 4849     		ldr	r1, .L317+8
+ 1360 084e FFF7FEFF 		bl	__aeabi_fmul
+ 1361              	.LVL251:
+ 1362 0852 4949     		ldr	r1, .L317+16
+ 1363 0854 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1364              	.LVL252:
+ 1365 0858 0028     		cmp	r0, #0
+ 1366 085a 00D1     		bne	.LCB1146
+ 1367 085c 64E1     		b	.L290	@long jump
+ 1368              	.LCB1146:
+ 1369              	.L151:
+ 1370 085e 7F21     		mov	r1, #127
+ 1371              	.L145:
+ 1372              		.loc 1 51 0
+ 1373 0860 4848     		ldr	r0, .L317+28
+ 1374 0862 FFF7FEFF 		bl	uart_putchar
+ 1375              	.LVL253:
+  52:../Sources/Telemetry.c **** 	// 9 - Servo Value
+  53:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*servoValue));
+ 1376              		.loc 1 53 0 is_stmt 1
+ 1377 0866 4848     		ldr	r0, .L317+32
+ 1378 0868 4849     		ldr	r1, .L317+36
+ 1379 086a 0068     		ldr	r0, [r0]
+ 1380 086c FFF7FEFF 		bl	__aeabi_fmul
+ 1381              	.LVL254:
+ 1382 0870 0021     		mov	r1, #0
+ 1383 0872 071C     		add	r7, r0, #0
+ 1384 0874 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1385              	.LVL255:
+ 1386 0878 0028     		cmp	r0, #0
+ 1387 087a 00D1     		bne	.LCB1164
+ 1388 087c ACE0     		b	.L291	@long jump
+ 1389              	.LCB1164:
+ 1390              		.loc 1 53 0 is_stmt 0
+ 1391 087e 381C     		add	r0, r7, #0
+ 1392 0880 FFF7FEFF 		bl	__aeabi_f2d
+ 1393              	.LVL256:
+ 1394 0884 394B     		ldr	r3, .L317+4
+ 1395 0886 384A     		ldr	r2, .L317
+ 1396 0888 FFF7FEFF 		bl	__aeabi_dadd
+ 1397              	.LVL257:
+ 1398 088c FFF7FEFF 		bl	__aeabi_d2iz
+ 1399              	.LVL258:
+ 1400 0890 C1B2     		uxtb	r1, r0
+ 1401              	.L164:
+ 1402              		.loc 1 53 0
+ 1403 0892 3C48     		ldr	r0, .L317+28
+ 1404 0894 FFF7FEFF 		bl	uart_putchar
+ 1405              	.LVL259:
+  54:../Sources/Telemetry.c **** 	// 10 - Detected edge type - Left:100, Right:-100, Track: 0, None:50
+  55:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, (signed char)(carState.edge==NO_EDGE)?(50):((carState.edge==BOTH_EDGE
+ 1406              		.loc 1 55 0 is_stmt 1
+ 1407 0898 6579     		ldrb	r5, [r4, #5]
+ 1408 089a 3221     		mov	r1, #50
+ 1409 089c 002D     		cmp	r5, #0
+ 1410 089e 06D0     		beq	.L165
+ 1411              		.loc 1 55 0 is_stmt 0
+ 1412 08a0 032D     		cmp	r5, #3
+ 1413 08a2 00D1     		bne	.LCB1185
+ 1414 08a4 9FE1     		b	.L195	@long jump
+ 1415              	.LCB1185:
+ 1416              		.loc 1 55 0
+ 1417 08a6 9C21     		mov	r1, #156
+ 1418 08a8 012D     		cmp	r5, #1
+ 1419 08aa 00D1     		bne	.LCB1188
+ 1420 08ac 9DE1     		b	.L312	@long jump
+ 1421              	.LCB1188:
+ 1422              	.L165:
+ 1423              		.loc 1 55 0
+ 1424 08ae 3548     		ldr	r0, .L317+28
+ 1425 08b0 FFF7FEFF 		bl	uart_putchar
+ 1426              	.LVL260:
+  56:../Sources/Telemetry.c **** 	// 11 - Camera Exposure Time, 1 unit = 0.1 ms
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1427              		.loc 1 57 0 is_stmt 1
+ 1428 08b4 3649     		ldr	r1, .L317+40
+ 1429 08b6 0868     		ldr	r0, [r1]
+ 1430 08b8 FFF7FEFF 		bl	__aeabi_i2f
+ 1431              	.LVL261:
+ 1432 08bc 3549     		ldr	r1, .L317+44
+ 1433 08be FFF7FEFF 		bl	__aeabi_fmul
+ 1434              	.LVL262:
+ 1435 08c2 2E49     		ldr	r1, .L317+20
+ 1436 08c4 051C     		add	r5, r0, #0
+ 1437 08c6 FFF7FEFF 		bl	__aeabi_fcmple
+ 1438              	.LVL263:
+ 1439 08ca 0028     		cmp	r0, #0
+ 1440 08cc 36D0     		beq	.L174
+ 1441              		.loc 1 57 0 is_stmt 0
+ 1442 08ce 281C     		add	r0, r5, #0
+ 1443 08d0 0021     		mov	r1, #0
+ 1444 08d2 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1445              	.LVL264:
+ 1446 08d6 0028     		cmp	r0, #0
+ 1447 08d8 66D0     		beq	.L168
+ 1448              		.loc 1 57 0
+ 1449 08da 281C     		add	r0, r5, #0
+ 1450 08dc 2849     		ldr	r1, .L317+24
+ 1451 08de FFF7FEFF 		bl	__aeabi_fcmpge
+ 1452              	.LVL265:
+ 1453 08e2 0028     		cmp	r0, #0
+ 1454 08e4 5AD0     		beq	.L293
+ 1455              		.loc 1 57 0
+ 1456 08e6 281C     		add	r0, r5, #0
+ 1457 08e8 2249     		ldr	r1, .L317+12
+ 1458 08ea FFF7FEFF 		bl	__aeabi_fcmple
+ 1459              	.LVL266:
+ 1460 08ee 7F26     		mov	r6, #127
+ 1461 08f0 071E     		sub	r7, r0, #0
+ 1462 08f2 15D1     		bne	.L172
+ 1463              		.loc 1 57 0
+ 1464 08f4 281C     		add	r0, r5, #0
+ 1465 08f6 0021     		mov	r1, #0
+ 1466 08f8 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 1467              	.LVL267:
+ 1468 08fc 0028     		cmp	r0, #0
+ 1469 08fe 53D0     		beq	.L168
+ 1470              		.loc 1 57 0
+ 1471 0900 002F     		cmp	r7, #0
+ 1472 0902 64D0     		beq	.L181
+ 1473              		.loc 1 57 0
+ 1474 0904 281C     		add	r0, r5, #0
+ 1475 0906 1C49     		ldr	r1, .L317+16
+ 1476 0908 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1477              	.LVL268:
+ 1478 090c 0028     		cmp	r0, #0
+ 1479 090e 07D1     		bne	.L172
+ 1480              		.loc 1 57 0
+ 1481 0910 281C     		add	r0, r5, #0
+ 1482 0912 1B49     		ldr	r1, .L317+24
+ 1483 0914 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1484              	.LVL269:
+ 1485 0918 7E26     		mov	r6, #126
+ 1486 091a 0028     		cmp	r0, #0
+ 1487 091c 00D1     		bne	.L172
+ 1488              	.L180:
+ 1489              		.loc 1 57 0
+ 1490 091e 0026     		mov	r6, #0
+ 1491              	.L172:
+ 1492              		.loc 1 57 0
+ 1493 0920 311C     		mov	r1, r6
+ 1494 0922 1848     		ldr	r0, .L317+28
+ 1495 0924 FFF7FEFF 		bl	uart_putchar
+ 1496              	.LVL270:
+  58:../Sources/Telemetry.c **** 	// 12 - Loop time
+  59:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, (signed char)loop_time);
+ 1497              		.loc 1 59 0 is_stmt 1
+ 1498 0928 1B4A     		ldr	r2, .L317+48
+ 1499 092a 1648     		ldr	r0, .L317+28
+ 1500 092c 1178     		ldrb	r1, [r2]
+ 1501 092e FFF7FEFF 		bl	uart_putchar
+ 1502              	.LVL271:
+  60:../Sources/Telemetry.c **** 	// 13 - Line Distance
+  61:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, (signed char)carState.lineDistance);
+ 1503              		.loc 1 61 0
+ 1504 0932 217B     		ldrb	r1, [r4, #12]
+ 1505 0934 1348     		ldr	r0, .L317+28
+ 1506 0936 FFF7FEFF 		bl	uart_putchar
+ 1507              	.LVL272:
+  62:../Sources/Telemetry.c **** }
+ 1508              		.loc 1 62 0
+ 1509              		@ sp needed for prologue
+ 1510 093a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1511              	.L174:
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1512              		.loc 1 57 0
+ 1513 093c 281C     		add	r0, r5, #0
+ 1514 093e 0E49     		ldr	r1, .L317+16
+ 1515 0940 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 1516              	.LVL273:
+ 1517 0944 7F26     		mov	r6, #127
+ 1518 0946 0028     		cmp	r0, #0
+ 1519 0948 EAD1     		bne	.L172
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1520              		.loc 1 57 0 is_stmt 0
+ 1521 094a 281C     		add	r0, r5, #0
+ 1522 094c 0C49     		ldr	r1, .L317+24
+ 1523 094e FFF7FEFF 		bl	__aeabi_fcmpge
+ 1524              	.LVL274:
+ 1525 0952 0028     		cmp	r0, #0
+ 1526 0954 E3D0     		beq	.L180
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1527              		.loc 1 57 0
+ 1528 0956 281C     		add	r0, r5, #0
+ 1529 0958 0649     		ldr	r1, .L317+12
+ 1530 095a FFF7FEFF 		bl	__aeabi_fcmple
+ 1531              	.LVL275:
+ 1532 095e 0028     		cmp	r0, #0
+ 1533 0960 DED1     		bne	.L172
+ 1534 0962 DCE7     		b	.L180
+ 1535              	.L318:
+ 1536 0964 C046C046 		.align	3
+ 1537              	.L317:
+ 1538 0968 00000000 		.word	0
+ 1539 096c 0000E03F 		.word	1071644672
+ 1540 0970 00007042 		.word	1114636288
+ 1541 0974 00800043 		.word	1124106240
+ 1542 0978 00007F43 		.word	1132396544
+ 1543 097c 00807E43 		.word	1132363776
+ 1544 0980 0000FF42 		.word	1124007936
+ 1545 0984 00C00640 		.word	1074184192
+ 1546 0988 00000000 		.word	servoValue
+ 1547 098c 0000FC42 		.word	1123811328
+ 1548 0990 00000000 		.word	newExposure
+ 1549 0994 CDCCCC3C 		.word	1020054733
+ 1550 0998 00000000 		.word	loop_time
+ 1551              	.L293:
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1552              		.loc 1 57 0
+ 1553 099c 281C     		add	r0, r5, #0
+ 1554 099e 0021     		mov	r1, #0
+ 1555 09a0 FFF7FEFF 		bl	__aeabi_fcmpeq
+ 1556              	.LVL276:
+ 1557 09a4 0028     		cmp	r0, #0
+ 1558 09a6 12D1     		bne	.L181
+ 1559              	.L168:
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1560              		.loc 1 57 0
+ 1561 09a8 281C     		add	r0, r5, #0
+ 1562 09aa 0021     		mov	r1, #0
+ 1563 09ac FFF7FEFF 		bl	__aeabi_fcmpge
+ 1564              	.LVL277:
+ 1565 09b0 0028     		cmp	r0, #0
+ 1566 09b2 C3D0     		beq	.L174
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1567              		.loc 1 57 0
+ 1568 09b4 281C     		add	r0, r5, #0
+ 1569 09b6 B049     		ldr	r1, .L319+8
+ 1570 09b8 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1571              	.LVL278:
+ 1572 09bc 0028     		cmp	r0, #0
+ 1573 09be 06D0     		beq	.L181
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1574              		.loc 1 57 0
+ 1575 09c0 281C     		add	r0, r5, #0
+ 1576 09c2 AE49     		ldr	r1, .L319+12
+ 1577 09c4 FFF7FEFF 		bl	__aeabi_fcmple
+ 1578              	.LVL279:
+ 1579 09c8 7F26     		mov	r6, #127
+ 1580 09ca 0028     		cmp	r0, #0
+ 1581 09cc A8D1     		bne	.L172
+ 1582              	.L181:
+  57:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255((float)newExposure*0.025f)));
+ 1583              		.loc 1 57 0
+ 1584 09ce 281C     		add	r0, r5, #0
+ 1585 09d0 FFF7FEFF 		bl	__aeabi_f2iz
+ 1586              	.LVL280:
+ 1587 09d4 C6B2     		uxtb	r6, r0
+ 1588 09d6 A3E7     		b	.L172
+ 1589              	.L291:
+  53:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*servoValue));
+ 1590              		.loc 1 53 0 is_stmt 1
+ 1591 09d8 381C     		add	r0, r7, #0
+ 1592 09da FFF7FEFF 		bl	__aeabi_f2d
+ 1593              	.LVL281:
+ 1594 09de A54B     		ldr	r3, .L319+4
+ 1595 09e0 A34A     		ldr	r2, .L319
+ 1596 09e2 FFF7FEFF 		bl	__aeabi_dsub
+ 1597              	.LVL282:
+ 1598 09e6 FFF7FEFF 		bl	__aeabi_d2iz
+ 1599              	.LVL283:
+ 1600 09ea C1B2     		uxtb	r1, r0
+ 1601 09ec 51E7     		b	.L164
+ 1602              	.L286:
+  47:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_1)));
+ 1603              		.loc 1 47 0
+ 1604 09ee 0120     		mov	r0, #1
+ 1605 09f0 FFF7FEFF 		bl	TFC_GetMotorPWM
+ 1606              	.LVL284:
+ 1607 09f4 A249     		ldr	r1, .L319+16
+ 1608 09f6 FFF7FEFF 		bl	__aeabi_fmul
+ 1609              	.LVL285:
+ 1610 09fa FFF7FEFF 		bl	__aeabi_f2d
+ 1611              	.LVL286:
+ 1612 09fe 9D4B     		ldr	r3, .L319+4
+ 1613 0a00 9B4A     		ldr	r2, .L319
+ 1614 0a02 FFF7FEFF 		bl	__aeabi_dsub
+ 1615              	.LVL287:
+ 1616 0a06 FFF7FEFF 		bl	__aeabi_d2iz
+ 1617              	.LVL288:
+ 1618 0a0a C1B2     		uxtb	r1, r0
+ 1619 0a0c 84E5     		b	.L97
+ 1620              	.L285:
+  45:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(126*TFC_GetMotorPWM(CHANNEL_0)));
+ 1621              		.loc 1 45 0
+ 1622 0a0e 0020     		mov	r0, #0
+ 1623 0a10 FFF7FEFF 		bl	TFC_GetMotorPWM
+ 1624              	.LVL289:
+ 1625 0a14 9A49     		ldr	r1, .L319+16
+ 1626 0a16 FFF7FEFF 		bl	__aeabi_fmul
+ 1627              	.LVL290:
+ 1628 0a1a FFF7FEFF 		bl	__aeabi_f2d
+ 1629              	.LVL291:
+ 1630 0a1e 954B     		ldr	r3, .L319+4
+ 1631 0a20 934A     		ldr	r2, .L319
+ 1632 0a22 FFF7FEFF 		bl	__aeabi_dsub
+ 1633              	.LVL292:
+ 1634 0a26 FFF7FEFF 		bl	__aeabi_d2iz
+ 1635              	.LVL293:
+ 1636 0a2a C1B2     		uxtb	r1, r0
+ 1637 0a2c 56E5     		b	.L94
+ 1638              	.L311:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1639              		.loc 1 51 0
+ 1640 0a2e 0120     		mov	r0, #1
+ 1641 0a30 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1642              	.LVL294:
+ 1643 0a34 9349     		ldr	r1, .L319+20
+ 1644 0a36 FFF7FEFF 		bl	__aeabi_fmul
+ 1645              	.LVL295:
+ 1646 0a3a 8F49     		ldr	r1, .L319+8
+ 1647 0a3c FFF7FEFF 		bl	__aeabi_fcmpge
+ 1648              	.LVL296:
+ 1649 0a40 0028     		cmp	r0, #0
+ 1650 0a42 00D1     		bne	.LCB1415
+ 1651 0a44 D1E6     		b	.L134	@long jump
+ 1652              	.LCB1415:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1653              		.loc 1 51 0 is_stmt 0
+ 1654 0a46 0120     		mov	r0, #1
+ 1655 0a48 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1656              	.LVL297:
+ 1657 0a4c CDE6     		b	.L134
+ 1658              	.L309:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1659              		.loc 1 49 0 is_stmt 1
+ 1660 0a4e FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1661              	.LVL298:
+ 1662 0a52 8C49     		ldr	r1, .L319+20
+ 1663 0a54 FFF7FEFF 		bl	__aeabi_fmul
+ 1664              	.LVL299:
+ 1665 0a58 8749     		ldr	r1, .L319+8
+ 1666 0a5a FFF7FEFF 		bl	__aeabi_fcmpge
+ 1667              	.LVL300:
+ 1668 0a5e 0028     		cmp	r0, #0
+ 1669 0a60 00D1     		bne	.LCB1432
+ 1670 0a62 FAE5     		b	.L102	@long jump
+ 1671              	.LCB1432:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1672              		.loc 1 49 0 is_stmt 0
+ 1673 0a64 0020     		mov	r0, #0
+ 1674 0a66 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1675              	.LVL301:
+ 1676 0a6a F6E5     		b	.L102
+ 1677              	.L307:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1678              		.loc 1 43 0 is_stmt 1
+ 1679 0a6c 0120     		mov	r0, #1
+ 1680 0a6e 8227     		mov	r7, #130
+ 1681 0a70 FFF7FEFF 		bl	getSpeed
+ 1682              	.LVL302:
+ 1683 0a74 F905     		lsl	r1, r7, #23
+ 1684 0a76 FFF7FEFF 		bl	__aeabi_fmul
+ 1685              	.LVL303:
+ 1686 0a7a 7F49     		ldr	r1, .L319+8
+ 1687 0a7c FFF7FEFF 		bl	__aeabi_fcmpge
+ 1688              	.LVL304:
+ 1689 0a80 0028     		cmp	r0, #0
+ 1690 0a82 00D1     		bne	.LCB1451
+ 1691 0a84 CCE4     		b	.L64	@long jump
+ 1692              	.LCB1451:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1693              		.loc 1 43 0 is_stmt 0
+ 1694 0a86 0120     		mov	r0, #1
+ 1695 0a88 FFF7FEFF 		bl	getSpeed
+ 1696              	.LVL305:
+ 1697 0a8c C8E4     		b	.L64
+ 1698              	.L305:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1699              		.loc 1 41 0 is_stmt 1
+ 1700 0a8e 8226     		mov	r6, #130
+ 1701 0a90 FFF7FEFF 		bl	getSpeed
+ 1702              	.LVL306:
+ 1703 0a94 F105     		lsl	r1, r6, #23
+ 1704 0a96 FFF7FEFF 		bl	__aeabi_fmul
+ 1705              	.LVL307:
+ 1706 0a9a 7749     		ldr	r1, .L319+8
+ 1707 0a9c FFF7FEFF 		bl	__aeabi_fcmpge
+ 1708              	.LVL308:
+ 1709 0aa0 0028     		cmp	r0, #0
+ 1710 0aa2 01D1     		bne	.LCB1469
+ 1711 0aa4 FFF7A9FB 		bl	.L32	@far jump
+ 1712              	.LCB1469:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1713              		.loc 1 41 0 is_stmt 0
+ 1714 0aa8 0020     		mov	r0, #0
+ 1715 0aaa FFF7FEFF 		bl	getSpeed
+ 1716              	.LVL309:
+ 1717 0aae FFF7A4FB 		bl	.L32	@ far jump
+ 1718              	.L282:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1719              		.loc 1 41 0
+ 1720 0ab2 0020     		mov	r0, #0
+ 1721 0ab4 FFF7FEFF 		bl	getSpeed
+ 1722              	.LVL310:
+ 1723 0ab8 8223     		mov	r3, #130
+ 1724 0aba D905     		lsl	r1, r3, #23
+ 1725 0abc FFF7FEFF 		bl	__aeabi_fmul
+ 1726              	.LVL311:
+ 1727 0ac0 6D49     		ldr	r1, .L319+8
+ 1728 0ac2 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1729              	.LVL312:
+ 1730 0ac6 0028     		cmp	r0, #0
+ 1731 0ac8 01D1     		bne	.LCB1488
+ 1732 0aca FFF762FB 		bl	.L58	@far jump
+ 1733              	.LCB1488:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1734              		.loc 1 41 0
+ 1735 0ace 0020     		mov	r0, #0
+ 1736 0ad0 FFF7FEFF 		bl	getSpeed
+ 1737              	.LVL313:
+ 1738 0ad4 8221     		mov	r1, #130
+ 1739 0ad6 C905     		lsl	r1, r1, #23
+ 1740 0ad8 FFF7FEFF 		bl	__aeabi_fmul
+ 1741              	.LVL314:
+ 1742 0adc 6749     		ldr	r1, .L319+12
+ 1743 0ade FFF7FEFF 		bl	__aeabi_fcmple
+ 1744              	.LVL315:
+ 1745 0ae2 0028     		cmp	r0, #0
+ 1746 0ae4 01D0     		beq	.LCB1500
+ 1747 0ae6 FFF7CAFB 		bl	.L49	@far jump
+ 1748              	.LCB1500:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1749              		.loc 1 41 0
+ 1750 0aea 0021     		mov	r1, #0
+ 1751 0aec FFF7C8FB 		bl	.L43	@ far jump
+ 1752              	.L284:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1753              		.loc 1 43 0 is_stmt 1
+ 1754 0af0 0120     		mov	r0, #1
+ 1755 0af2 8226     		mov	r6, #130
+ 1756 0af4 FFF7FEFF 		bl	getSpeed
+ 1757              	.LVL316:
+ 1758 0af8 F105     		lsl	r1, r6, #23
+ 1759 0afa FFF7FEFF 		bl	__aeabi_fmul
+ 1760              	.LVL317:
+ 1761 0afe 5E49     		ldr	r1, .L319+8
+ 1762 0b00 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1763              	.LVL318:
+ 1764 0b04 0028     		cmp	r0, #0
+ 1765 0b06 00D1     		bne	.LCB1517
+ 1766 0b08 40E4     		b	.L90	@long jump
+ 1767              	.LCB1517:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1768              		.loc 1 43 0 is_stmt 0
+ 1769 0b0a 0120     		mov	r0, #1
+ 1770 0b0c FFF7FEFF 		bl	getSpeed
+ 1771              	.LVL319:
+ 1772 0b10 8222     		mov	r2, #130
+ 1773 0b12 D105     		lsl	r1, r2, #23
+ 1774 0b14 FFF7FEFF 		bl	__aeabi_fmul
+ 1775              	.LVL320:
+ 1776 0b18 5849     		ldr	r1, .L319+12
+ 1777 0b1a FFF7FEFF 		bl	__aeabi_fcmple
+ 1778              	.LVL321:
+ 1779 0b1e 0028     		cmp	r0, #0
+ 1780 0b20 00D0     		beq	.LCB1529
+ 1781 0b22 BCE4     		b	.L81	@long jump
+ 1782              	.LCB1529:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1783              		.loc 1 43 0
+ 1784 0b24 0021     		mov	r1, #0
+ 1785 0b26 BBE4     		b	.L75
+ 1786              	.L290:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1787              		.loc 1 51 0 is_stmt 1
+ 1788 0b28 0120     		mov	r0, #1
+ 1789 0b2a FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1790              	.LVL322:
+ 1791 0b2e 5549     		ldr	r1, .L319+20
+ 1792 0b30 FFF7FEFF 		bl	__aeabi_fmul
+ 1793              	.LVL323:
+ 1794 0b34 5049     		ldr	r1, .L319+8
+ 1795 0b36 FFF7FEFF 		bl	__aeabi_fcmpge
+ 1796              	.LVL324:
+ 1797 0b3a 0028     		cmp	r0, #0
+ 1798 0b3c 00D1     		bne	.LCB1545
+ 1799 0b3e 3BE6     		b	.L160	@long jump
+ 1800              	.LCB1545:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1801              		.loc 1 51 0 is_stmt 0
+ 1802 0b40 0120     		mov	r0, #1
+ 1803 0b42 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1804              	.LVL325:
+ 1805 0b46 4F49     		ldr	r1, .L319+20
+ 1806 0b48 FFF7FEFF 		bl	__aeabi_fmul
+ 1807              	.LVL326:
+ 1808 0b4c 4B49     		ldr	r1, .L319+12
+ 1809 0b4e FFF7FEFF 		bl	__aeabi_fcmple
+ 1810              	.LVL327:
+ 1811 0b52 0028     		cmp	r0, #0
+ 1812 0b54 00D0     		beq	.LCB1556
+ 1813 0b56 82E6     		b	.L151	@long jump
+ 1814              	.LCB1556:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1815              		.loc 1 51 0
+ 1816 0b58 0021     		mov	r1, #0
+ 1817 0b5a 81E6     		b	.L145
+ 1818              	.L288:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1819              		.loc 1 49 0 is_stmt 1
+ 1820 0b5c 0020     		mov	r0, #0
+ 1821 0b5e FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1822              	.LVL328:
+ 1823 0b62 4849     		ldr	r1, .L319+20
+ 1824 0b64 FFF7FEFF 		bl	__aeabi_fmul
+ 1825              	.LVL329:
+ 1826 0b68 4349     		ldr	r1, .L319+8
+ 1827 0b6a FFF7FEFF 		bl	__aeabi_fcmpge
+ 1828              	.LVL330:
+ 1829 0b6e 0028     		cmp	r0, #0
+ 1830 0b70 00D1     		bne	.LCB1572
+ 1831 0b72 45E5     		b	.L128	@long jump
+ 1832              	.LCB1572:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1833              		.loc 1 49 0 is_stmt 0
+ 1834 0b74 0020     		mov	r0, #0
+ 1835 0b76 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1836              	.LVL331:
+ 1837 0b7a 4249     		ldr	r1, .L319+20
+ 1838 0b7c FFF7FEFF 		bl	__aeabi_fmul
+ 1839              	.LVL332:
+ 1840 0b80 3E49     		ldr	r1, .L319+12
+ 1841 0b82 FFF7FEFF 		bl	__aeabi_fcmple
+ 1842              	.LVL333:
+ 1843 0b86 0028     		cmp	r0, #0
+ 1844 0b88 00D0     		beq	.LCB1583
+ 1845 0b8a A0E5     		b	.L119	@long jump
+ 1846              	.LCB1583:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1847              		.loc 1 49 0
+ 1848 0b8c 0021     		mov	r1, #0
+ 1849 0b8e 9FE5     		b	.L113
+ 1850              	.L54:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1851              		.loc 1 41 0 is_stmt 1
+ 1852 0b90 0020     		mov	r0, #0
+ 1853 0b92 8227     		mov	r7, #130
+ 1854 0b94 FFF7FEFF 		bl	getSpeed
+ 1855              	.LVL334:
+ 1856 0b98 F905     		lsl	r1, r7, #23
+ 1857 0b9a FFF7FEFF 		bl	__aeabi_fmul
+ 1858              	.LVL335:
+ 1859 0b9e FFF7FEFF 		bl	__aeabi_f2iz
+ 1860              	.LVL336:
+ 1861 0ba2 C1B2     		uxtb	r1, r0
+ 1862 0ba4 FFF76CFB 		bl	.L43	@ far jump
+ 1863              	.L156:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1864              		.loc 1 51 0
+ 1865 0ba8 0120     		mov	r0, #1
+ 1866 0baa FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1867              	.LVL337:
+ 1868 0bae 3549     		ldr	r1, .L319+20
+ 1869 0bb0 FFF7FEFF 		bl	__aeabi_fmul
+ 1870              	.LVL338:
+ 1871 0bb4 FFF7FEFF 		bl	__aeabi_f2iz
+ 1872              	.LVL339:
+ 1873 0bb8 C1B2     		uxtb	r1, r0
+ 1874 0bba 51E6     		b	.L145
+ 1875              	.L124:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1876              		.loc 1 49 0
+ 1877 0bbc 0020     		mov	r0, #0
+ 1878 0bbe FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1879              	.LVL340:
+ 1880 0bc2 3049     		ldr	r1, .L319+20
+ 1881 0bc4 FFF7FEFF 		bl	__aeabi_fmul
+ 1882              	.LVL341:
+ 1883 0bc8 FFF7FEFF 		bl	__aeabi_f2iz
+ 1884              	.LVL342:
+ 1885 0bcc C1B2     		uxtb	r1, r0
+ 1886 0bce 7FE5     		b	.L113
+ 1887              	.L86:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1888              		.loc 1 43 0
+ 1889 0bd0 0120     		mov	r0, #1
+ 1890 0bd2 FFF7FEFF 		bl	getSpeed
+ 1891              	.LVL343:
+ 1892 0bd6 8223     		mov	r3, #130
+ 1893 0bd8 D905     		lsl	r1, r3, #23
+ 1894 0bda FFF7FEFF 		bl	__aeabi_fmul
+ 1895              	.LVL344:
+ 1896 0bde FFF7FEFF 		bl	__aeabi_f2iz
+ 1897              	.LVL345:
+ 1898 0be2 C1B2     		uxtb	r1, r0
+ 1899 0be4 5CE4     		b	.L75
+ 1900              	.L195:
+  55:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, (signed char)(carState.edge==NO_EDGE)?(50):((carState.edge==BOTH_EDGE
+ 1901              		.loc 1 55 0
+ 1902 0be6 0021     		mov	r1, #0
+ 1903 0be8 61E6     		b	.L165
+ 1904              	.L312:
+ 1905 0bea 6421     		mov	r1, #100
+ 1906 0bec 5FE6     		b	.L165
+ 1907              	.L310:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1908              		.loc 1 51 0
+ 1909 0bee 0120     		mov	r0, #1
+ 1910 0bf0 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1911              	.LVL346:
+ 1912 0bf4 2349     		ldr	r1, .L319+20
+ 1913 0bf6 FFF7FEFF 		bl	__aeabi_fmul
+ 1914              	.LVL347:
+ 1915 0bfa 2049     		ldr	r1, .L319+12
+ 1916 0bfc FFF7FEFF 		bl	__aeabi_fcmple
+ 1917              	.LVL348:
+ 1918 0c00 7E21     		mov	r1, #126
+ 1919 0c02 0028     		cmp	r0, #0
+ 1920 0c04 00D0     		beq	.LCB1668
+ 1921 0c06 2BE6     		b	.L145	@long jump
+ 1922              	.LCB1668:
+  51:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_1))));
+ 1923              		.loc 1 51 0 is_stmt 0
+ 1924 0c08 0021     		mov	r1, #0
+ 1925 0c0a 29E6     		b	.L145
+ 1926              	.L304:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1927              		.loc 1 41 0 is_stmt 1
+ 1928 0c0c 0020     		mov	r0, #0
+ 1929 0c0e FFF7FEFF 		bl	getSpeed
+ 1930              	.LVL349:
+ 1931 0c12 8223     		mov	r3, #130
+ 1932 0c14 D905     		lsl	r1, r3, #23
+ 1933 0c16 FFF7FEFF 		bl	__aeabi_fmul
+ 1934              	.LVL350:
+ 1935 0c1a 1849     		ldr	r1, .L319+12
+ 1936 0c1c FFF7FEFF 		bl	__aeabi_fcmple
+ 1937              	.LVL351:
+ 1938 0c20 7E21     		mov	r1, #126
+ 1939 0c22 0028     		cmp	r0, #0
+ 1940 0c24 01D0     		beq	.LCB1686
+ 1941 0c26 FFF72BFB 		bl	.L43	@far jump
+ 1942              	.LCB1686:
+  41:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_0))));
+ 1943              		.loc 1 41 0 is_stmt 0
+ 1944 0c2a 0021     		mov	r1, #0
+ 1945 0c2c FFF728FB 		bl	.L43	@ far jump
+ 1946              	.L306:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1947              		.loc 1 43 0 is_stmt 1
+ 1948 0c30 0120     		mov	r0, #1
+ 1949 0c32 8226     		mov	r6, #130
+ 1950 0c34 FFF7FEFF 		bl	getSpeed
+ 1951              	.LVL352:
+ 1952 0c38 F105     		lsl	r1, r6, #23
+ 1953 0c3a FFF7FEFF 		bl	__aeabi_fmul
+ 1954              	.LVL353:
+ 1955 0c3e 0F49     		ldr	r1, .L319+12
+ 1956 0c40 FFF7FEFF 		bl	__aeabi_fcmple
+ 1957              	.LVL354:
+ 1958 0c44 7E21     		mov	r1, #126
+ 1959 0c46 0028     		cmp	r0, #0
+ 1960 0c48 00D0     		beq	.LCB1704
+ 1961 0c4a 29E4     		b	.L75	@long jump
+ 1962              	.LCB1704:
+  43:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(8*getSpeed(CHANNEL_1))));
+ 1963              		.loc 1 43 0 is_stmt 0
+ 1964 0c4c 0021     		mov	r1, #0
+ 1965 0c4e 27E4     		b	.L75
+ 1966              	.L308:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1967              		.loc 1 49 0 is_stmt 1
+ 1968 0c50 0020     		mov	r0, #0
+ 1969 0c52 FFF7FEFF 		bl	TFC_ReadMotorCurrent
+ 1970              	.LVL355:
+ 1971 0c56 0B49     		ldr	r1, .L319+20
+ 1972 0c58 FFF7FEFF 		bl	__aeabi_fmul
+ 1973              	.LVL356:
+ 1974 0c5c 0749     		ldr	r1, .L319+12
+ 1975 0c5e FFF7FEFF 		bl	__aeabi_fcmple
+ 1976              	.LVL357:
+ 1977 0c62 7E21     		mov	r1, #126
+ 1978 0c64 0028     		cmp	r0, #0
+ 1979 0c66 00D0     		beq	.LCB1721
+ 1980 0c68 32E5     		b	.L113	@long jump
+ 1981              	.LCB1721:
+  49:../Sources/Telemetry.c **** 	uart_putchar(UART2_BASE_PTR, FLOAT_TO_CHAR(LIMIT_255(60*TFC_ReadMotorCurrent(CHANNEL_0))));
+ 1982              		.loc 1 49 0 is_stmt 0
+ 1983 0c6a 0021     		mov	r1, #0
+ 1984 0c6c 30E5     		b	.L113
+ 1985              	.L320:
+ 1986 0c6e C046     		.align	3
+ 1987              	.L319:
+ 1988 0c70 00000000 		.word	0
+ 1989 0c74 0000E03F 		.word	1071644672
+ 1990 0c78 0000FF42 		.word	1124007936
+ 1991 0c7c 00800043 		.word	1124106240
+ 1992 0c80 0000FC42 		.word	1123811328
+ 1993 0c84 00007042 		.word	1114636288
+ 1994              		.cfi_endproc
+ 1995              	.LFE1:
+ 1997              		.global	__aeabi_ui2f
+ 1998              		.section	.text.BluetoothSetSpeed,"ax",%progbits
+ 1999              		.align	2
+ 2000              		.global	BluetoothSetSpeed
+ 2001              		.code	16
+ 2002              		.thumb_func
+ 2004              	BluetoothSetSpeed:
+ 2005              	.LFB3:
+  63:../Sources/Telemetry.c **** 
+  64:../Sources/Telemetry.c **** void telemetryReadData(){
+  65:../Sources/Telemetry.c **** 	
+  66:../Sources/Telemetry.c **** 	if(count==0){
+  67:../Sources/Telemetry.c **** 		//if something is on the UART, get it and put it in received_byte
+  68:../Sources/Telemetry.c **** 		if(uart_getchar_present(UART2_BASE_PTR)){
+  69:../Sources/Telemetry.c **** 			received_byte1 = uart_getchar(UART2_BASE_PTR);
+  70:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<8);
+  71:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<9);
+  72:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<10);
+  73:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<11);
+  74:../Sources/Telemetry.c **** 			count++;
+  75:../Sources/Telemetry.c **** 		}
+  76:../Sources/Telemetry.c **** 	}
+  77:../Sources/Telemetry.c **** 	else if(count>0){
+  78:../Sources/Telemetry.c **** 		if(uart_getchar_present(UART2_BASE_PTR)){
+  79:../Sources/Telemetry.c **** 			received_byte2 = uart_getchar(UART2_BASE_PTR);
+  80:../Sources/Telemetry.c **** 			count=0;
+  81:../Sources/Telemetry.c **** 		}
+  82:../Sources/Telemetry.c **** 	}
+  83:../Sources/Telemetry.c **** 	
+  84:../Sources/Telemetry.c **** 	if(received_byte1!=0 && received_byte2!=0){
+  85:../Sources/Telemetry.c **** 		switch(received_byte1){
+  86:../Sources/Telemetry.c **** 		case 255: //SPEED
+  87:../Sources/Telemetry.c **** 			BluetoothSetSpeed(received_byte2);
+  88:../Sources/Telemetry.c **** 			break;
+  89:../Sources/Telemetry.c **** 		case 251: //LED
+  90:../Sources/Telemetry.c **** 			BluetoothSetLED(received_byte2);
+  91:../Sources/Telemetry.c **** 			break;
+  92:../Sources/Telemetry.c **** 		}
+  93:../Sources/Telemetry.c **** 		//received_byte1=0;
+  94:../Sources/Telemetry.c **** 		//received_byte2=0;
+  95:../Sources/Telemetry.c **** 	}
+  96:../Sources/Telemetry.c **** 	
+  97:../Sources/Telemetry.c **** }
+  98:../Sources/Telemetry.c **** 
+  99:../Sources/Telemetry.c **** void BluetoothSetSpeed(uint8_t i){
+ 2006              		.loc 1 99 0 is_stmt 1
+ 2007              		.cfi_startproc
+ 2008              	.LVL358:
+ 2009 0000 38B5     		push	{r3, r4, r5, lr}
+ 2010              	.LCFI2:
+ 2011              		.cfi_def_cfa_offset 16
+ 2012              		.cfi_offset 3, -16
+ 2013              		.cfi_offset 4, -12
+ 2014              		.cfi_offset 5, -8
+ 2015              		.cfi_offset 14, -4
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2016              		.loc 1 100 0
+ 2017 0002 FFF7FEFF 		bl	__aeabi_ui2f
+ 2018              	.LVL359:
+ 101:../Sources/Telemetry.c **** 		if(maxSpeedPercent>100){
+ 2019              		.loc 1 101 0
+ 2020 0006 064C     		ldr	r4, .L325
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2021              		.loc 1 100 0
+ 2022 0008 051C     		add	r5, r0, #0
+ 2023              	.LVL360:
+ 2024              		.loc 1 101 0
+ 2025 000a 211C     		add	r1, r4, #0
+ 2026 000c FFF7FEFF 		bl	__aeabi_fcmpgt
+ 2027              	.LVL361:
+ 102:../Sources/Telemetry.c **** 			maxSpeedPercent=100;
+ 2028              		.loc 1 102 0
+ 2029 0010 044B     		ldr	r3, .L325+4
+ 101:../Sources/Telemetry.c **** 		if(maxSpeedPercent>100){
+ 2030              		.loc 1 101 0
+ 2031 0012 0028     		cmp	r0, #0
+ 2032 0014 01D0     		beq	.L324
+ 2033              		.loc 1 102 0
+ 2034 0016 1C60     		str	r4, [r3]
+ 2035              	.LVL362:
+ 2036              	.L321:
+ 103:../Sources/Telemetry.c **** 		}
+ 104:../Sources/Telemetry.c **** }
+ 2037              		.loc 1 104 0
+ 2038              		@ sp needed for prologue
+ 2039              	.LVL363:
+ 2040 0018 38BD     		pop	{r3, r4, r5, pc}
+ 2041              	.L324:
+ 2042              	.LVL364:
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2043              		.loc 1 100 0
+ 2044 001a 1D60     		str	r5, [r3]
+ 2045 001c FCE7     		b	.L321
+ 2046              	.L326:
+ 2047 001e C046     		.align	2
+ 2048              	.L325:
+ 2049 0020 0000C842 		.word	1120403456
+ 2050 0024 00000000 		.word	maxSpeedPercent
+ 2051              		.cfi_endproc
+ 2052              	.LFE3:
+ 2054              		.section	.text.BluetoothSetLED,"ax",%progbits
+ 2055              		.align	2
+ 2056              		.global	BluetoothSetLED
+ 2057              		.code	16
+ 2058              		.thumb_func
+ 2060              	BluetoothSetLED:
+ 2061              	.LFB4:
+ 105:../Sources/Telemetry.c **** 
+ 106:../Sources/Telemetry.c **** void BluetoothSetLED(uint8_t i){	
+ 2062              		.loc 1 106 0
+ 2063              		.cfi_startproc
+ 2064              	.LVL365:
+ 2065 0000 00B5     		push	{lr}
+ 2066              	.LCFI3:
+ 2067              		.cfi_def_cfa_offset 4
+ 2068              		.cfi_offset 14, -4
+ 107:../Sources/Telemetry.c **** 		switch(i){
+ 2069              		.loc 1 107 0
+ 2070 0002 0228     		cmp	r0, #2
+ 2071 0004 43D0     		beq	.L330
+ 2072 0006 17D8     		bhi	.L333
+ 2073 0008 0128     		cmp	r0, #1
+ 2074 000a 4CD0     		beq	.L338
+ 2075              	.L328:
+ 108:../Sources/Telemetry.c **** 			case 1: 
+ 109:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<8);
+ 110:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 111:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<10);
+ 112:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<11);
+ 113:../Sources/Telemetry.c **** 				break;
+ 114:../Sources/Telemetry.c **** 			case 2:
+ 115:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 116:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<9);
+ 117:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<10);
+ 118:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<11);
+ 119:../Sources/Telemetry.c **** 				break;
+ 120:../Sources/Telemetry.c **** 			case 3:
+ 121:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 122:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 123:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<10);
+ 124:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<11);			
+ 125:../Sources/Telemetry.c **** 				break;
+ 126:../Sources/Telemetry.c **** 			case 4: 
+ 127:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 128:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 129:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<10);
+ 130:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<11);
+ 131:../Sources/Telemetry.c **** 				break;
+ 132:../Sources/Telemetry.c **** 			default:
+ 133:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 2076              		.loc 1 133 0
+ 2077 000c 294B     		ldr	r3, .L339
+ 2078 000e 8022     		mov	r2, #128
+ 2079 0010 9968     		ldr	r1, [r3, #8]
+ 2080 0012 5000     		lsl	r0, r2, #1
+ 2081              	.LVL366:
+ 2082 0014 0843     		orr	r0, r1
+ 2083 0016 9860     		str	r0, [r3, #8]
+ 2084              	.L336:
+ 134:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 2085              		.loc 1 134 0
+ 2086 0018 9968     		ldr	r1, [r3, #8]
+ 2087 001a 8022     		mov	r2, #128
+ 2088 001c 9000     		lsl	r0, r2, #2
+ 2089 001e 0843     		orr	r0, r1
+ 2090 0020 9860     		str	r0, [r3, #8]
+ 2091              	.L337:
+ 135:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<10);
+ 2092              		.loc 1 135 0
+ 2093 0022 9968     		ldr	r1, [r3, #8]
+ 2094 0024 8022     		mov	r2, #128
+ 2095 0026 D000     		lsl	r0, r2, #3
+ 2096 0028 0843     		orr	r0, r1
+ 2097 002a 9860     		str	r0, [r3, #8]
+ 2098              	.L335:
+ 136:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<11);
+ 2099              		.loc 1 136 0
+ 2100 002c 9968     		ldr	r1, [r3, #8]
+ 2101 002e 8022     		mov	r2, #128
+ 2102 0030 1001     		lsl	r0, r2, #4
+ 2103 0032 0843     		orr	r0, r1
+ 2104 0034 9860     		str	r0, [r3, #8]
+ 2105              	.L327:
+ 137:../Sources/Telemetry.c **** 			}
+ 138:../Sources/Telemetry.c **** }
+ 2106              		.loc 1 138 0
+ 2107              		@ sp needed for prologue
+ 2108 0036 00BD     		pop	{pc}
+ 2109              	.LVL367:
+ 2110              	.L333:
+ 107:../Sources/Telemetry.c **** 		switch(i){
+ 2111              		.loc 1 107 0
+ 2112 0038 0328     		cmp	r0, #3
+ 2113 003a 17D0     		beq	.L331
+ 2114 003c 0428     		cmp	r0, #4
+ 2115 003e E5D1     		bne	.L328
+ 127:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 2116              		.loc 1 127 0
+ 2117 0040 1C4B     		ldr	r3, .L339
+ 2118 0042 8022     		mov	r2, #128
+ 2119 0044 9968     		ldr	r1, [r3, #8]
+ 2120 0046 5000     		lsl	r0, r2, #1
+ 2121              	.LVL368:
+ 2122 0048 0843     		orr	r0, r1
+ 2123 004a 9860     		str	r0, [r3, #8]
+ 128:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 2124              		.loc 1 128 0
+ 2125 004c 9968     		ldr	r1, [r3, #8]
+ 2126 004e 8022     		mov	r2, #128
+ 2127 0050 9000     		lsl	r0, r2, #2
+ 2128 0052 0843     		orr	r0, r1
+ 2129 0054 9860     		str	r0, [r3, #8]
+ 129:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<10);
+ 2130              		.loc 1 129 0
+ 2131 0056 9968     		ldr	r1, [r3, #8]
+ 2132 0058 8022     		mov	r2, #128
+ 2133 005a D000     		lsl	r0, r2, #3
+ 2134 005c 0843     		orr	r0, r1
+ 2135 005e 9860     		str	r0, [r3, #8]
+ 130:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<11);
+ 2136              		.loc 1 130 0
+ 2137 0060 5968     		ldr	r1, [r3, #4]
+ 2138 0062 8022     		mov	r2, #128
+ 2139 0064 1001     		lsl	r0, r2, #4
+ 2140 0066 0843     		orr	r0, r1
+ 2141 0068 5860     		str	r0, [r3, #4]
+ 131:../Sources/Telemetry.c **** 				break;
+ 2142              		.loc 1 131 0
+ 2143 006a E4E7     		b	.L327
+ 2144              	.LVL369:
+ 2145              	.L331:
+ 121:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 2146              		.loc 1 121 0
+ 2147 006c 114B     		ldr	r3, .L339
+ 2148 006e 8022     		mov	r2, #128
+ 2149 0070 9968     		ldr	r1, [r3, #8]
+ 2150 0072 5000     		lsl	r0, r2, #1
+ 2151              	.LVL370:
+ 2152 0074 0843     		orr	r0, r1
+ 2153 0076 9860     		str	r0, [r3, #8]
+ 122:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<9);
+ 2154              		.loc 1 122 0
+ 2155 0078 9968     		ldr	r1, [r3, #8]
+ 2156 007a 8022     		mov	r2, #128
+ 2157 007c 9000     		lsl	r0, r2, #2
+ 2158 007e 0843     		orr	r0, r1
+ 2159 0080 9860     		str	r0, [r3, #8]
+ 123:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<10);
+ 2160              		.loc 1 123 0
+ 2161 0082 5968     		ldr	r1, [r3, #4]
+ 2162 0084 8022     		mov	r2, #128
+ 2163 0086 D000     		lsl	r0, r2, #3
+ 2164 0088 0843     		orr	r0, r1
+ 2165 008a 5860     		str	r0, [r3, #4]
+ 2166 008c CEE7     		b	.L335
+ 2167              	.LVL371:
+ 2168              	.L330:
+ 115:../Sources/Telemetry.c **** 				GPIOB_PCOR |= (1<<8);
+ 2169              		.loc 1 115 0
+ 2170 008e 094B     		ldr	r3, .L339
+ 2171 0090 8022     		mov	r2, #128
+ 2172 0092 9968     		ldr	r1, [r3, #8]
+ 2173 0094 5000     		lsl	r0, r2, #1
+ 2174              	.LVL372:
+ 2175 0096 0843     		orr	r0, r1
+ 2176 0098 9860     		str	r0, [r3, #8]
+ 116:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<9);
+ 2177              		.loc 1 116 0
+ 2178 009a 5968     		ldr	r1, [r3, #4]
+ 2179 009c 8022     		mov	r2, #128
+ 2180 009e 9000     		lsl	r0, r2, #2
+ 2181 00a0 0843     		orr	r0, r1
+ 2182 00a2 5860     		str	r0, [r3, #4]
+ 2183 00a4 BDE7     		b	.L337
+ 2184              	.LVL373:
+ 2185              	.L338:
+ 109:../Sources/Telemetry.c **** 				GPIOB_PSOR |= (1<<8);
+ 2186              		.loc 1 109 0
+ 2187 00a6 034B     		ldr	r3, .L339
+ 2188 00a8 8022     		mov	r2, #128
+ 2189 00aa 5968     		ldr	r1, [r3, #4]
+ 2190 00ac 5000     		lsl	r0, r2, #1
+ 2191              	.LVL374:
+ 2192 00ae 0843     		orr	r0, r1
+ 2193 00b0 5860     		str	r0, [r3, #4]
+ 2194 00b2 B1E7     		b	.L336
+ 2195              	.L340:
+ 2196              		.align	2
+ 2197              	.L339:
+ 2198 00b4 40F00F40 		.word	1074786368
+ 2199              		.cfi_endproc
+ 2200              	.LFE4:
+ 2202              		.section	.text.telemetryReadData,"ax",%progbits
+ 2203              		.align	2
+ 2204              		.global	telemetryReadData
+ 2205              		.code	16
+ 2206              		.thumb_func
+ 2208              	telemetryReadData:
+ 2209              	.LFB2:
+  64:../Sources/Telemetry.c **** void telemetryReadData(){
+ 2210              		.loc 1 64 0
+ 2211              		.cfi_startproc
+ 2212 0000 38B5     		push	{r3, r4, r5, lr}
+ 2213              	.LCFI4:
+ 2214              		.cfi_def_cfa_offset 16
+ 2215              		.cfi_offset 3, -16
+ 2216              		.cfi_offset 4, -12
+ 2217              		.cfi_offset 5, -8
+ 2218              		.cfi_offset 14, -4
+  66:../Sources/Telemetry.c **** 	if(count==0){
+ 2219              		.loc 1 66 0
+ 2220 0002 284C     		ldr	r4, .L359
+  68:../Sources/Telemetry.c **** 		if(uart_getchar_present(UART2_BASE_PTR)){
+ 2221              		.loc 1 68 0
+ 2222 0004 2848     		ldr	r0, .L359+4
+  66:../Sources/Telemetry.c **** 	if(count==0){
+ 2223              		.loc 1 66 0
+ 2224 0006 2378     		ldrb	r3, [r4]
+ 2225 0008 002B     		cmp	r3, #0
+ 2226 000a 10D0     		beq	.L357
+  78:../Sources/Telemetry.c **** 		if(uart_getchar_present(UART2_BASE_PTR)){
+ 2227              		.loc 1 78 0
+ 2228 000c FFF7FEFF 		bl	uart_getchar_present
+ 2229              	.LVL375:
+ 2230 0010 0028     		cmp	r0, #0
+ 2231 0012 3BD1     		bne	.L345
+ 2232              	.L356:
+ 2233 0014 254A     		ldr	r2, .L359+8
+ 2234 0016 1578     		ldrb	r5, [r2]
+ 2235              	.L344:
+  84:../Sources/Telemetry.c **** 	if(received_byte1!=0 && received_byte2!=0){
+ 2236              		.loc 1 84 0
+ 2237 0018 002D     		cmp	r5, #0
+ 2238 001a 07D0     		beq	.L341
+  84:../Sources/Telemetry.c **** 	if(received_byte1!=0 && received_byte2!=0){
+ 2239              		.loc 1 84 0 is_stmt 0
+ 2240 001c 244C     		ldr	r4, .L359+12
+ 2241 001e 2078     		ldrb	r0, [r4]
+ 2242 0020 0028     		cmp	r0, #0
+ 2243 0022 03D0     		beq	.L341
+  85:../Sources/Telemetry.c **** 		switch(received_byte1){
+ 2244              		.loc 1 85 0 is_stmt 1
+ 2245 0024 FB2D     		cmp	r5, #251
+ 2246 0026 39D0     		beq	.L349
+ 2247 0028 FF2D     		cmp	r5, #255
+ 2248 002a 23D0     		beq	.L358
+ 2249              	.L341:
+  97:../Sources/Telemetry.c **** }
+ 2250              		.loc 1 97 0
+ 2251              		@ sp needed for prologue
+ 2252 002c 38BD     		pop	{r3, r4, r5, pc}
+ 2253              	.L357:
+  68:../Sources/Telemetry.c **** 		if(uart_getchar_present(UART2_BASE_PTR)){
+ 2254              		.loc 1 68 0
+ 2255 002e FFF7FEFF 		bl	uart_getchar_present
+ 2256              	.LVL376:
+ 2257 0032 0028     		cmp	r0, #0
+ 2258 0034 EED0     		beq	.L356
+  69:../Sources/Telemetry.c **** 			received_byte1 = uart_getchar(UART2_BASE_PTR);
+ 2259              		.loc 1 69 0
+ 2260 0036 1C48     		ldr	r0, .L359+4
+ 2261 0038 FFF7FEFF 		bl	uart_getchar
+ 2262              	.LVL377:
+ 2263 003c 1B4B     		ldr	r3, .L359+8
+  70:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<8);
+ 2264              		.loc 1 70 0
+ 2265 003e 1D4A     		ldr	r2, .L359+16
+  69:../Sources/Telemetry.c **** 			received_byte1 = uart_getchar(UART2_BASE_PTR);
+ 2266              		.loc 1 69 0
+ 2267 0040 1870     		strb	r0, [r3]
+  70:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<8);
+ 2268              		.loc 1 70 0
+ 2269 0042 8021     		mov	r1, #128
+  69:../Sources/Telemetry.c **** 			received_byte1 = uart_getchar(UART2_BASE_PTR);
+ 2270              		.loc 1 69 0
+ 2271 0044 051C     		mov	r5, r0
+  70:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<8);
+ 2272              		.loc 1 70 0
+ 2273 0046 5068     		ldr	r0, [r2, #4]
+ 2274 0048 4B00     		lsl	r3, r1, #1
+ 2275 004a 0343     		orr	r3, r0
+ 2276 004c 5360     		str	r3, [r2, #4]
+  71:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<9);
+ 2277              		.loc 1 71 0
+ 2278 004e 5068     		ldr	r0, [r2, #4]
+ 2279 0050 8021     		mov	r1, #128
+ 2280 0052 8B00     		lsl	r3, r1, #2
+ 2281 0054 0343     		orr	r3, r0
+ 2282 0056 5360     		str	r3, [r2, #4]
+  72:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<10);
+ 2283              		.loc 1 72 0
+ 2284 0058 5068     		ldr	r0, [r2, #4]
+ 2285 005a 8021     		mov	r1, #128
+ 2286 005c CB00     		lsl	r3, r1, #3
+ 2287 005e 0343     		orr	r3, r0
+ 2288 0060 5360     		str	r3, [r2, #4]
+  73:../Sources/Telemetry.c **** 			GPIOB_PSOR |= (1<<11);
+ 2289              		.loc 1 73 0
+ 2290 0062 5068     		ldr	r0, [r2, #4]
+ 2291 0064 8021     		mov	r1, #128
+ 2292 0066 0B01     		lsl	r3, r1, #4
+ 2293 0068 0343     		orr	r3, r0
+ 2294 006a 5360     		str	r3, [r2, #4]
+  74:../Sources/Telemetry.c **** 			count++;
+ 2295              		.loc 1 74 0
+ 2296 006c 2278     		ldrb	r2, [r4]
+ 2297 006e 0132     		add	r2, r2, #1
+ 2298 0070 2270     		strb	r2, [r4]
+ 2299 0072 D1E7     		b	.L344
+ 2300              	.L358:
+ 2301              	.LVL378:
+ 2302              	.LBB5:
+ 2303              	.LBB6:
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2304              		.loc 1 100 0
+ 2305 0074 FFF7FEFF 		bl	__aeabi_ui2f
+ 2306              	.LVL379:
+ 101:../Sources/Telemetry.c **** 		if(maxSpeedPercent>100){
+ 2307              		.loc 1 101 0
+ 2308 0078 0F4D     		ldr	r5, .L359+20
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2309              		.loc 1 100 0
+ 2310 007a 104C     		ldr	r4, .L359+24
+ 101:../Sources/Telemetry.c **** 		if(maxSpeedPercent>100){
+ 2311              		.loc 1 101 0
+ 2312 007c 291C     		add	r1, r5, #0
+ 2313              	.LVL380:
+ 100:../Sources/Telemetry.c **** 	maxSpeedPercent=i;
+ 2314              		.loc 1 100 0
+ 2315 007e 2060     		str	r0, [r4]
+ 101:../Sources/Telemetry.c **** 		if(maxSpeedPercent>100){
+ 2316              		.loc 1 101 0
+ 2317 0080 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 2318              	.LVL381:
+ 2319 0084 0028     		cmp	r0, #0
+ 2320 0086 D1D0     		beq	.L341
+ 102:../Sources/Telemetry.c **** 			maxSpeedPercent=100;
+ 2321              		.loc 1 102 0
+ 2322 0088 2560     		str	r5, [r4]
+ 2323 008a CFE7     		b	.L341
+ 2324              	.L345:
+ 2325              	.LBE6:
+ 2326              	.LBE5:
+  79:../Sources/Telemetry.c **** 			received_byte2 = uart_getchar(UART2_BASE_PTR);
+ 2327              		.loc 1 79 0
+ 2328 008c 0648     		ldr	r0, .L359+4
+ 2329 008e FFF7FEFF 		bl	uart_getchar
+ 2330              	.LVL382:
+ 2331 0092 0749     		ldr	r1, .L359+12
+ 2332 0094 0870     		strb	r0, [r1]
+  80:../Sources/Telemetry.c **** 			count=0;
+ 2333              		.loc 1 80 0
+ 2334 0096 0020     		mov	r0, #0
+ 2335 0098 2070     		strb	r0, [r4]
+ 2336 009a BBE7     		b	.L356
+ 2337              	.L349:
+  90:../Sources/Telemetry.c **** 			BluetoothSetLED(received_byte2);
+ 2338              		.loc 1 90 0
+ 2339 009c FFF7FEFF 		bl	BluetoothSetLED
+ 2340              	.LVL383:
+  91:../Sources/Telemetry.c **** 			break;
+ 2341              		.loc 1 91 0
+ 2342 00a0 C4E7     		b	.L341
+ 2343              	.L360:
+ 2344 00a2 C046     		.align	2
+ 2345              	.L359:
+ 2346 00a4 00000000 		.word	.LANCHOR0
+ 2347 00a8 00C00640 		.word	1074184192
+ 2348 00ac 00000000 		.word	.LANCHOR1
+ 2349 00b0 00000000 		.word	.LANCHOR2
+ 2350 00b4 40F00F40 		.word	1074786368
+ 2351 00b8 0000C842 		.word	1120403456
+ 2352 00bc 00000000 		.word	maxSpeedPercent
+ 2353              		.cfi_endproc
+ 2354              	.LFE2:
+ 2356              		.global	count
+ 2357              		.global	received_byte2
+ 2358              		.global	received_byte1
+ 2359              		.section	.bss.count,"aw",%nobits
+ 2360              		.set	.LANCHOR0,. + 0
+ 2363              	count:
+ 2364 0000 00       		.space	1
+ 2365              		.section	.bss.received_byte1,"aw",%nobits
+ 2366              		.set	.LANCHOR1,. + 0
+ 2369              	received_byte1:
+ 2370 0000 00       		.space	1
+ 2371              		.section	.bss.received_byte2,"aw",%nobits
+ 2372              		.set	.LANCHOR2,. + 0
+ 2375              	received_byte2:
+ 2376 0000 00       		.space	1
+ 2377              		.text
+ 2378              	.Letext0:
+ 2379              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 2380              		.file 3 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/MKL25Z4.h"
+ 2381              		.file 4 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/typedefs_str
+ 2382              		.file 5 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/TFC\\TFC_Lin
+DEFINED SYMBOLS
+                            *ABS*:00000000 Telemetry.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:19     .text.cameraFeed:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:24     .text.cameraFeed:00000000 cameraFeed
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:91     .text.cameraFeed:00000044 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:108    .text.telemetrySendData:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:113    .text.telemetrySendData:00000000 telemetrySendData
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:662    .text.telemetrySendData:00000390 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:671    .text.telemetrySendData:000003ac $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1029   .text.telemetrySendData:00000608 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1040   .text.telemetrySendData:0000062c $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1538   .text.telemetrySendData:00000968 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1553   .text.telemetrySendData:0000099c $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1988   .text.telemetrySendData:00000c70 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:1999   .text.BluetoothSetSpeed:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2004   .text.BluetoothSetSpeed:00000000 BluetoothSetSpeed
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2049   .text.BluetoothSetSpeed:00000020 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2055   .text.BluetoothSetLED:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2060   .text.BluetoothSetLED:00000000 BluetoothSetLED
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2198   .text.BluetoothSetLED:000000b4 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2203   .text.telemetryReadData:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2208   .text.telemetryReadData:00000000 telemetryReadData
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2346   .text.telemetryReadData:000000a4 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2363   .bss.count:00000000 count
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2375   .bss.received_byte2:00000000 received_byte2
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2369   .bss.received_byte1:00000000 received_byte1
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2364   .bss.count:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2370   .bss.received_byte1:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccak18VZ.s:2376   .bss.received_byte2:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_uidiv
+uart_putchar
+LineScanImage0Buffer
+__aeabi_fmul
+__aeabi_fcmple
+__aeabi_fcmpge
+__aeabi_f2iz
+__aeabi_fcmpgt
+__aeabi_fcmpeq
+__aeabi_f2d
+__aeabi_dadd
+__aeabi_d2iz
+__aeabi_dsub
+__aeabi_i2f
+getSpeed
+carState
+targetSpeed
+TFC_GetMotorPWM
+TFC_ReadMotorCurrent
+servoValue
+newExposure
+loop_time
+__aeabi_ui2f
+maxSpeedPercent
+uart_getchar_present
+uart_getchar

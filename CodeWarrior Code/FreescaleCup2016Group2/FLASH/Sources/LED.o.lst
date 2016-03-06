@@ -1,0 +1,363 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"LED.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	__aeabi_fcmpgt
+  18              		.section	.text.LEDfeedback,"ax",%progbits
+  19              		.align	2
+  20              		.global	LEDfeedback
+  21              		.code	16
+  22              		.thumb_func
+  24              	LEDfeedback:
+  25              	.LFB0:
+  26              		.file 1 "../Sources/LED.c"
+   1:../Sources/LED.c **** /*
+   2:../Sources/LED.c ****  * LED.c
+   3:../Sources/LED.c ****  *
+   4:../Sources/LED.c ****  *  Created on: Jan 26, 2016
+   5:../Sources/LED.c ****  *      Author: bentr_000
+   6:../Sources/LED.c ****  */
+   7:../Sources/LED.c **** 
+   8:../Sources/LED.c **** #include "LED.h"
+   9:../Sources/LED.c **** 
+  10:../Sources/LED.c **** extern carState_s carState;
+  11:../Sources/LED.c **** extern float batteryLevel;
+  12:../Sources/LED.c **** 
+  13:../Sources/LED.c **** void LEDfeedback(carState_s* carState)
+  14:../Sources/LED.c **** {
+  27              		.loc 1 14 0
+  28              		.cfi_startproc
+  29              	.LVL0:
+  15:../Sources/LED.c **** 	if(batteryLevel > LOW_BATTERY)
+  30              		.loc 1 15 0
+  31 0000 4A4B     		ldr	r3, .L26
+  14:../Sources/LED.c **** {
+  32              		.loc 1 14 0
+  33 0002 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38              		.loc 1 15 0
+  39 0004 4A49     		ldr	r1, .L26+4
+  14:../Sources/LED.c **** {
+  40              		.loc 1 14 0
+  41 0006 041C     		mov	r4, r0
+  42              		.loc 1 15 0
+  43 0008 1868     		ldr	r0, [r3]
+  44              	.LVL1:
+  45 000a FFF7FEFF 		bl	__aeabi_fcmpgt
+  46              	.LVL2:
+  47 000e 0028     		cmp	r0, #0
+  48 0010 23D0     		beq	.L12
+  16:../Sources/LED.c **** 	{
+  17:../Sources/LED.c **** 		if(carState->lineDetectionState == STOPLINE_DETECTED)	// Also set in lineFollowingMode()
+  49              		.loc 1 17 0
+  50 0012 A078     		ldrb	r0, [r4, #2]
+  51 0014 0228     		cmp	r0, #2
+  52 0016 36D0     		beq	.L20
+  18:../Sources/LED.c **** 		{
+  19:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+  20:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+  21:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<10);
+  22:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<11);
+  23:../Sources/LED.c **** 		}
+  24:../Sources/LED.c **** 		#ifdef CROSS_DETECTION_ENABLE
+  25:../Sources/LED.c **** 		else if(carState->crossSection == YES)
+  26:../Sources/LED.c **** 		{
+  27:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<8);
+  28:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+  29:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+  30:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<11);
+  31:../Sources/LED.c **** 		}
+  32:../Sources/LED.c **** 		#endif
+  33:../Sources/LED.c **** 		else if(carState->sMode == S_MODE_ON)
+  53              		.loc 1 33 0
+  54 0018 637A     		ldrb	r3, [r4, #9]
+  55 001a 012B     		cmp	r3, #1
+  56 001c 3FD0     		beq	.L21
+  34:../Sources/LED.c **** 		{
+  35:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+  36:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<9);
+  37:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<10);
+  38:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+  39:../Sources/LED.c **** 		}
+  40:../Sources/LED.c **** 		else if(carState->detectedType == DOUBLE_EDGE)
+  57              		.loc 1 40 0
+  58 001e 2179     		ldrb	r1, [r4, #4]
+  59 0020 0229     		cmp	r1, #2
+  60 0022 52D0     		beq	.L22
+  41:../Sources/LED.c **** 		{
+  42:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<8);
+  43:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<9);
+  44:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+  45:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+  46:../Sources/LED.c **** 		}
+  47:../Sources/LED.c **** 		else if (carState->edge == LEFT_EDGE)
+  61              		.loc 1 47 0
+  62 0024 6479     		ldrb	r4, [r4, #5]
+  63              	.LVL3:
+  64 0026 012C     		cmp	r4, #1
+  65 0028 60D0     		beq	.L23
+  48:../Sources/LED.c **** 		{	
+  49:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<8);
+  50:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+  51:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+  52:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+  53:../Sources/LED.c **** 		}
+  54:../Sources/LED.c **** 		else if (carState->edge == RIGHT_EDGE)
+  66              		.loc 1 54 0
+  67 002a 022C     		cmp	r4, #2
+  68 002c 6AD0     		beq	.L24
+  55:../Sources/LED.c **** 		{	
+  56:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+  57:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<9);
+  58:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+  59:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+  60:../Sources/LED.c **** 		}
+  61:../Sources/LED.c **** 		else if (carState->lineDetectionState == LINE_TEMPORARILY_LOST)
+  69              		.loc 1 61 0
+  70 002e 0128     		cmp	r0, #1
+  71 0030 00D1     		bne	.LCB35
+  72 0032 6EE0     		b	.L25	@long jump
+  73              	.LCB35:
+  62:../Sources/LED.c **** 		{	
+  63:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+  64:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+  65:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<10);
+  66:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+  67:../Sources/LED.c **** 		}
+  68:../Sources/LED.c **** 		else if (carState->lineDetectionState == LINE_LOST)
+  74              		.loc 1 68 0
+  75 0034 0328     		cmp	r0, #3
+  76 0036 25D1     		bne	.L1
+  69:../Sources/LED.c **** 		{	
+  70:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+  77              		.loc 1 70 0
+  78 0038 3E48     		ldr	r0, .L26+8
+  79 003a 8022     		mov	r2, #128
+  80 003c 8368     		ldr	r3, [r0, #8]
+  81 003e 5100     		lsl	r1, r2, #1
+  82 0040 1943     		orr	r1, r3
+  83 0042 8160     		str	r1, [r0, #8]
+  71:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+  84              		.loc 1 71 0
+  85 0044 8468     		ldr	r4, [r0, #8]
+  86 0046 8023     		mov	r3, #128
+  87 0048 9A00     		lsl	r2, r3, #2
+  88 004a 2243     		orr	r2, r4
+  89 004c 8260     		str	r2, [r0, #8]
+  72:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+  90              		.loc 1 72 0
+  91 004e 8168     		ldr	r1, [r0, #8]
+  92 0050 8024     		mov	r4, #128
+  93 0052 E300     		lsl	r3, r4, #3
+  94 0054 0B43     		orr	r3, r1
+  95 0056 8360     		str	r3, [r0, #8]
+  96 0058 0FE0     		b	.L14
+  97              	.LVL4:
+  98              	.L12:
+  73:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<11);
+  74:../Sources/LED.c **** 		}
+  75:../Sources/LED.c **** 	}
+  76:../Sources/LED.c **** 	else
+  77:../Sources/LED.c **** 	{
+  78:../Sources/LED.c **** 		GPIOB_PSOR |= (1<<8);
+  99              		.loc 1 78 0
+ 100 005a 3648     		ldr	r0, .L26+8
+ 101 005c 8022     		mov	r2, #128
+ 102 005e 4168     		ldr	r1, [r0, #4]
+ 103 0060 5400     		lsl	r4, r2, #1
+ 104              	.LVL5:
+ 105 0062 0C43     		orr	r4, r1
+ 106 0064 4460     		str	r4, [r0, #4]
+  79:../Sources/LED.c **** 		GPIOB_PSOR |= (1<<9);
+ 107              		.loc 1 79 0
+ 108 0066 4368     		ldr	r3, [r0, #4]
+ 109 0068 8021     		mov	r1, #128
+ 110 006a 8A00     		lsl	r2, r1, #2
+ 111 006c 1A43     		orr	r2, r3
+ 112 006e 4260     		str	r2, [r0, #4]
+ 113              	.L13:
+  80:../Sources/LED.c **** 		GPIOB_PSOR |= (1<<10);
+ 114              		.loc 1 80 0
+ 115 0070 4368     		ldr	r3, [r0, #4]
+ 116 0072 8021     		mov	r1, #128
+ 117 0074 CC00     		lsl	r4, r1, #3
+ 118 0076 1C43     		orr	r4, r3
+ 119 0078 4460     		str	r4, [r0, #4]
+ 120              	.L14:
+  81:../Sources/LED.c **** 		GPIOB_PSOR |= (1<<11);		
+ 121              		.loc 1 81 0
+ 122 007a 4368     		ldr	r3, [r0, #4]
+ 123 007c 8022     		mov	r2, #128
+ 124 007e 1101     		lsl	r1, r2, #4
+ 125 0080 1943     		orr	r1, r3
+ 126 0082 4160     		str	r1, [r0, #4]
+ 127              	.L1:
+  82:../Sources/LED.c **** 	}
+  83:../Sources/LED.c **** }
+ 128              		.loc 1 83 0
+ 129              		@ sp needed for prologue
+ 130 0084 10BD     		pop	{r4, pc}
+ 131              	.LVL6:
+ 132              	.L20:
+  19:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+ 133              		.loc 1 19 0
+ 134 0086 2B48     		ldr	r0, .L26+8
+ 135 0088 8022     		mov	r2, #128
+ 136 008a 8468     		ldr	r4, [r0, #8]
+ 137              	.LVL7:
+ 138 008c 5300     		lsl	r3, r2, #1
+ 139 008e 2343     		orr	r3, r4
+ 140 0090 8360     		str	r3, [r0, #8]
+  20:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+ 141              		.loc 1 20 0
+ 142 0092 8168     		ldr	r1, [r0, #8]
+ 143 0094 8024     		mov	r4, #128
+ 144 0096 A200     		lsl	r2, r4, #2
+ 145 0098 0A43     		orr	r2, r1
+ 146 009a 8260     		str	r2, [r0, #8]
+ 147 009c E8E7     		b	.L13
+ 148              	.LVL8:
+ 149              	.L21:
+  35:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+ 150              		.loc 1 35 0
+ 151 009e 2548     		ldr	r0, .L26+8
+ 152 00a0 8024     		mov	r4, #128
+ 153              	.LVL9:
+ 154 00a2 8168     		ldr	r1, [r0, #8]
+ 155 00a4 6300     		lsl	r3, r4, #1
+ 156 00a6 0B43     		orr	r3, r1
+ 157 00a8 8360     		str	r3, [r0, #8]
+  36:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<9);
+ 158              		.loc 1 36 0
+ 159 00aa 4168     		ldr	r1, [r0, #4]
+ 160 00ac 8022     		mov	r2, #128
+ 161 00ae 9400     		lsl	r4, r2, #2
+ 162 00b0 0C43     		orr	r4, r1
+ 163 00b2 4460     		str	r4, [r0, #4]
+ 164              	.L15:
+  65:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<10);
+ 165              		.loc 1 65 0
+ 166 00b4 4368     		ldr	r3, [r0, #4]
+ 167 00b6 8021     		mov	r1, #128
+ 168 00b8 CA00     		lsl	r2, r1, #3
+ 169 00ba 1A43     		orr	r2, r3
+ 170 00bc 4260     		str	r2, [r0, #4]
+ 171              	.L16:
+  66:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<11);
+ 172              		.loc 1 66 0
+ 173 00be 8468     		ldr	r4, [r0, #8]
+ 174 00c0 8023     		mov	r3, #128
+ 175 00c2 1901     		lsl	r1, r3, #4
+ 176 00c4 2143     		orr	r1, r4
+ 177 00c6 8160     		str	r1, [r0, #8]
+ 178 00c8 DCE7     		b	.L1
+ 179              	.LVL10:
+ 180              	.L22:
+  42:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<8);
+ 181              		.loc 1 42 0
+ 182 00ca 1A48     		ldr	r0, .L26+8
+ 183 00cc 8021     		mov	r1, #128
+ 184 00ce 4368     		ldr	r3, [r0, #4]
+ 185 00d0 4C00     		lsl	r4, r1, #1
+ 186              	.LVL11:
+ 187 00d2 1C43     		orr	r4, r3
+ 188 00d4 4460     		str	r4, [r0, #4]
+ 189              	.L18:
+  57:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<9);
+ 190              		.loc 1 57 0
+ 191 00d6 4368     		ldr	r3, [r0, #4]
+ 192 00d8 8022     		mov	r2, #128
+ 193 00da 9100     		lsl	r1, r2, #2
+ 194 00dc 1943     		orr	r1, r3
+ 195 00de 4160     		str	r1, [r0, #4]
+ 196              	.L17:
+  58:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<10);
+ 197              		.loc 1 58 0
+ 198 00e0 8468     		ldr	r4, [r0, #8]
+ 199 00e2 8023     		mov	r3, #128
+ 200 00e4 DA00     		lsl	r2, r3, #3
+ 201 00e6 2243     		orr	r2, r4
+ 202 00e8 8260     		str	r2, [r0, #8]
+ 203 00ea E8E7     		b	.L16
+ 204              	.L23:
+  49:../Sources/LED.c **** 			GPIOB_PSOR |= (1<<8);
+ 205              		.loc 1 49 0
+ 206 00ec 1148     		ldr	r0, .L26+8
+ 207 00ee 8022     		mov	r2, #128
+ 208 00f0 4468     		ldr	r4, [r0, #4]
+ 209 00f2 5300     		lsl	r3, r2, #1
+ 210 00f4 2343     		orr	r3, r4
+ 211 00f6 4360     		str	r3, [r0, #4]
+  50:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+ 212              		.loc 1 50 0
+ 213 00f8 8168     		ldr	r1, [r0, #8]
+ 214 00fa 8024     		mov	r4, #128
+ 215 00fc A200     		lsl	r2, r4, #2
+ 216 00fe 0A43     		orr	r2, r1
+ 217 0100 8260     		str	r2, [r0, #8]
+ 218 0102 EDE7     		b	.L17
+ 219              	.L24:
+  56:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+ 220              		.loc 1 56 0
+ 221 0104 0B48     		ldr	r0, .L26+8
+ 222 0106 8023     		mov	r3, #128
+ 223 0108 8468     		ldr	r4, [r0, #8]
+ 224 010a 5900     		lsl	r1, r3, #1
+ 225 010c 2143     		orr	r1, r4
+ 226 010e 8160     		str	r1, [r0, #8]
+ 227 0110 E1E7     		b	.L18
+ 228              	.L25:
+  63:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<8);
+ 229              		.loc 1 63 0
+ 230 0112 0848     		ldr	r0, .L26+8
+ 231 0114 8022     		mov	r2, #128
+ 232 0116 8168     		ldr	r1, [r0, #8]
+ 233 0118 5400     		lsl	r4, r2, #1
+ 234 011a 0C43     		orr	r4, r1
+ 235 011c 8460     		str	r4, [r0, #8]
+  64:../Sources/LED.c **** 			GPIOB_PCOR |= (1<<9);
+ 236              		.loc 1 64 0
+ 237 011e 8368     		ldr	r3, [r0, #8]
+ 238 0120 8021     		mov	r1, #128
+ 239 0122 8A00     		lsl	r2, r1, #2
+ 240 0124 1A43     		orr	r2, r3
+ 241 0126 8260     		str	r2, [r0, #8]
+ 242 0128 C4E7     		b	.L15
+ 243              	.L27:
+ 244 012a C046     		.align	2
+ 245              	.L26:
+ 246 012c 00000000 		.word	batteryLevel
+ 247 0130 0000E040 		.word	1088421888
+ 248 0134 40F00F40 		.word	1074786368
+ 249              		.cfi_endproc
+ 250              	.LFE0:
+ 252              		.text
+ 253              	.Letext0:
+ 254              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 255              		.file 3 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/typedefs_str
+ 256              		.file 4 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/MKL25Z4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 LED.c
+C:\Users\BENTR_~1\AppData\Local\Temp\ccyTUZoH.s:19     .text.LEDfeedback:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccyTUZoH.s:24     .text.LEDfeedback:00000000 LEDfeedback
+C:\Users\BENTR_~1\AppData\Local\Temp\ccyTUZoH.s:246    .text.LEDfeedback:0000012c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_fcmpgt
+batteryLevel

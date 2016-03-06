@@ -42,7 +42,7 @@
   37 000e 9858     		ldr	r0, [r3, r2]
    7:../Sources/I2C.c ****  PORTE_PCR24 = PORT_PCR_MUX(5);
    8:../Sources/I2C.c ****  PORTE_PCR25 = PORT_PCR_MUX(5);
-   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+   9:../Sources/I2C.c ****  I2C0_F = 0x14; //24,000,000 Hz / 80 = 300 kHz (0x14 = 80 on the SCL divider, MUL = 0, ref manual p
   10:../Sources/I2C.c ****  I2C0_C1 = I2C_C1_IICEN_MASK;
   11:../Sources/I2C.c **** }
   38              		.loc 1 11 0
@@ -56,7 +56,7 @@
   44 0014 084B     		ldr	r3, .L2+12
   45 0016 A022     		mov	r2, #160
   46 0018 D000     		lsl	r0, r2, #3
-   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+   9:../Sources/I2C.c ****  I2C0_F = 0x14; //24,000,000 Hz / 80 = 300 kHz (0x14 = 80 on the SCL divider, MUL = 0, ref manual p
   47              		.loc 1 9 0
   48 001a 0849     		ldr	r1, .L2+16
    7:../Sources/I2C.c ****  PORTE_PCR24 = PORT_PCR_MUX(5);
@@ -68,7 +68,7 @@
    8:../Sources/I2C.c ****  PORTE_PCR25 = PORT_PCR_MUX(5);
   53              		.loc 1 8 0
   54 0020 5866     		str	r0, [r3, #100]
-   9:../Sources/I2C.c ****  I2C0_F = 0x14;
+   9:../Sources/I2C.c ****  I2C0_F = 0x14; //24,000,000 Hz / 80 = 300 kHz (0x14 = 80 on the SCL divider, MUL = 0, ref manual p
   55              		.loc 1 9 0
   56 0022 1423     		mov	r3, #20
   57 0024 4B70     		strb	r3, [r1, #1]
@@ -895,26 +895,26 @@
  745              		.text
  746              	.Letext0:
  747              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
- 748              		.file 3 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/MKL25Z4.h"
+ 748              		.file 3 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/MKL25Z4.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 I2C.c
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:18     .text.Init_I2C:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:23     .text.Init_I2C:00000000 Init_I2C
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:65     .text.Init_I2C:0000002c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:74     .text.IIC_StartTransmission:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:79     .text.IIC_StartTransmission:00000000 IIC_StartTransmission
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:120    .text.IIC_StartTransmission:00000024 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:125    .text.Pause:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:130    .text.Pause:00000000 Pause
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:166    .text.I2CReadRegister:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:171    .text.I2CReadRegister:00000000 I2CReadRegister
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:346    .text.I2CReadRegister:000000b4 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:351    .text.I2CWriteRegister:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:356    .text.I2CWriteRegister:00000000 I2CWriteRegister
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:487    .text.I2CWriteRegister:0000007c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:492    .text.I2CReadMultiRegisters:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:497    .text.I2CReadMultiRegisters:00000000 I2CReadMultiRegisters
-C:\Users\BENTR_~1\AppData\Local\Temp\ccUNO44J.s:741    .text.I2CReadMultiRegisters:00000100 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:18     .text.Init_I2C:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:23     .text.Init_I2C:00000000 Init_I2C
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:65     .text.Init_I2C:0000002c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:74     .text.IIC_StartTransmission:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:79     .text.IIC_StartTransmission:00000000 IIC_StartTransmission
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:120    .text.IIC_StartTransmission:00000024 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:125    .text.Pause:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:130    .text.Pause:00000000 Pause
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:166    .text.I2CReadRegister:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:171    .text.I2CReadRegister:00000000 I2CReadRegister
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:346    .text.I2CReadRegister:000000b4 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:351    .text.I2CWriteRegister:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:356    .text.I2CWriteRegister:00000000 I2CWriteRegister
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:487    .text.I2CWriteRegister:0000007c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:492    .text.I2CReadMultiRegisters:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:497    .text.I2CReadMultiRegisters:00000000 I2CReadMultiRegisters
+C:\Users\BENTR_~1\AppData\Local\Temp\ccAuWZoH.s:741    .text.I2CReadMultiRegisters:00000100 $d
                      .debug_frame:00000010 $d
 
 NO UNDEFINED SYMBOLS

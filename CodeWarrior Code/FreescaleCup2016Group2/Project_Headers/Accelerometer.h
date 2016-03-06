@@ -1,11 +1,11 @@
-#ifndef MMA8451Q_H_
-#define MMA8451Q_H_
+#ifndef ACCELEROMETER_H_
+#define ACCELEROMETER_H_
 
 #include "I2C.h"
 #include "TFC\TFC.h"
 
-void Init_MMA8451Q();
-void zeroAccelerometers();
+void Init_Accelerometer();
+void zeroAccelerometer();
 float getXAcc();
 float getYAcc();
 float getZAcc();
@@ -15,4 +15,4 @@ int16_t getRawZAcc();
 uint8_t getID();
 
 
-#endif /* MMA8451Q_H_ */
+#endif /* ACCELEROMETER_H_ */

@@ -10,12 +10,18 @@
 
 #include "MKL25Z4.h"
 #include "string.h"
+#include "TFC\TFC.h"
 #include "typedefs_structs\carState_s.h"
+#include "main.h"
 
 void LCDinit();
+void LCDmoveCursor(int x,int y);
+void LCDfeedback();
 void LCDwriteString(char string[]);
-void LCDwriteVariable(char string[], int variable);
+void LCDwriteVariable(int variable);
 void LCDwriteState(carState_s* carState);
+void LCDclear();
+void LCDreturn();
 void itoa(int n, char s[]);
 void reverse(char s[]);
 

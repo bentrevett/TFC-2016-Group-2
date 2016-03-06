@@ -1,6 +1,6 @@
 <Analysispoints>
 	<Name>AnalysispointsManager</Name>
-	<ProjectPath>C:/Users/bentr_000/Desktop/FRDM-TFC-24nov/SaAnalysispointsManager.apconfig</ProjectPath>
+	<ProjectPath>C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/SaAnalysispointsManager.apconfig</ProjectPath>
 	<MaxNumberOfCores>1</MaxNumberOfCores>
 	<Comments>Analysispoints Manager</Comments>
 	<IgnoreAll>false</IgnoreAll>

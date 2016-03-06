@@ -1633,7 +1633,7 @@
   75:../Sources/LineDetectionDouble.c **** 			&& carState->lineDistance > STRAIGHT_DISTANCE_THRESHOLD
  1010              		.loc 1 75 0
  1011 04ea 3B7B     		ldrb	r3, [r7, #12]
- 1012 04ec 512B     		cmp	r3, #81
+ 1012 04ec 282B     		cmp	r3, #40
  1013 04ee 00D9     		bls	.LCB824
  1014 04f0 9DE2     		b	.L369	@long jump
  1015              	.LCB824:
@@ -3173,7 +3173,7 @@
  2269              		.loc 1 82 0
  2270 0b80 069E     		ldr	r6, [sp, #24]
  2271 0b82 317B     		ldrb	r1, [r6, #12]
- 2272 0b84 5129     		cmp	r1, #81
+ 2272 0b84 2829     		cmp	r1, #40
  2273 0b86 00D9     		bls	.LCB1900
  2274 0b88 B1E1     		b	.L384	@long jump
  2275              	.LCB1900:
@@ -7001,79 +7001,79 @@
  5545              		.text
  5546              	.Letext0:
  5547              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
- 5548              		.file 3 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/typedefs_structs\\carSt
- 5549              		.file 4 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/LineDetectionDouble.h"
- 5550              		.file 5 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/TFC\\TFC_ARM_SysTick.h"
- 5551              		.file 6 "C:/Users/bentr_000/Desktop/FreescaleCup2016Group2/Project_Headers/Settings.h"
+ 5548              		.file 3 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/typedefs_str
+ 5549              		.file 4 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/LineDetectio
+ 5550              		.file 5 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/TFC\\TFC_ARM
+ 5551              		.file 6 "C:/Users/bentr_000/Desktop/New folder/FreescaleCup2016Group2/Project_Headers/Settings.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 LineDetectionDouble.c
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:31     .text.findLine:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:36     .text.findLine:00000000 findLine
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:724    .text.findLine:00000344 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:736    .text.findLine:0000036c $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:1615   .text.findLine:00000818 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:1626   .text.findLine:0000082c $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:2365   .text.findLine:00000c00 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:2386   .text.findLine:00000c44 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3117   .text.findLine:00001034 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3125   .text.findLine:00001050 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3623   .text.findLine:0000131c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3645   .text.findTransitions:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3650   .text.findTransitions:00000000 findTransitions
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3861   .text.findLineDistance:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3866   .text.findLineDistance:00000000 findLineDistance
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3972   .text.transitionsToLines:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3977   .text.transitionsToLines:00000000 transitionsToLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4125   .text.transitionsToTracks:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4130   .text.transitionsToTracks:00000000 transitionsToTracks
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4281   .text.transitionsToDoubleLines:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4286   .text.transitionsToDoubleLines:00000000 transitionsToDoubleLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4433   .text.transitionsToDoubleLines:000000a8 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4438   .text.weightTracks:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4443   .text.weightTracks:00000000 weightTracks
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4540   .text.weightTracks:00000064 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4547   .text.weightDoubleLines:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4552   .text.weightDoubleLines:00000000 weightDoubleLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4747   .text.weightDoubleLines:000000dc $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4756   .text.preloadProbabilityTables:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4761   .text.preloadProbabilityTables:00000000 preloadProbabilityTables
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4789   .text.preloadProbabilityTables:0000001c $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4798   .text.weightStopLines:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4803   .text.weightStopLines:00000000 weightStopLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4975   .text.weightStopLines:000000e8 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4985   .text.findStop:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:4990   .text.findStop:00000000 findStop
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5436   .text.findStop:00000250 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5448   .bss.detectedDoubleLines:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5452   .bss.detectedDoubleLines:00000000 detectedDoubleLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5455   .bss.detectedLines:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5459   .bss.detectedLines:00000000 detectedLines
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5462   .bss.previousTrack.6012:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5466   .bss.previousTrack.6012:00000000 previousTrack.6012
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5469   .bss.lineTransitionsStop:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5473   .bss.lineTransitionsStop:00000000 lineTransitionsStop
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5476   .bss.lineCenterTemp:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5480   .bss.lineCenterTemp:00000000 lineCenterTemp
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5483   .data.previousRight.6016:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5487   .data.previousRight.6016:00000000 previousRight.6016
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5494   .bss.lineCenterPrevious:00000000 lineCenterPrevious
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5495   .bss.lineCenterPrevious:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5500   .bss.edgePreviousValid:00000000 edgePreviousValid
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5501   .bss.edgePreviousValid:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5503   .bss.lineTransitions:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5507   .bss.lineTransitions:00000000 lineTransitions
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5510   .data.previousLeft.6015:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5514   .data.previousLeft.6015:00000000 previousLeft.6015
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5518   .bss.imageDifferentialTwo.6010:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5522   .bss.imageDifferentialTwo.6010:00000000 imageDifferentialTwo.6010
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5525   .bss.detectedTracks:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5529   .bss.detectedTracks:00000000 detectedTracks
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5532   .data.trackWidthAverage:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5536   .data.trackWidthAverage:00000000 trackWidthAverage
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5539   .bss.imageDifferential.6009:00000000 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:5543   .bss.imageDifferential.6009:00000000 imageDifferential.6009
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:31     .text.findLine:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:36     .text.findLine:00000000 findLine
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:724    .text.findLine:00000344 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:736    .text.findLine:0000036c $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:1615   .text.findLine:00000818 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:1626   .text.findLine:0000082c $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:2365   .text.findLine:00000c00 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:2386   .text.findLine:00000c44 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3117   .text.findLine:00001034 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3125   .text.findLine:00001050 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3623   .text.findLine:0000131c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3645   .text.findTransitions:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3650   .text.findTransitions:00000000 findTransitions
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3861   .text.findLineDistance:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3866   .text.findLineDistance:00000000 findLineDistance
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3972   .text.transitionsToLines:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3977   .text.transitionsToLines:00000000 transitionsToLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4125   .text.transitionsToTracks:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4130   .text.transitionsToTracks:00000000 transitionsToTracks
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4281   .text.transitionsToDoubleLines:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4286   .text.transitionsToDoubleLines:00000000 transitionsToDoubleLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4433   .text.transitionsToDoubleLines:000000a8 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4438   .text.weightTracks:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4443   .text.weightTracks:00000000 weightTracks
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4540   .text.weightTracks:00000064 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4547   .text.weightDoubleLines:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4552   .text.weightDoubleLines:00000000 weightDoubleLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4747   .text.weightDoubleLines:000000dc $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4756   .text.preloadProbabilityTables:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4761   .text.preloadProbabilityTables:00000000 preloadProbabilityTables
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4789   .text.preloadProbabilityTables:0000001c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4798   .text.weightStopLines:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4803   .text.weightStopLines:00000000 weightStopLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4975   .text.weightStopLines:000000e8 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4985   .text.findStop:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:4990   .text.findStop:00000000 findStop
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5436   .text.findStop:00000250 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5448   .bss.detectedDoubleLines:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5452   .bss.detectedDoubleLines:00000000 detectedDoubleLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5455   .bss.detectedLines:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5459   .bss.detectedLines:00000000 detectedLines
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5462   .bss.previousTrack.6012:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5466   .bss.previousTrack.6012:00000000 previousTrack.6012
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5469   .bss.lineTransitionsStop:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5473   .bss.lineTransitionsStop:00000000 lineTransitionsStop
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5476   .bss.lineCenterTemp:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5480   .bss.lineCenterTemp:00000000 lineCenterTemp
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5483   .data.previousRight.6016:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5487   .data.previousRight.6016:00000000 previousRight.6016
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5494   .bss.lineCenterPrevious:00000000 lineCenterPrevious
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5495   .bss.lineCenterPrevious:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5500   .bss.edgePreviousValid:00000000 edgePreviousValid
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5501   .bss.edgePreviousValid:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5503   .bss.lineTransitions:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5507   .bss.lineTransitions:00000000 lineTransitions
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5510   .data.previousLeft.6015:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5514   .data.previousLeft.6015:00000000 previousLeft.6015
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5518   .bss.imageDifferentialTwo.6010:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5522   .bss.imageDifferentialTwo.6010:00000000 imageDifferentialTwo.6010
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5525   .bss.detectedTracks:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5529   .bss.detectedTracks:00000000 detectedTracks
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5532   .data.trackWidthAverage:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5536   .data.trackWidthAverage:00000000 trackWidthAverage
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5539   .bss.imageDifferential.6009:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:5543   .bss.imageDifferential.6009:00000000 imageDifferential.6009
                      .debug_frame:00000010 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\cc27NCOO.s:3644   .text.findLine:00001364 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\ccSDrAnI.s:3644   .text.findLine:00001364 $t
 
 UNDEFINED SYMBOLS
 __aeabi_fmul

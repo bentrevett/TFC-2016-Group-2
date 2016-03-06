@@ -15,12 +15,12 @@
   15              	.Ltext0:
   16              		.cfi_sections	.debug_frame
   17              		.global	__aeabi_fcmplt
-  18              		.global	__aeabi_fcmpgt
-  19              		.global	__aeabi_fsub
-  20              		.global	__aeabi_fmul
-  21              		.global	__aeabi_fdiv
-  22              		.global	__aeabi_fadd
-  23              		.global	__aeabi_f2uiz
+  18              		.global	__aeabi_fsub
+  19              		.global	__aeabi_fmul
+  20              		.global	__aeabi_fdiv
+  21              		.global	__aeabi_fadd
+  22              		.global	__aeabi_f2uiz
+  23              		.global	__aeabi_fcmpgt
   24              		.section	.text.getRadiusRoot,"ax",%progbits
   25              		.align	2
   26              		.global	getRadiusRoot
@@ -35,393 +35,1005 @@
    4:../Sources/ServoMapping.c ****  *  Created on: April 17, 2015
    5:../Sources/ServoMapping.c ****  *  Author: Miroslav Dobrev
    6:../Sources/ServoMapping.c ****  *  
-   7:../Sources/ServoMapping.c ****  *  Handles the mapping between servoValue and steering radius.
-   8:../Sources/ServoMapping.c ****  */
+   7:../Sources/ServoMapping.c ****  #include <stdio.h>
+   8:../Sources/ServoMapping.c **** #include <math.h>
    9:../Sources/ServoMapping.c **** 
-  10:../Sources/ServoMapping.c **** #include "ServoMapping.h"
-  11:../Sources/ServoMapping.c **** 
-  12:../Sources/ServoMapping.c **** #define MAP_ARRAY_SIZE	101
-  13:../Sources/ServoMapping.c **** 
-  14:../Sources/ServoMapping.c **** #define SERVO_VALUE_MIN		0.04f	// Minimum servoValue that is mapped
-  15:../Sources/ServoMapping.c **** #define SERVO_VALUE_MAX		0.36f	// Max servoValue that is mapped
-  16:../Sources/ServoMapping.c **** #define STEP_RECIPROCAL	  (MAP_ARRAY_SIZE-1)/(SERVO_VALUE_MAX - SERVO_VALUE_MIN)	// 1/servoValueSte
-  17:../Sources/ServoMapping.c **** 
-  18:../Sources/ServoMapping.c **** float getRadiusRoot(float servoValue)
-  19:../Sources/ServoMapping.c **** {	
-  33              		.loc 1 19 0
+  10:../Sources/ServoMapping.c **** float i=0;
+  11:../Sources/ServoMapping.c **** int j=0;
+  12:../Sources/ServoMapping.c **** 
+  13:../Sources/ServoMapping.c **** float polynomial_right (float x){
+  14:../Sources/ServoMapping.c **** 	return -19.517*pow(x,3)+18.875*pow(x,2)-6.9362*x+1.5246;
+  15:../Sources/ServoMapping.c **** }
+  16:../Sources/ServoMapping.c **** float polynomial_left(float x){
+  17:../Sources/ServoMapping.c **** 	return 9.5582*pow(x,3)-4.2093*pow(x,2)-1.9232*x+1.4343;
+  18:../Sources/ServoMapping.c **** }
+  19:../Sources/ServoMapping.c **** 
+  20:../Sources/ServoMapping.c **** int main(void) {
+  21:../Sources/ServoMapping.c **** 	// your code goes here
+  22:../Sources/ServoMapping.c **** 	
+  23:../Sources/ServoMapping.c **** 	for(i=0.05;i<=0.4;i+=0.00347){
+  24:../Sources/ServoMapping.c **** 		printf("%f,",polynomial_left(i));
+  25:../Sources/ServoMapping.c **** 		printf("\n");
+  26:../Sources/ServoMapping.c **** 		j++;
+  27:../Sources/ServoMapping.c **** 	}
+  28:../Sources/ServoMapping.c **** 	return 0;
+  29:../Sources/ServoMapping.c **** }
+  30:../Sources/ServoMapping.c **** }
+  31:../Sources/ServoMapping.c ****  
+  32:../Sources/ServoMapping.c ****  *  Handles the mapping between servoValue and steering radius.
+  33:../Sources/ServoMapping.c ****  */
+  34:../Sources/ServoMapping.c **** 
+  35:../Sources/ServoMapping.c **** #include "ServoMapping.h"
+  36:../Sources/ServoMapping.c **** 
+  37:../Sources/ServoMapping.c **** #define MAP_ARRAY_SIZE	101
+  38:../Sources/ServoMapping.c **** 
+  39:../Sources/ServoMapping.c **** #define SERVO_VALUE_MIN		0.05f	// Minimum servoValue that is mapped
+  40:../Sources/ServoMapping.c **** #define SERVO_VALUE_MAX		0.40f	// Max servoValue that is mapped
+  41:../Sources/ServoMapping.c **** #define STEP_RECIPROCAL	  (MAP_ARRAY_SIZE-1)/(SERVO_VALUE_MAX - SERVO_VALUE_MIN)	// 1/servoValueSte
+  42:../Sources/ServoMapping.c **** 
+  43:../Sources/ServoMapping.c **** float mapArrayLeft[MAP_ARRAY_SIZE]={
+  44:../Sources/ServoMapping.c **** 1.328812,
+  45:../Sources/ServoMapping.c **** 1.320893,
+  46:../Sources/ServoMapping.c **** 1.312910,
+  47:../Sources/ServoMapping.c **** 1.304865,
+  48:../Sources/ServoMapping.c **** 1.296761,
+  49:../Sources/ServoMapping.c **** 1.288599,
+  50:../Sources/ServoMapping.c **** 1.280382,
+  51:../Sources/ServoMapping.c **** 1.272113,
+  52:../Sources/ServoMapping.c **** 1.263794,
+  53:../Sources/ServoMapping.c **** 1.255427,
+  54:../Sources/ServoMapping.c **** 1.247015,
+  55:../Sources/ServoMapping.c **** 1.238560,
+  56:../Sources/ServoMapping.c **** 1.230065,
+  57:../Sources/ServoMapping.c **** 1.221531,
+  58:../Sources/ServoMapping.c **** 1.212962,
+  59:../Sources/ServoMapping.c **** 1.204359,
+  60:../Sources/ServoMapping.c **** 1.195726,
+  61:../Sources/ServoMapping.c **** 1.187064,
+  62:../Sources/ServoMapping.c **** 1.178375,
+  63:../Sources/ServoMapping.c **** 1.169664,
+  64:../Sources/ServoMapping.c **** 1.160931,
+  65:../Sources/ServoMapping.c **** 1.152179,
+  66:../Sources/ServoMapping.c **** 1.143410,
+  67:../Sources/ServoMapping.c **** 1.134627,
+  68:../Sources/ServoMapping.c **** 1.125833,
+  69:../Sources/ServoMapping.c **** 1.117029,
+  70:../Sources/ServoMapping.c **** 1.108218,
+  71:../Sources/ServoMapping.c **** 1.099403,
+  72:../Sources/ServoMapping.c **** 1.090586,
+  73:../Sources/ServoMapping.c **** 1.081769,
+  74:../Sources/ServoMapping.c **** 1.072954,
+  75:../Sources/ServoMapping.c **** 1.064145,
+  76:../Sources/ServoMapping.c **** 1.055343,
+  77:../Sources/ServoMapping.c **** 1.046551,
+  78:../Sources/ServoMapping.c **** 1.037771,
+  79:../Sources/ServoMapping.c **** 1.029006,
+  80:../Sources/ServoMapping.c **** 1.020257,
+  81:../Sources/ServoMapping.c **** 1.011528,
+  82:../Sources/ServoMapping.c **** 1.002822,
+  83:../Sources/ServoMapping.c **** 0.994139,
+  84:../Sources/ServoMapping.c **** 0.985483,
+  85:../Sources/ServoMapping.c **** 0.976855,
+  86:../Sources/ServoMapping.c **** 0.968260,
+  87:../Sources/ServoMapping.c **** 0.959698,
+  88:../Sources/ServoMapping.c **** 0.951172,
+  89:../Sources/ServoMapping.c **** 0.942685,
+  90:../Sources/ServoMapping.c **** 0.934238,
+  91:../Sources/ServoMapping.c **** 0.925836,
+  92:../Sources/ServoMapping.c **** 0.917478,
+  93:../Sources/ServoMapping.c **** 0.909170,
+  94:../Sources/ServoMapping.c **** 0.900911,
+  95:../Sources/ServoMapping.c **** 0.892706,
+  96:../Sources/ServoMapping.c **** 0.884556,
+  97:../Sources/ServoMapping.c **** 0.876464,
+  98:../Sources/ServoMapping.c **** 0.868432,
+  99:../Sources/ServoMapping.c **** 0.860462,
+ 100:../Sources/ServoMapping.c **** 0.852558,
+ 101:../Sources/ServoMapping.c **** 0.844720,
+ 102:../Sources/ServoMapping.c **** 0.836953,
+ 103:../Sources/ServoMapping.c **** 0.829258,
+ 104:../Sources/ServoMapping.c **** 0.821637,
+ 105:../Sources/ServoMapping.c **** 0.814093,
+ 106:../Sources/ServoMapping.c **** 0.806628,
+ 107:../Sources/ServoMapping.c **** 0.799246,
+ 108:../Sources/ServoMapping.c **** 0.791947,
+ 109:../Sources/ServoMapping.c **** 0.784735,
+ 110:../Sources/ServoMapping.c **** 0.777611,
+ 111:../Sources/ServoMapping.c **** 0.770579,
+ 112:../Sources/ServoMapping.c **** 0.763641,
+ 113:../Sources/ServoMapping.c **** 0.756799,
+ 114:../Sources/ServoMapping.c **** 0.750055,
+ 115:../Sources/ServoMapping.c **** 0.743412,
+ 116:../Sources/ServoMapping.c **** 0.736873,
+ 117:../Sources/ServoMapping.c **** 0.730439,
+ 118:../Sources/ServoMapping.c **** 0.724113,
+ 119:../Sources/ServoMapping.c **** 0.717898,
+ 120:../Sources/ServoMapping.c **** 0.711796,
+ 121:../Sources/ServoMapping.c **** 0.705809,
+ 122:../Sources/ServoMapping.c **** 0.699939,
+ 123:../Sources/ServoMapping.c **** 0.694190,
+ 124:../Sources/ServoMapping.c **** 0.688563,
+ 125:../Sources/ServoMapping.c **** 0.683061,
+ 126:../Sources/ServoMapping.c **** 0.677686,
+ 127:../Sources/ServoMapping.c **** 0.672441,
+ 128:../Sources/ServoMapping.c **** 0.667327,
+ 129:../Sources/ServoMapping.c **** 0.662349,
+ 130:../Sources/ServoMapping.c **** 0.657507,
+ 131:../Sources/ServoMapping.c **** 0.652804,
+ 132:../Sources/ServoMapping.c **** 0.648243,
+ 133:../Sources/ServoMapping.c **** 0.643826,
+ 134:../Sources/ServoMapping.c **** 0.639556,
+ 135:../Sources/ServoMapping.c **** 0.635434,
+ 136:../Sources/ServoMapping.c **** 0.631463,
+ 137:../Sources/ServoMapping.c **** 0.627646,
+ 138:../Sources/ServoMapping.c **** 0.623985,
+ 139:../Sources/ServoMapping.c **** 0.620483,
+ 140:../Sources/ServoMapping.c **** 0.617141,
+ 141:../Sources/ServoMapping.c **** 0.613962,
+ 142:../Sources/ServoMapping.c **** 0.610949,
+ 143:../Sources/ServoMapping.c **** 0.608104,
+ 144:../Sources/ServoMapping.c **** 0.605430
+ 145:../Sources/ServoMapping.c **** };
+ 146:../Sources/ServoMapping.c **** 
+ 147:../Sources/ServoMapping.c **** float mapArrayRight[MAP_ARRAY_SIZE]={
+ 148:../Sources/ServoMapping.c **** 1.222538,
+ 149:../Sources/ServoMapping.c **** 1.204702,
+ 150:../Sources/ServoMapping.c **** 1.187246,
+ 151:../Sources/ServoMapping.c **** 1.170163,
+ 152:../Sources/ServoMapping.c **** 1.153450,
+ 153:../Sources/ServoMapping.c **** 1.137102,
+ 154:../Sources/ServoMapping.c **** 1.121113,
+ 155:../Sources/ServoMapping.c **** 1.105479,
+ 156:../Sources/ServoMapping.c **** 1.090194,
+ 157:../Sources/ServoMapping.c **** 1.075255,
+ 158:../Sources/ServoMapping.c **** 1.060655,
+ 159:../Sources/ServoMapping.c **** 1.046391,
+ 160:../Sources/ServoMapping.c **** 1.032457,
+ 161:../Sources/ServoMapping.c **** 1.018848,
+ 162:../Sources/ServoMapping.c **** 1.005559,
+ 163:../Sources/ServoMapping.c **** 0.992587,
+ 164:../Sources/ServoMapping.c **** 0.979924,
+ 165:../Sources/ServoMapping.c **** 0.967568,
+ 166:../Sources/ServoMapping.c **** 0.955512,
+ 167:../Sources/ServoMapping.c **** 0.943753,
+ 168:../Sources/ServoMapping.c **** 0.932284,
+ 169:../Sources/ServoMapping.c **** 0.921102,
+ 170:../Sources/ServoMapping.c **** 0.910201,
+ 171:../Sources/ServoMapping.c **** 0.899576,
+ 172:../Sources/ServoMapping.c **** 0.889223,
+ 173:../Sources/ServoMapping.c **** 0.879137,
+ 174:../Sources/ServoMapping.c **** 0.869312,
+ 175:../Sources/ServoMapping.c **** 0.859744,
+ 176:../Sources/ServoMapping.c **** 0.850428,
+ 177:../Sources/ServoMapping.c **** 0.841359,
+ 178:../Sources/ServoMapping.c **** 0.832532,
+ 179:../Sources/ServoMapping.c **** 0.823943,
+ 180:../Sources/ServoMapping.c **** 0.815585,
+ 181:../Sources/ServoMapping.c **** 0.807456,
+ 182:../Sources/ServoMapping.c **** 0.799549,
+ 183:../Sources/ServoMapping.c **** 0.791859,
+ 184:../Sources/ServoMapping.c **** 0.784383,
+ 185:../Sources/ServoMapping.c **** 0.777114,
+ 186:../Sources/ServoMapping.c **** 0.770048,
+ 187:../Sources/ServoMapping.c **** 0.763181,
+ 188:../Sources/ServoMapping.c **** 0.756506,
+ 189:../Sources/ServoMapping.c **** 0.750020,
+ 190:../Sources/ServoMapping.c **** 0.743718,
+ 191:../Sources/ServoMapping.c **** 0.737594,
+ 192:../Sources/ServoMapping.c **** 0.731643,
+ 193:../Sources/ServoMapping.c **** 0.725862,
+ 194:../Sources/ServoMapping.c **** 0.720244,
+ 195:../Sources/ServoMapping.c **** 0.714785,
+ 196:../Sources/ServoMapping.c **** 0.709480,
+ 197:../Sources/ServoMapping.c **** 0.704325,
+ 198:../Sources/ServoMapping.c **** 0.699314,
+ 199:../Sources/ServoMapping.c **** 0.694442,
+ 200:../Sources/ServoMapping.c **** 0.689705,
+ 201:../Sources/ServoMapping.c **** 0.685097,
+ 202:../Sources/ServoMapping.c **** 0.680614,
+ 203:../Sources/ServoMapping.c **** 0.676251,
+ 204:../Sources/ServoMapping.c **** 0.672003,
+ 205:../Sources/ServoMapping.c **** 0.667865,
+ 206:../Sources/ServoMapping.c **** 0.663832,
+ 207:../Sources/ServoMapping.c **** 0.659899,
+ 208:../Sources/ServoMapping.c **** 0.656062,
+ 209:../Sources/ServoMapping.c **** 0.652315,
+ 210:../Sources/ServoMapping.c **** 0.648654,
+ 211:../Sources/ServoMapping.c **** 0.645073,
+ 212:../Sources/ServoMapping.c **** 0.641568,
+ 213:../Sources/ServoMapping.c **** 0.638134,
+ 214:../Sources/ServoMapping.c **** 0.634766,
+ 215:../Sources/ServoMapping.c **** 0.631460,
+ 216:../Sources/ServoMapping.c **** 0.628209,
+ 217:../Sources/ServoMapping.c **** 0.625010,
+ 218:../Sources/ServoMapping.c **** 0.621857,
+ 219:../Sources/ServoMapping.c **** 0.618746,
+ 220:../Sources/ServoMapping.c **** 0.615672,
+ 221:../Sources/ServoMapping.c **** 0.612629,
+ 222:../Sources/ServoMapping.c **** 0.609613,
+ 223:../Sources/ServoMapping.c **** 0.606619,
+ 224:../Sources/ServoMapping.c **** 0.603642,
+ 225:../Sources/ServoMapping.c **** 0.600678,
+ 226:../Sources/ServoMapping.c **** 0.597721,
+ 227:../Sources/ServoMapping.c **** 0.594766,
+ 228:../Sources/ServoMapping.c **** 0.591808,
+ 229:../Sources/ServoMapping.c **** 0.588844,
+ 230:../Sources/ServoMapping.c **** 0.585867,
+ 231:../Sources/ServoMapping.c **** 0.582872,
+ 232:../Sources/ServoMapping.c **** 0.579856,
+ 233:../Sources/ServoMapping.c **** 0.576813,
+ 234:../Sources/ServoMapping.c **** 0.573738,
+ 235:../Sources/ServoMapping.c **** 0.570626,
+ 236:../Sources/ServoMapping.c **** 0.567473,
+ 237:../Sources/ServoMapping.c **** 0.564273,
+ 238:../Sources/ServoMapping.c **** 0.561022,
+ 239:../Sources/ServoMapping.c **** 0.557714,
+ 240:../Sources/ServoMapping.c **** 0.554345,
+ 241:../Sources/ServoMapping.c **** 0.550910,
+ 242:../Sources/ServoMapping.c **** 0.547404,
+ 243:../Sources/ServoMapping.c **** 0.543823,
+ 244:../Sources/ServoMapping.c **** 0.540160,
+ 245:../Sources/ServoMapping.c **** 0.536412,
+ 246:../Sources/ServoMapping.c **** 0.532573,
+ 247:../Sources/ServoMapping.c **** 0.528639,
+ 248:../Sources/ServoMapping.c **** 0.524604
+ 249:../Sources/ServoMapping.c **** };
+ 250:../Sources/ServoMapping.c **** 
+ 251:../Sources/ServoMapping.c **** //old mapping changed on 16/2/16
+ 252:../Sources/ServoMapping.c **** float mapArrayOld[MAP_ARRAY_SIZE] = {
+ 253:../Sources/ServoMapping.c **** 		1.645865	,
+ 254:../Sources/ServoMapping.c **** 		1.614463	,
+ 255:../Sources/ServoMapping.c **** 		1.583798	,
+ 256:../Sources/ServoMapping.c **** 		1.553862	,
+ 257:../Sources/ServoMapping.c **** 		1.524644	,
+ 258:../Sources/ServoMapping.c **** 		1.496134	,
+ 259:../Sources/ServoMapping.c **** 		1.468322	,
+ 260:../Sources/ServoMapping.c **** 		1.441198	,
+ 261:../Sources/ServoMapping.c **** 		1.414753	,
+ 262:../Sources/ServoMapping.c **** 		1.388976	,
+ 263:../Sources/ServoMapping.c **** 		1.363858	,
+ 264:../Sources/ServoMapping.c **** 		1.339388	,
+ 265:../Sources/ServoMapping.c **** 		1.315557	,
+ 266:../Sources/ServoMapping.c **** 		1.292355	,
+ 267:../Sources/ServoMapping.c **** 		1.269771	,
+ 268:../Sources/ServoMapping.c **** 		1.247797	,
+ 269:../Sources/ServoMapping.c **** 		1.226421	,
+ 270:../Sources/ServoMapping.c **** 		1.205635	,
+ 271:../Sources/ServoMapping.c **** 		1.185427	,
+ 272:../Sources/ServoMapping.c **** 		1.165789	,
+ 273:../Sources/ServoMapping.c **** 		1.146710	,
+ 274:../Sources/ServoMapping.c **** 		1.128181	,
+ 275:../Sources/ServoMapping.c **** 		1.110191	,
+ 276:../Sources/ServoMapping.c **** 		1.092730	,
+ 277:../Sources/ServoMapping.c **** 		1.075789	,
+ 278:../Sources/ServoMapping.c **** 		1.059358	,
+ 279:../Sources/ServoMapping.c **** 		1.043426	,
+ 280:../Sources/ServoMapping.c **** 		1.027984	,
+ 281:../Sources/ServoMapping.c **** 		1.013022	,
+ 282:../Sources/ServoMapping.c **** 		0.998530	,
+ 283:../Sources/ServoMapping.c **** 		0.984499	,
+ 284:../Sources/ServoMapping.c **** 		0.970917	,
+ 285:../Sources/ServoMapping.c **** 		0.957775	,
+ 286:../Sources/ServoMapping.c **** 		0.945064	,
+ 287:../Sources/ServoMapping.c **** 		0.932773	,
+ 288:../Sources/ServoMapping.c **** 		0.920892	,
+ 289:../Sources/ServoMapping.c **** 		0.909412	,
+ 290:../Sources/ServoMapping.c **** 		0.898323	,
+ 291:../Sources/ServoMapping.c **** 		0.887614	,
+ 292:../Sources/ServoMapping.c **** 		0.877276	,
+ 293:../Sources/ServoMapping.c **** 		0.867299	,
+ 294:../Sources/ServoMapping.c **** 		0.857673	,
+ 295:../Sources/ServoMapping.c **** 		0.848387	,
+ 296:../Sources/ServoMapping.c **** 		0.839433	,
+ 297:../Sources/ServoMapping.c **** 		0.830800	,
+ 298:../Sources/ServoMapping.c **** 		0.822478	,
+ 299:../Sources/ServoMapping.c **** 		0.814457	,
+ 300:../Sources/ServoMapping.c **** 		0.806727	,
+ 301:../Sources/ServoMapping.c **** 		0.799279	,
+ 302:../Sources/ServoMapping.c **** 		0.792103	,
+ 303:../Sources/ServoMapping.c **** 		0.785188	,
+ 304:../Sources/ServoMapping.c **** 		0.778525	,
+ 305:../Sources/ServoMapping.c **** 		0.772103	,
+ 306:../Sources/ServoMapping.c **** 		0.765913	,
+ 307:../Sources/ServoMapping.c **** 		0.759946	,
+ 308:../Sources/ServoMapping.c **** 		0.754190	,
+ 309:../Sources/ServoMapping.c **** 		0.748636	,
+ 310:../Sources/ServoMapping.c **** 		0.743274	,
+ 311:../Sources/ServoMapping.c **** 		0.738094	,
+ 312:../Sources/ServoMapping.c **** 		0.733087	,
+ 313:../Sources/ServoMapping.c **** 		0.728242	,
+ 314:../Sources/ServoMapping.c **** 		0.723549	,
+ 315:../Sources/ServoMapping.c **** 		0.718999	,
+ 316:../Sources/ServoMapping.c **** 		0.714582	,
+ 317:../Sources/ServoMapping.c **** 		0.710287	,
+ 318:../Sources/ServoMapping.c **** 		0.706105	,
+ 319:../Sources/ServoMapping.c **** 		0.702025	,
+ 320:../Sources/ServoMapping.c **** 		0.698039	,
+ 321:../Sources/ServoMapping.c **** 		0.694135	,
+ 322:../Sources/ServoMapping.c **** 		0.690305	,
+ 323:../Sources/ServoMapping.c **** 		0.686537	,
+ 324:../Sources/ServoMapping.c **** 		0.682823	,
+ 325:../Sources/ServoMapping.c **** 		0.679152	,
+ 326:../Sources/ServoMapping.c **** 		0.675515	,
+ 327:../Sources/ServoMapping.c **** 		0.671900	,
+ 328:../Sources/ServoMapping.c **** 		0.668300	,
+ 329:../Sources/ServoMapping.c **** 		0.664702	,
+ 330:../Sources/ServoMapping.c **** 		0.661099	,
+ 331:../Sources/ServoMapping.c **** 		0.657479	,
+ 332:../Sources/ServoMapping.c **** 		0.653833	,
+ 333:../Sources/ServoMapping.c **** 		0.650151	,
+ 334:../Sources/ServoMapping.c **** 		0.646422	,
+ 335:../Sources/ServoMapping.c **** 		0.642638	,
+ 336:../Sources/ServoMapping.c **** 		0.638788	,
+ 337:../Sources/ServoMapping.c **** 		0.634862	,
+ 338:../Sources/ServoMapping.c **** 		0.630850	,
+ 339:../Sources/ServoMapping.c **** 		0.626743	,
+ 340:../Sources/ServoMapping.c **** 		0.622530	,
+ 341:../Sources/ServoMapping.c **** 		0.618201	,
+ 342:../Sources/ServoMapping.c **** 		0.613747	,
+ 343:../Sources/ServoMapping.c **** 		0.609158	,
+ 344:../Sources/ServoMapping.c **** 		0.604424	,
+ 345:../Sources/ServoMapping.c **** 		0.599534	,
+ 346:../Sources/ServoMapping.c **** 		0.594479	,
+ 347:../Sources/ServoMapping.c **** 		0.589249	,
+ 348:../Sources/ServoMapping.c **** 		0.583834	,
+ 349:../Sources/ServoMapping.c **** 		0.578224	,
+ 350:../Sources/ServoMapping.c **** 		0.572409	,
+ 351:../Sources/ServoMapping.c **** 		0.566379	,
+ 352:../Sources/ServoMapping.c **** 		0.560125	,
+ 353:../Sources/ServoMapping.c **** 		0.553636
+ 354:../Sources/ServoMapping.c **** };
+ 355:../Sources/ServoMapping.c **** 
+ 356:../Sources/ServoMapping.c **** float getRadiusRoot(float servoValue)
+ 357:../Sources/ServoMapping.c **** {	
+  33              		.loc 1 357 0
   34              		.cfi_startproc
   35              	.LVL0:
-  36 0000 10B5     		push	{r4, lr}
+  36 0000 38B5     		push	{r3, r4, r5, lr}
   37              	.LCFI0:
-  38              		.cfi_def_cfa_offset 8
-  39              		.cfi_offset 4, -8
-  40              		.cfi_offset 14, -4
-  20:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f)
-  41              		.loc 1 20 0
-  42 0002 0021     		mov	r1, #0
-  19:../Sources/ServoMapping.c **** {	
-  43              		.loc 1 19 0
-  44 0004 041C     		add	r4, r0, #0
-  45              		.loc 1 20 0
-  46 0006 FFF7FEFF 		bl	__aeabi_fcmplt
-  47              	.LVL1:
-  48 000a 0028     		cmp	r0, #0
-  49 000c 27D1     		bne	.L12
-  50              	.L2:
-  21:../Sources/ServoMapping.c **** 	{
-  22:../Sources/ServoMapping.c **** 		servoValue = (-servoValue);
-  23:../Sources/ServoMapping.c **** 	}
-  24:../Sources/ServoMapping.c **** 		
-  25:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN)
-  51              		.loc 1 25 0
-  52 000e 201C     		add	r0, r4, #0
-  53 0010 1549     		ldr	r1, .L14
-  54 0012 FFF7FEFF 		bl	__aeabi_fcmplt
-  55              	.LVL2:
-  56 0016 0028     		cmp	r0, #0
-  57 0018 1FD1     		bne	.L7
-  26:../Sources/ServoMapping.c **** 	{
-  27:../Sources/ServoMapping.c **** 		return 100000.0f;		// Huge radius - practically moving straight.
-  28:../Sources/ServoMapping.c **** 	}
-  29:../Sources/ServoMapping.c **** 	else if(servoValue > SERVO_VALUE_MAX)
-  58              		.loc 1 29 0
-  59 001a 201C     		add	r0, r4, #0
-  60 001c 1349     		ldr	r1, .L14+4
-  61 001e FFF7FEFF 		bl	__aeabi_fcmpgt
-  62              	.LVL3:
-  63 0022 0028     		cmp	r0, #0
-  64 0024 14D1     		bne	.L13
-  65              	.LVL4:
-  30:../Sources/ServoMapping.c **** 	{
-  31:../Sources/ServoMapping.c **** 		return mapArray[MAP_ARRAY_SIZE - 1];
-  32:../Sources/ServoMapping.c **** 	}
-  33:../Sources/ServoMapping.c **** 	
-  34:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
-  66              		.loc 1 34 0
-  67 0026 1049     		ldr	r1, .L14
-  68 0028 201C     		add	r0, r4, #0
-  69 002a FFF7FEFF 		bl	__aeabi_fsub
-  70              	.LVL5:
-  71 002e 1049     		ldr	r1, .L14+8
-  72 0030 FFF7FEFF 		bl	__aeabi_fmul
-  73              	.LVL6:
-  74 0034 0F49     		ldr	r1, .L14+12
-  75 0036 FFF7FEFF 		bl	__aeabi_fdiv
-  76              	.LVL7:
-  77 003a FC21     		mov	r1, #252
-  78 003c 8905     		lsl	r1, r1, #22
-  79 003e FFF7FEFF 		bl	__aeabi_fadd
-  80              	.LVL8:
-  81 0042 FFF7FEFF 		bl	__aeabi_f2uiz
-  82              	.LVL9:
-  35:../Sources/ServoMapping.c **** 	
-  36:../Sources/ServoMapping.c **** 	return mapArray[i];
-  83              		.loc 1 36 0
-  84 0046 0C4B     		ldr	r3, .L14+16
-  85 0048 C2B2     		uxtb	r2, r0
-  86 004a 9000     		lsl	r0, r2, #2
-  87 004c C058     		ldr	r0, [r0, r3]
-  88              	.LVL10:
-  89              	.L4:
-  37:../Sources/ServoMapping.c **** }
-  90              		.loc 1 37 0
-  91              		@ sp needed for prologue
-  92 004e 10BD     		pop	{r4, pc}
-  93              	.LVL11:
-  94              	.L13:
-  31:../Sources/ServoMapping.c **** 		return mapArray[MAP_ARRAY_SIZE - 1];
-  95              		.loc 1 31 0
-  96 0050 C824     		mov	r4, #200
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 3, -16
+  40              		.cfi_offset 4, -12
+  41              		.cfi_offset 5, -8
+  42              		.cfi_offset 14, -4
+ 358:../Sources/ServoMapping.c **** 
+ 359:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN){
+  43              		.loc 1 359 0
+  44 0002 1E49     		ldr	r1, .L19
+ 357:../Sources/ServoMapping.c **** {	
+  45              		.loc 1 357 0
+  46 0004 041C     		add	r4, r0, #0
+  47              		.loc 1 359 0
+  48 0006 FFF7FEFF 		bl	__aeabi_fcmplt
+  49              	.LVL1:
+  50 000a 0028     		cmp	r0, #0
+  51 000c 20D1     		bne	.L9
+ 360:../Sources/ServoMapping.c **** 	return 100000.0f;		// Huge radius - practically moving straight.
+ 361:../Sources/ServoMapping.c **** 	}
+ 362:../Sources/ServoMapping.c **** 	
+ 363:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
+  52              		.loc 1 363 0
+  53 000e 1B49     		ldr	r1, .L19
+  54 0010 201C     		add	r0, r4, #0
+  55 0012 FFF7FEFF 		bl	__aeabi_fsub
+  56              	.LVL2:
+  57 0016 1A49     		ldr	r1, .L19+4
+  58 0018 FFF7FEFF 		bl	__aeabi_fmul
+  59              	.LVL3:
+  60 001c 1949     		ldr	r1, .L19+8
+  61 001e FFF7FEFF 		bl	__aeabi_fdiv
+  62              	.LVL4:
+  63 0022 FC21     		mov	r1, #252
+  64 0024 8905     		lsl	r1, r1, #22
+  65 0026 FFF7FEFF 		bl	__aeabi_fadd
+  66              	.LVL5:
+  67 002a FFF7FEFF 		bl	__aeabi_f2uiz
+  68              	.LVL6:
+ 364:../Sources/ServoMapping.c **** 
+ 365:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f){ //if turning right
+  69              		.loc 1 365 0
+  70 002e 0021     		mov	r1, #0
+ 363:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
+  71              		.loc 1 363 0
+  72 0030 C5B2     		uxtb	r5, r0
+  73              	.LVL7:
+  74              		.loc 1 365 0
+  75 0032 201C     		add	r0, r4, #0
+  76              	.LVL8:
+  77 0034 FFF7FEFF 		bl	__aeabi_fcmplt
+  78              	.LVL9:
+  79 0038 0028     		cmp	r0, #0
+  80 003a 0BD1     		bne	.L17
+ 366:../Sources/ServoMapping.c **** 		if(servoValue > SERVO_VALUE_MAX){
+ 367:../Sources/ServoMapping.c **** 			return mapArrayRight[MAP_ARRAY_SIZE - 1];
+ 368:../Sources/ServoMapping.c **** 		}
+ 369:../Sources/ServoMapping.c **** 		else{
+ 370:../Sources/ServoMapping.c **** 			return mapArrayRight[i];
+ 371:../Sources/ServoMapping.c **** 		}
+ 372:../Sources/ServoMapping.c **** 	}
+ 373:../Sources/ServoMapping.c **** 	
+ 374:../Sources/ServoMapping.c **** 	else{ //if turning left
+ 375:../Sources/ServoMapping.c **** 		if(servoValue > SERVO_VALUE_MAX){
+  81              		.loc 1 375 0
+  82 003c 201C     		add	r0, r4, #0
+  83 003e 1249     		ldr	r1, .L19+12
+  84 0040 FFF7FEFF 		bl	__aeabi_fcmpgt
+  85              	.LVL10:
+  86 0044 0028     		cmp	r0, #0
+  87 0046 10D1     		bne	.L18
+ 376:../Sources/ServoMapping.c **** 			return mapArrayLeft[MAP_ARRAY_SIZE - 1];
+ 377:../Sources/ServoMapping.c **** 		}
+ 378:../Sources/ServoMapping.c **** 		else{
+ 379:../Sources/ServoMapping.c **** 			return mapArrayLeft[i];
+  88              		.loc 1 379 0
+  89 0048 104B     		ldr	r3, .L19+16
+  90 004a A800     		lsl	r0, r5, #2
+  91 004c C058     		ldr	r0, [r0, r3]
+  92              	.LVL11:
+  93              	.L2:
+ 380:../Sources/ServoMapping.c **** 		}
+ 381:../Sources/ServoMapping.c **** 	}
+ 382:../Sources/ServoMapping.c **** 	
+ 383:../Sources/ServoMapping.c **** }
+  94              		.loc 1 383 0
+  95              		@ sp needed for prologue
+  96 004e 38BD     		pop	{r3, r4, r5, pc}
   97              	.LVL12:
-  98 0052 094A     		ldr	r2, .L14+16
-  99 0054 6100     		lsl	r1, r4, #1
- 100 0056 5058     		ldr	r0, [r2, r1]
- 101 0058 F9E7     		b	.L4
- 102              	.LVL13:
- 103              	.L7:
-  27:../Sources/ServoMapping.c **** 		return 100000.0f;		// Huge radius - practically moving straight.
- 104              		.loc 1 27 0
- 105 005a 0848     		ldr	r0, .L14+20
- 106 005c F7E7     		b	.L4
- 107              	.L12:
-  22:../Sources/ServoMapping.c **** 		servoValue = (-servoValue);
- 108              		.loc 1 22 0
- 109 005e 8023     		mov	r3, #128
- 110 0060 1806     		lsl	r0, r3, #24
- 111 0062 2418     		add	r4, r4, r0
- 112              	.LVL14:
- 113 0064 D3E7     		b	.L2
- 114              	.L15:
- 115 0066 C046     		.align	2
- 116              	.L14:
- 117 0068 0AD7233D 		.word	1025758986
- 118 006c EC51B83E 		.word	1052266988
- 119 0070 0000C842 		.word	1120403456
- 120 0074 0BD7A33E 		.word	1050924811
- 121 0078 00000000 		.word	.LANCHOR0
- 122 007c 0050C347 		.word	1203982336
- 123              		.cfi_endproc
- 124              	.LFE0:
- 126              		.section	.text.getRadius,"ax",%progbits
- 127              		.align	2
- 128              		.global	getRadius
- 129              		.code	16
- 130              		.thumb_func
- 132              	getRadius:
- 133              	.LFB1:
-  38:../Sources/ServoMapping.c **** 
-  39:../Sources/ServoMapping.c **** float getRadius(float servoValue)
-  40:../Sources/ServoMapping.c **** {
- 134              		.loc 1 40 0
- 135              		.cfi_startproc
- 136              	.LVL15:
- 137 0000 10B5     		push	{r4, lr}
- 138              	.LCFI1:
- 139              		.cfi_def_cfa_offset 8
- 140              		.cfi_offset 4, -8
- 141              		.cfi_offset 14, -4
- 142              	.LBB4:
- 143              	.LBB5:
-  20:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f)
- 144              		.loc 1 20 0
- 145 0002 0021     		mov	r1, #0
- 146              	.LBE5:
- 147              	.LBE4:
- 148              		.loc 1 40 0
- 149 0004 041C     		add	r4, r0, #0
- 150              	.LBB8:
- 151              	.LBB6:
-  20:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f)
- 152              		.loc 1 20 0
- 153 0006 FFF7FEFF 		bl	__aeabi_fcmplt
- 154              	.LVL16:
- 155 000a 0028     		cmp	r0, #0
- 156 000c 2DD1     		bne	.L26
- 157              	.LVL17:
- 158              	.L17:
-  25:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN)
- 159              		.loc 1 25 0
- 160 000e 201C     		add	r0, r4, #0
- 161 0010 1849     		ldr	r1, .L28
- 162 0012 FFF7FEFF 		bl	__aeabi_fcmplt
- 163              	.LVL18:
- 164 0016 0028     		cmp	r0, #0
- 165 0018 25D1     		bne	.L22
-  29:../Sources/ServoMapping.c **** 	else if(servoValue > SERVO_VALUE_MAX)
- 166              		.loc 1 29 0
- 167 001a 201C     		add	r0, r4, #0
- 168 001c 1649     		ldr	r1, .L28+4
- 169 001e FFF7FEFF 		bl	__aeabi_fcmpgt
- 170              	.LVL19:
- 171 0022 0028     		cmp	r0, #0
- 172 0024 17D1     		bne	.L27
- 173              	.LVL20:
-  34:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
- 174              		.loc 1 34 0
- 175 0026 1349     		ldr	r1, .L28
- 176 0028 201C     		add	r0, r4, #0
- 177 002a FFF7FEFF 		bl	__aeabi_fsub
- 178              	.LVL21:
- 179 002e 1349     		ldr	r1, .L28+8
- 180 0030 FFF7FEFF 		bl	__aeabi_fmul
- 181              	.LVL22:
- 182 0034 1249     		ldr	r1, .L28+12
- 183 0036 FFF7FEFF 		bl	__aeabi_fdiv
- 184              	.LVL23:
- 185 003a FC21     		mov	r1, #252
- 186 003c 8905     		lsl	r1, r1, #22
- 187 003e FFF7FEFF 		bl	__aeabi_fadd
- 188              	.LVL24:
- 189 0042 FFF7FEFF 		bl	__aeabi_f2uiz
- 190              	.LVL25:
-  36:../Sources/ServoMapping.c **** 	return mapArray[i];
- 191              		.loc 1 36 0
- 192 0046 0F4B     		ldr	r3, .L28+16
- 193 0048 C2B2     		uxtb	r2, r0
- 194 004a 9000     		lsl	r0, r2, #2
- 195 004c C158     		ldr	r1, [r0, r3]
- 196 004e 081C     		add	r0, r1, #0
- 197 0050 FFF7FEFF 		bl	__aeabi_fmul
- 198              	.LVL26:
- 199              	.L19:
- 200              	.LBE6:
- 201              	.LBE8:
-  41:../Sources/ServoMapping.c **** 	float radiusRoot = getRadiusRoot(servoValue);
-  42:../Sources/ServoMapping.c **** 	
-  43:../Sources/ServoMapping.c **** 	return radiusRoot*radiusRoot;
-  44:../Sources/ServoMapping.c **** }
- 202              		.loc 1 44 0
- 203              		@ sp needed for prologue
- 204 0054 10BD     		pop	{r4, pc}
+  98              	.L9:
+ 360:../Sources/ServoMapping.c **** 	return 100000.0f;		// Huge radius - practically moving straight.
+  99              		.loc 1 360 0
+ 100 0050 0F48     		ldr	r0, .L19+20
+ 101 0052 FCE7     		b	.L2
+ 102              	.L17:
+ 366:../Sources/ServoMapping.c **** 		if(servoValue > SERVO_VALUE_MAX){
+ 103              		.loc 1 366 0
+ 104 0054 201C     		add	r0, r4, #0
+ 105 0056 0C49     		ldr	r1, .L19+12
+ 106 0058 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 107              	.LVL13:
+ 108 005c 0028     		cmp	r0, #0
+ 109 005e 09D0     		beq	.L14
+ 367:../Sources/ServoMapping.c **** 			return mapArrayRight[MAP_ARRAY_SIZE - 1];
+ 110              		.loc 1 367 0
+ 111 0060 C823     		mov	r3, #200
+ 112 0062 0C4A     		ldr	r2, .L19+24
+ 113 0064 5C00     		lsl	r4, r3, #1
+ 114              	.LVL14:
+ 115 0066 1059     		ldr	r0, [r2, r4]
+ 116 0068 F1E7     		b	.L2
+ 117              	.LVL15:
+ 118              	.L18:
+ 376:../Sources/ServoMapping.c **** 			return mapArrayLeft[MAP_ARRAY_SIZE - 1];
+ 119              		.loc 1 376 0
+ 120 006a C822     		mov	r2, #200
+ 121 006c 0749     		ldr	r1, .L19+16
+ 122 006e 5400     		lsl	r4, r2, #1
+ 123              	.LVL16:
+ 124 0070 0859     		ldr	r0, [r1, r4]
+ 125 0072 ECE7     		b	.L2
+ 126              	.LVL17:
+ 127              	.L14:
+ 370:../Sources/ServoMapping.c **** 			return mapArrayRight[i];
+ 128              		.loc 1 370 0
+ 129 0074 0748     		ldr	r0, .L19+24
+ 130 0076 AD00     		lsl	r5, r5, #2
+ 131 0078 2858     		ldr	r0, [r5, r0]
+ 132 007a E8E7     		b	.L2
+ 133              	.L20:
+ 134              		.align	2
+ 135              	.L19:
+ 136 007c CDCC4C3D 		.word	1028443341
+ 137 0080 0000C842 		.word	1120403456
+ 138 0084 3333B33E 		.word	1051931443
+ 139 0088 CDCCCC3E 		.word	1053609165
+ 140 008c 00000000 		.word	.LANCHOR1
+ 141 0090 0050C347 		.word	1203982336
+ 142 0094 00000000 		.word	.LANCHOR0
+ 143              		.cfi_endproc
+ 144              	.LFE0:
+ 146              		.section	.text.getRadius,"ax",%progbits
+ 147              		.align	2
+ 148              		.global	getRadius
+ 149              		.code	16
+ 150              		.thumb_func
+ 152              	getRadius:
+ 153              	.LFB1:
+ 384:../Sources/ServoMapping.c **** 
+ 385:../Sources/ServoMapping.c **** float getRadius(float servoValue)
+ 386:../Sources/ServoMapping.c **** {
+ 154              		.loc 1 386 0
+ 155              		.cfi_startproc
+ 156              	.LVL18:
+ 157 0000 38B5     		push	{r3, r4, r5, lr}
+ 158              	.LCFI1:
+ 159              		.cfi_def_cfa_offset 16
+ 160              		.cfi_offset 3, -16
+ 161              		.cfi_offset 4, -12
+ 162              		.cfi_offset 5, -8
+ 163              		.cfi_offset 14, -4
+ 164              	.LBB4:
+ 165              	.LBB5:
+ 359:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN){
+ 166              		.loc 1 359 0
+ 167 0002 2449     		ldr	r1, .L38
+ 168              	.LBE5:
+ 169              	.LBE4:
+ 170              		.loc 1 386 0
+ 171 0004 041C     		add	r4, r0, #0
+ 172              	.LBB8:
+ 173              	.LBB6:
+ 359:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN){
+ 174              		.loc 1 359 0
+ 175 0006 FFF7FEFF 		bl	__aeabi_fcmplt
+ 176              	.LVL19:
+ 177 000a 0028     		cmp	r0, #0
+ 178 000c 23D1     		bne	.L29
+ 363:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
+ 179              		.loc 1 363 0
+ 180 000e 2149     		ldr	r1, .L38
+ 181 0010 201C     		add	r0, r4, #0
+ 182 0012 FFF7FEFF 		bl	__aeabi_fsub
+ 183              	.LVL20:
+ 184 0016 2049     		ldr	r1, .L38+4
+ 185 0018 FFF7FEFF 		bl	__aeabi_fmul
+ 186              	.LVL21:
+ 187 001c 1F49     		ldr	r1, .L38+8
+ 188 001e FFF7FEFF 		bl	__aeabi_fdiv
+ 189              	.LVL22:
+ 190 0022 FC21     		mov	r1, #252
+ 191 0024 8905     		lsl	r1, r1, #22
+ 192 0026 FFF7FEFF 		bl	__aeabi_fadd
+ 193              	.LVL23:
+ 194 002a FFF7FEFF 		bl	__aeabi_f2uiz
+ 195              	.LVL24:
+ 365:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f){ //if turning right
+ 196              		.loc 1 365 0
+ 197 002e 0021     		mov	r1, #0
+ 363:../Sources/ServoMapping.c **** 	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
+ 198              		.loc 1 363 0
+ 199 0030 C5B2     		uxtb	r5, r0
+ 200              	.LVL25:
+ 365:../Sources/ServoMapping.c **** 	if(servoValue < 0.0f){ //if turning right
+ 201              		.loc 1 365 0
+ 202 0032 201C     		add	r0, r4, #0
+ 203              	.LVL26:
+ 204 0034 FFF7FEFF 		bl	__aeabi_fcmplt
  205              	.LVL27:
- 206              	.L27:
- 207              	.LBB9:
- 208              	.LBB7:
-  31:../Sources/ServoMapping.c **** 		return mapArray[MAP_ARRAY_SIZE - 1];
- 209              		.loc 1 31 0
- 210 0056 C824     		mov	r4, #200
- 211              	.LVL28:
- 212 0058 0A4A     		ldr	r2, .L28+16
- 213 005a 6100     		lsl	r1, r4, #1
- 214 005c 5158     		ldr	r1, [r2, r1]
- 215 005e 081C     		add	r0, r1, #0
- 216 0060 FFF7FEFF 		bl	__aeabi_fmul
- 217              	.LVL29:
- 218 0064 F6E7     		b	.L19
- 219              	.LVL30:
- 220              	.L22:
-  25:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN)
- 221              		.loc 1 25 0
- 222 0066 0848     		ldr	r0, .L28+20
- 223 0068 F4E7     		b	.L19
- 224              	.LVL31:
- 225              	.L26:
-  22:../Sources/ServoMapping.c **** 		servoValue = (-servoValue);
- 226              		.loc 1 22 0
- 227 006a 8023     		mov	r3, #128
- 228 006c 1806     		lsl	r0, r3, #24
- 229 006e 2418     		add	r4, r4, r0
- 230              	.LVL32:
- 231 0070 CDE7     		b	.L17
- 232              	.L29:
- 233 0072 C046     		.align	2
- 234              	.L28:
- 235 0074 0AD7233D 		.word	1025758986
- 236 0078 EC51B83E 		.word	1052266988
- 237 007c 0000C842 		.word	1120403456
- 238 0080 0BD7A33E 		.word	1050924811
- 239 0084 00000000 		.word	.LANCHOR0
- 240 0088 F9021550 		.word	1343554297
- 241              	.LBE7:
- 242              	.LBE9:
- 243              		.cfi_endproc
- 244              	.LFE1:
- 246              		.global	mapArray
- 247              		.section	.data.mapArray,"aw",%progbits
- 248              		.align	2
- 249              		.set	.LANCHOR0,. + 0
- 252              	mapArray:
- 253 0000 B4ABD23F 		.word	1070771124
- 254 0004 B9A6CE3F 		.word	1070507705
- 255 0008 E5B9CA3F 		.word	1070250469
- 256 000c F3E4C63F 		.word	1069999347
- 257 0010 8927C33F 		.word	1069754249
- 258 0014 5281BF3F 		.word	1069515090
- 259 0018 FAF1BB3F 		.word	1069281786
- 260 001c 2D79B83F 		.word	1069054253
- 261 0020 A016B53F 		.word	1068832416
- 262 0024 F7C9B13F 		.word	1068616183
- 263 0028 E692AE3F 		.word	1068405478
- 264 002c 1171AB3F 		.word	1068200209
- 265 0030 2C64A83F 		.word	1068000300
- 266 0034 E36BA53F 		.word	1067805667
- 267 0038 DB87A23F 		.word	1067616219
- 268 003c D0B79F3F 		.word	1067431888
- 269 0040 5DFB9C3F 		.word	1067252573
- 270 0044 3F529A3F 		.word	1067078207
- 271 0048 12BC973F 		.word	1066908690
- 272 004c 9338953F 		.word	1066743955
- 273 0050 65C7923F 		.word	1066583909
- 274 0054 3C68903F 		.word	1066428476
- 275 0058 BD1A8E3F 		.word	1066277565
- 276 005c 94DE8B3F 		.word	1066131092
- 277 0060 74B3893F 		.word	1065988980
- 278 0064 0B99873F 		.word	1065851147
- 279 0068 FC8E853F 		.word	1065717500
- 280 006c FB94833F 		.word	1065587963
- 281 0070 B4AA813F 		.word	1065462452
- 282 0074 A99F7F3F 		.word	1065328553
- 283 0078 20087C3F 		.word	1065093152
- 284 007c 048E783F 		.word	1064865284
- 285 0080 BE30753F 		.word	1064644798
- 286 0084 B7EF713F 		.word	1064431543
- 287 0088 36CA6E3F 		.word	1064225334
- 288 008c 94BF6B3F 		.word	1064026004
- 289 0090 3ACF683F 		.word	1063833402
- 290 0094 7FF8653F 		.word	1063647359
- 291 0098 AC3A633F 		.word	1063467692
- 292 009c 2995603F 		.word	1063294249
- 293 00a0 4F075E3F 		.word	1063126863
- 294 00a4 75905B3F 		.word	1062965365
- 295 00a8 E42F593F 		.word	1062809572
- 296 00ac 15E5563F 		.word	1062659349
- 297 00b0 4FAF543F 		.word	1062514511
- 298 00b4 EB8D523F 		.word	1062374891
- 299 00b8 4180503F 		.word	1062240321
- 300 00bc A9854E3F 		.word	1062110633
- 301 00c0 8C9D4C3F 		.word	1061985676
- 302 00c4 43C74A3F 		.word	1061865283
- 303 00c8 1502493F 		.word	1061749269
- 304 00cc 6A4D473F 		.word	1061637482
- 305 00d0 8BA8453F 		.word	1061529739
- 306 00d4 E012443F 		.word	1061425888
- 307 00d8 D28B423F 		.word	1061325778
- 308 00dc 9912413F 		.word	1061229209
- 309 00e0 9CA63F3F 		.word	1061136028
- 310 00e4 34473E3F 		.word	1061046068
- 311 00e8 BAF33C3F 		.word	1060959162
- 312 00ec 97AB3B3F 		.word	1060875159
- 313 00f0 116E3A3F 		.word	1060793873
- 314 00f4 823A393F 		.word	1060715138
- 315 00f8 5210383F 		.word	1060638802
- 316 00fc D9EE363F 		.word	1060564697
- 317 0100 5ED5353F 		.word	1060492638
- 318 0104 4CC3343F 		.word	1060422476
- 319 0108 E9B7333F 		.word	1060354025
- 320 010c AFB2323F 		.word	1060287151
- 321 0110 D5B2313F 		.word	1060221653
- 322 0114 D4B7303F 		.word	1060157396
- 323 0118 E4C02F3F 		.word	1060094180
- 324 011c 7DCD2E3F 		.word	1060031869
- 325 0120 E8DC2D3F 		.word	1059970280
- 326 0124 8DEE2C3F 		.word	1059909261
- 327 0128 A3012C3F 		.word	1059848611
- 328 012c B5152B3F 		.word	1059788213
- 329 0130 E9292A3F 		.word	1059727849
- 330 0134 C93D293F 		.word	1059667401
- 331 0138 8B50283F 		.word	1059606667
- 332 013c 9961273F 		.word	1059545497
- 333 0140 4C70263F 		.word	1059483724
- 334 0144 EA7B253F 		.word	1059421162
- 335 0148 ED83243F 		.word	1059357677
- 336 014c 9C87233F 		.word	1059293084
- 337 0150 5186223F 		.word	1059227217
- 338 0154 637F213F 		.word	1059159907
- 339 0158 3B72203F 		.word	1059091003
- 340 015c 205E1F3F 		.word	1059020320
- 341 0160 6C421E3F 		.word	1058947692
- 342 0164 861E1D3F 		.word	1058872966
- 343 0168 C7F11B3F 		.word	1058795975
- 344 016c 88BB1A3F 		.word	1058716552
- 345 0170 0F7B193F 		.word	1058634511
- 346 0174 C72F183F 		.word	1058549703
- 347 0178 06D9163F 		.word	1058461958
- 348 017c 2576153F 		.word	1058371109
- 349 0180 7D06143F 		.word	1058276989
- 350 0184 6589123F 		.word	1058179429
- 351 0188 37FE103F 		.word	1058078263
- 352 018c 5A640F3F 		.word	1057973338
- 353 0190 17BB0D3F 		.word	1057864471
- 354              		.text
- 355              	.Letext0:
- 356              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 206 0038 0028     		cmp	r0, #0
+ 207 003a 0ED1     		bne	.L36
+ 375:../Sources/ServoMapping.c **** 		if(servoValue > SERVO_VALUE_MAX){
+ 208              		.loc 1 375 0
+ 209 003c 201C     		add	r0, r4, #0
+ 210 003e 1849     		ldr	r1, .L38+12
+ 211 0040 FFF7FEFF 		bl	__aeabi_fcmpgt
+ 212              	.LVL28:
+ 213 0044 0028     		cmp	r0, #0
+ 214 0046 16D1     		bne	.L37
+ 379:../Sources/ServoMapping.c **** 			return mapArrayLeft[i];
+ 215              		.loc 1 379 0
+ 216 0048 164B     		ldr	r3, .L38+16
+ 217 004a A800     		lsl	r0, r5, #2
+ 218 004c C158     		ldr	r1, [r0, r3]
+ 219 004e 081C     		add	r0, r1, #0
+ 220 0050 FFF7FEFF 		bl	__aeabi_fmul
+ 221              	.LVL29:
+ 222              	.L22:
+ 223              	.LBE6:
+ 224              	.LBE8:
+ 387:../Sources/ServoMapping.c **** 	float radiusRoot = getRadiusRoot(servoValue);
+ 388:../Sources/ServoMapping.c **** 	
+ 389:../Sources/ServoMapping.c **** 	return radiusRoot*radiusRoot;
+ 390:../Sources/ServoMapping.c **** }
+ 225              		.loc 1 390 0
+ 226              		@ sp needed for prologue
+ 227 0054 38BD     		pop	{r3, r4, r5, pc}
+ 228              	.LVL30:
+ 229              	.L29:
+ 230              	.LBB9:
+ 231              	.LBB7:
+ 359:../Sources/ServoMapping.c **** 	if(servoValue < SERVO_VALUE_MIN){
+ 232              		.loc 1 359 0
+ 233 0056 1448     		ldr	r0, .L38+20
+ 234 0058 FCE7     		b	.L22
+ 235              	.L36:
+ 366:../Sources/ServoMapping.c **** 		if(servoValue > SERVO_VALUE_MAX){
+ 236              		.loc 1 366 0
+ 237 005a 201C     		add	r0, r4, #0
+ 238 005c 1049     		ldr	r1, .L38+12
+ 239 005e FFF7FEFF 		bl	__aeabi_fcmpgt
+ 240              	.LVL31:
+ 241 0062 0028     		cmp	r0, #0
+ 242 0064 0FD0     		beq	.L34
+ 367:../Sources/ServoMapping.c **** 			return mapArrayRight[MAP_ARRAY_SIZE - 1];
+ 243              		.loc 1 367 0
+ 244 0066 C823     		mov	r3, #200
+ 245 0068 104A     		ldr	r2, .L38+24
+ 246 006a 5C00     		lsl	r4, r3, #1
+ 247              	.LVL32:
+ 248 006c 1159     		ldr	r1, [r2, r4]
+ 249 006e 081C     		add	r0, r1, #0
+ 250 0070 FFF7FEFF 		bl	__aeabi_fmul
+ 251              	.LVL33:
+ 252 0074 EEE7     		b	.L22
+ 253              	.LVL34:
+ 254              	.L37:
+ 376:../Sources/ServoMapping.c **** 			return mapArrayLeft[MAP_ARRAY_SIZE - 1];
+ 255              		.loc 1 376 0
+ 256 0076 C822     		mov	r2, #200
+ 257 0078 0A49     		ldr	r1, .L38+16
+ 258 007a 5400     		lsl	r4, r2, #1
+ 259              	.LVL35:
+ 260 007c 0959     		ldr	r1, [r1, r4]
+ 261 007e 081C     		add	r0, r1, #0
+ 262 0080 FFF7FEFF 		bl	__aeabi_fmul
+ 263              	.LVL36:
+ 264 0084 E6E7     		b	.L22
+ 265              	.LVL37:
+ 266              	.L34:
+ 370:../Sources/ServoMapping.c **** 			return mapArrayRight[i];
+ 267              		.loc 1 370 0
+ 268 0086 0948     		ldr	r0, .L38+24
+ 269 0088 AD00     		lsl	r5, r5, #2
+ 270 008a 2958     		ldr	r1, [r5, r0]
+ 271 008c 081C     		add	r0, r1, #0
+ 272 008e FFF7FEFF 		bl	__aeabi_fmul
+ 273              	.LVL38:
+ 274 0092 DFE7     		b	.L22
+ 275              	.L39:
+ 276              		.align	2
+ 277              	.L38:
+ 278 0094 CDCC4C3D 		.word	1028443341
+ 279 0098 0000C842 		.word	1120403456
+ 280 009c 3333B33E 		.word	1051931443
+ 281 00a0 CDCCCC3E 		.word	1053609165
+ 282 00a4 00000000 		.word	.LANCHOR1
+ 283 00a8 F9021550 		.word	1343554297
+ 284 00ac 00000000 		.word	.LANCHOR0
+ 285              	.LBE7:
+ 286              	.LBE9:
+ 287              		.cfi_endproc
+ 288              	.LFE1:
+ 290              		.global	mapArrayOld
+ 291              		.global	mapArrayRight
+ 292              		.global	mapArrayLeft
+ 293              		.section	.data.mapArrayRight,"aw",%progbits
+ 294              		.align	2
+ 295              		.set	.LANCHOR0,. + 0
+ 298              	mapArrayRight:
+ 299 0000 207C9C3F 		.word	1067220000
+ 300 0004 AD339A3F 		.word	1067070381
+ 301 0008 ADF7973F 		.word	1066923949
+ 302 000c E7C7953F 		.word	1066780647
+ 303 0010 40A4933F 		.word	1066640448
+ 304 0014 8F8C913F 		.word	1066503311
+ 305 0018 A1808F3F 		.word	1066369185
+ 306 001c 56808D3F 		.word	1066238038
+ 307 0020 7A8B8B3F 		.word	1066109818
+ 308 0024 F5A1893F 		.word	1065984501
+ 309 0028 8BC3873F 		.word	1065862027
+ 310 002c 24F0853F 		.word	1065742372
+ 311 0030 8D27843F 		.word	1065625485
+ 312 0034 9C69823F 		.word	1065511324
+ 313 0038 28B6803F 		.word	1065399848
+ 314 003c 2E1A7E3F 		.word	1065228846
+ 315 0040 4DDC7A3F 		.word	1065016397
+ 316 0044 89B2773F 		.word	1064809097
+ 317 0048 6F9C743F 		.word	1064606831
+ 318 004c CC99713F 		.word	1064409548
+ 319 0050 2AAA6E3F 		.word	1064217130
+ 320 0054 57CD6B3F 		.word	1064029527
+ 321 0058 EF02693F 		.word	1063846639
+ 322 005c 9D4A663F 		.word	1063668381
+ 323 0060 1EA4633F 		.word	1063494686
+ 324 0064 1F0F613F 		.word	1063325471
+ 325 0068 3B8B5E3F 		.word	1063160635
+ 326 006c 2F185C3F 		.word	1063000111
+ 327 0070 A6B5593F 		.word	1062843814
+ 328 0074 4E63573F 		.word	1062691662
+ 329 0078 D120553F 		.word	1062543569
+ 330 007c EEED523F 		.word	1062399470
+ 331 0080 2ECA503F 		.word	1062259246
+ 332 0084 70B54E3F 		.word	1062122864
+ 333 0088 3EAF4C3F 		.word	1061990206
+ 334 008c 45B74A3F 		.word	1061861189
+ 335 0090 53CD483F 		.word	1061735763
+ 336 0094 F1F0463F 		.word	1061613809
+ 337 0098 DE21453F 		.word	1061495262
+ 338 009c D45F433F 		.word	1061380052
+ 339 00a0 61AA413F 		.word	1061268065
+ 340 00a4 5001403F 		.word	1061159248
+ 341 00a8 4E643E3F 		.word	1061053518
+ 342 00ac F6D23C3F 		.word	1060950774
+ 343 00b0 F54C3B3F 		.word	1060850933
+ 344 00b4 18D2393F 		.word	1060753944
+ 345 00b8 E961383F 		.word	1060659689
+ 346 00bc 26FC363F 		.word	1060568102
+ 347 00c0 7BA0353F 		.word	1060479099
+ 348 00c4 A54E343F 		.word	1060392613
+ 349 00c8 3E06333F 		.word	1060308542
+ 350 00cc F3C6313F 		.word	1060226803
+ 351 00d0 8290303F 		.word	1060147330
+ 352 00d4 84622F3F 		.word	1060070020
+ 353 00d8 B83C2E3F 		.word	1059994808
+ 354 00dc C91E2D3F 		.word	1059921609
+ 355 00e0 63082C3F 		.word	1059850339
+ 356 00e4 33F92A3F 		.word	1059780915
+ 357 00e8 E5F0293F 		.word	1059713253
+ 358 00ec 24EF283F 		.word	1059647268
+ 359 00f0 AEF3273F 		.word	1059582894
+ 360 00f4 1EFE263F 		.word	1059520030
+ 361 00f8 300E263F 		.word	1059458608
+ 362 00fc 8123253F 		.word	1059398529
+ 363 0100 CD3D243F 		.word	1059339725
+ 364 0104 C05C233F 		.word	1059282112
+ 365 0108 0680223F 		.word	1059225606
+ 366 010c 5DA7213F 		.word	1059170141
+ 367 0110 4ED2203F 		.word	1059115598
+ 368 0114 A800203F 		.word	1059061928
+ 369 0118 05321F3F 		.word	1059009029
+ 370 011c 23661E3F 		.word	1058956835
+ 371 0120 AE9C1D3F 		.word	1058905262
+ 372 0124 41D51C3F 		.word	1058854209
+ 373 0128 990F1C3F 		.word	1058803609
+ 374 012c 624B1B3F 		.word	1058753378
+ 375 0130 48881A3F 		.word	1058703432
+ 376 0134 09C6193F 		.word	1058653705
+ 377 0138 3E04193F 		.word	1058604094
+ 378 013c 9642183F 		.word	1058554518
+ 379 0140 BB80173F 		.word	1058504891
+ 380 0144 7BBE163F 		.word	1058455163
+ 381 0148 61FB153F 		.word	1058405217
+ 382 014c 1937153F 		.word	1058354969
+ 383 0150 7171143F 		.word	1058304369
+ 384 0154 04AA133F 		.word	1058253316
+ 385 0158 7EE0123F 		.word	1058201726
+ 386 015c 8C14123F 		.word	1058149516
+ 387 0160 E945113F 		.word	1058096617
+ 388 0164 3274103F 		.word	1058042930
+ 389 0168 239F0F3F 		.word	1057988387
+ 390 016c 58C60E3F 		.word	1057932888
+ 391 0170 8EE90D3F 		.word	1057876366
+ 392 0174 70080D3F 		.word	1057818736
+ 393 0178 AB220C3F 		.word	1057759915
+ 394 017c FC370B3F 		.word	1057699836
+ 395 0180 ED470A3F 		.word	1057638381
+ 396 0184 4C52093F 		.word	1057575500
+ 397 0188 B456083F 		.word	1057511092
+ 398 018c E354073F 		.word	1057445091
+ 399 0190 734C063F 		.word	1057377395
+ 400              		.section	.data.mapArrayLeft,"aw",%progbits
+ 401              		.align	2
+ 402              		.set	.LANCHOR1,. + 0
+ 405              	mapArrayLeft:
+ 406 0000 8316AA3F 		.word	1068111491
+ 407 0004 0613A93F 		.word	1068045062
+ 408 0008 6F0DA83F 		.word	1067978095
+ 409 000c D105A73F 		.word	1067910609
+ 410 0010 44FCA53F 		.word	1067842628
+ 411 0014 D0F0A43F 		.word	1067774160
+ 412 0018 8FE3A33F 		.word	1067705231
+ 413 001c 99D4A23F 		.word	1067635865
+ 414 0020 00C4A13F 		.word	1067566080
+ 415 0024 D5B1A03F 		.word	1067495893
+ 416 0028 309E9F3F 		.word	1067425328
+ 417 002c 22899E3F 		.word	1067354402
+ 418 0030 C5729D3F 		.word	1067283141
+ 419 0034 215B9C3F 		.word	1067211553
+ 420 0038 57429B3F 		.word	1067139671
+ 421 003c 70289A3F 		.word	1067067504
+ 422 0040 8D0D993F 		.word	1066995085
+ 423 0044 B7F1973F 		.word	1066922423
+ 424 0048 FED4963F 		.word	1066849534
+ 425 004c 8DB7953F 		.word	1066776461
+ 426 0050 6399943F 		.word	1066703203
+ 427 0054 9A7A933F 		.word	1066629786
+ 428 0058 425B923F 		.word	1066556226
+ 429 005c 753B913F 		.word	1066482549
+ 430 0060 4C1B903F 		.word	1066408780
+ 431 0064 CEFA8E3F 		.word	1066334926
+ 432 0068 16DA8D3F 		.word	1066261014
+ 433 006c 3DB98C3F 		.word	1066187069
+ 434 0070 52988B3F 		.word	1066113106
+ 435 0074 68778A3F 		.word	1066039144
+ 436 0078 8F56893F 		.word	1065965199
+ 437 007c E735883F 		.word	1065891303
+ 438 0080 7B15873F 		.word	1065817467
+ 439 0084 62F5853F 		.word	1065743714
+ 440 0088 AED5843F 		.word	1065670062
+ 441 008c 78B6833F 		.word	1065596536
+ 442 0090 C897823F 		.word	1065523144
+ 443 0094 C079813F 		.word	1065449920
+ 444 0098 795C803F 		.word	1065376889
+ 445 009c E57F7E3F 		.word	1065254885
+ 446 00a0 9D487C3F 		.word	1065109661
+ 447 00a4 2B137A3F 		.word	1064964907
+ 448 00a8 E3DF773F 		.word	1064820707
+ 449 00ac C5AE753F 		.word	1064677061
+ 450 00b0 0280733F 		.word	1064534018
+ 451 00b4 CE53713F 		.word	1064391630
+ 452 00b8 392A6F3F 		.word	1064249913
+ 453 00bc 97036D3F 		.word	1064108951
+ 454 00c0 D7DF6A3F 		.word	1063968727
+ 455 00c4 5DBF683F 		.word	1063829341
+ 456 00c8 1AA2663F 		.word	1063690778
+ 457 00cc 6188643F 		.word	1063553121
+ 458 00d0 4372623F 		.word	1063416387
+ 459 00d4 F25F603F 		.word	1063280626
+ 460 00d8 8F515E3F 		.word	1063145871
+ 461 00dc 3D475C3F 		.word	1063012157
+ 462 00e0 3E415A3F 		.word	1062879550
+ 463 00e4 923F583F 		.word	1062748050
+ 464 00e8 8D42563F 		.word	1062617741
+ 465 00ec 414A543F 		.word	1062488641
+ 466 00f0 CD56523F 		.word	1062360781
+ 467 00f4 6668503F 		.word	1062234214
+ 468 00f8 2C7F4E3F 		.word	1062108972
+ 469 00fc 639B4C3F 		.word	1061985123
+ 470 0100 0ABD4A3F 		.word	1061862666
+ 471 0104 65E4483F 		.word	1061741669
+ 472 0108 8411473F 		.word	1061622148
+ 473 010c AA44453F 		.word	1061504170
+ 474 0110 FA7D433F 		.word	1061387770
+ 475 0114 94BD413F 		.word	1061272980
+ 476 0118 9B03403F 		.word	1061159835
+ 477 011c 40503E3F 		.word	1061048384
+ 478 0120 B5A33C3F 		.word	1060938677
+ 479 0124 0DFE3A3F 		.word	1060830733
+ 480 0128 785F393F 		.word	1060724600
+ 481 012c 2AC8373F 		.word	1060620330
+ 482 0130 4338363F 		.word	1060517955
+ 483 0134 E6AF343F 		.word	1060417510
+ 484 0138 342F333F 		.word	1060319028
+ 485 013c 70B6313F 		.word	1060222576
+ 486 0140 AA45303F 		.word	1060128170
+ 487 0144 16DD2E3F 		.word	1060035862
+ 488 0148 D47C2D3F 		.word	1059945684
+ 489 014c 18252C3F 		.word	1059857688
+ 490 0150 F1D52A3F 		.word	1059771889
+ 491 0154 B48F293F 		.word	1059688372
+ 492 0158 6152283F 		.word	1059607137
+ 493 015c 2A1E273F 		.word	1059528234
+ 494 0160 41F3253F 		.word	1059451713
+ 495 0164 C8D1243F 		.word	1059377608
+ 496 0168 F1B9233F 		.word	1059305969
+ 497 016c CDAB223F 		.word	1059236813
+ 498 0170 8FA7213F 		.word	1059170191
+ 499 0174 69AD203F 		.word	1059106153
+ 500 0178 7BBD1F3F 		.word	1059044731
+ 501 017c F9D71E3F 		.word	1058985977
+ 502 0180 F4FC1D3F 		.word	1058929908
+ 503 0184 9D2C1D3F 		.word	1058876573
+ 504 0188 27671C3F 		.word	1058826023
+ 505 018c B4AC1B3F 		.word	1058778292
+ 506 0190 76FD1A3F 		.word	1058733430
+ 507              		.section	.data.mapArrayOld,"aw",%progbits
+ 508              		.align	2
+ 511              	mapArrayOld:
+ 512 0000 B4ABD23F 		.word	1070771124
+ 513 0004 B9A6CE3F 		.word	1070507705
+ 514 0008 E5B9CA3F 		.word	1070250469
+ 515 000c F3E4C63F 		.word	1069999347
+ 516 0010 8927C33F 		.word	1069754249
+ 517 0014 5281BF3F 		.word	1069515090
+ 518 0018 FAF1BB3F 		.word	1069281786
+ 519 001c 2D79B83F 		.word	1069054253
+ 520 0020 A016B53F 		.word	1068832416
+ 521 0024 F7C9B13F 		.word	1068616183
+ 522 0028 E692AE3F 		.word	1068405478
+ 523 002c 1171AB3F 		.word	1068200209
+ 524 0030 2C64A83F 		.word	1068000300
+ 525 0034 E36BA53F 		.word	1067805667
+ 526 0038 DB87A23F 		.word	1067616219
+ 527 003c D0B79F3F 		.word	1067431888
+ 528 0040 5DFB9C3F 		.word	1067252573
+ 529 0044 3F529A3F 		.word	1067078207
+ 530 0048 12BC973F 		.word	1066908690
+ 531 004c 9338953F 		.word	1066743955
+ 532 0050 65C7923F 		.word	1066583909
+ 533 0054 3C68903F 		.word	1066428476
+ 534 0058 BD1A8E3F 		.word	1066277565
+ 535 005c 94DE8B3F 		.word	1066131092
+ 536 0060 74B3893F 		.word	1065988980
+ 537 0064 0B99873F 		.word	1065851147
+ 538 0068 FC8E853F 		.word	1065717500
+ 539 006c FB94833F 		.word	1065587963
+ 540 0070 B4AA813F 		.word	1065462452
+ 541 0074 A99F7F3F 		.word	1065328553
+ 542 0078 20087C3F 		.word	1065093152
+ 543 007c 048E783F 		.word	1064865284
+ 544 0080 BE30753F 		.word	1064644798
+ 545 0084 B7EF713F 		.word	1064431543
+ 546 0088 36CA6E3F 		.word	1064225334
+ 547 008c 94BF6B3F 		.word	1064026004
+ 548 0090 3ACF683F 		.word	1063833402
+ 549 0094 7FF8653F 		.word	1063647359
+ 550 0098 AC3A633F 		.word	1063467692
+ 551 009c 2995603F 		.word	1063294249
+ 552 00a0 4F075E3F 		.word	1063126863
+ 553 00a4 75905B3F 		.word	1062965365
+ 554 00a8 E42F593F 		.word	1062809572
+ 555 00ac 15E5563F 		.word	1062659349
+ 556 00b0 4FAF543F 		.word	1062514511
+ 557 00b4 EB8D523F 		.word	1062374891
+ 558 00b8 4180503F 		.word	1062240321
+ 559 00bc A9854E3F 		.word	1062110633
+ 560 00c0 8C9D4C3F 		.word	1061985676
+ 561 00c4 43C74A3F 		.word	1061865283
+ 562 00c8 1502493F 		.word	1061749269
+ 563 00cc 6A4D473F 		.word	1061637482
+ 564 00d0 8BA8453F 		.word	1061529739
+ 565 00d4 E012443F 		.word	1061425888
+ 566 00d8 D28B423F 		.word	1061325778
+ 567 00dc 9912413F 		.word	1061229209
+ 568 00e0 9CA63F3F 		.word	1061136028
+ 569 00e4 34473E3F 		.word	1061046068
+ 570 00e8 BAF33C3F 		.word	1060959162
+ 571 00ec 97AB3B3F 		.word	1060875159
+ 572 00f0 116E3A3F 		.word	1060793873
+ 573 00f4 823A393F 		.word	1060715138
+ 574 00f8 5210383F 		.word	1060638802
+ 575 00fc D9EE363F 		.word	1060564697
+ 576 0100 5ED5353F 		.word	1060492638
+ 577 0104 4CC3343F 		.word	1060422476
+ 578 0108 E9B7333F 		.word	1060354025
+ 579 010c AFB2323F 		.word	1060287151
+ 580 0110 D5B2313F 		.word	1060221653
+ 581 0114 D4B7303F 		.word	1060157396
+ 582 0118 E4C02F3F 		.word	1060094180
+ 583 011c 7DCD2E3F 		.word	1060031869
+ 584 0120 E8DC2D3F 		.word	1059970280
+ 585 0124 8DEE2C3F 		.word	1059909261
+ 586 0128 A3012C3F 		.word	1059848611
+ 587 012c B5152B3F 		.word	1059788213
+ 588 0130 E9292A3F 		.word	1059727849
+ 589 0134 C93D293F 		.word	1059667401
+ 590 0138 8B50283F 		.word	1059606667
+ 591 013c 9961273F 		.word	1059545497
+ 592 0140 4C70263F 		.word	1059483724
+ 593 0144 EA7B253F 		.word	1059421162
+ 594 0148 ED83243F 		.word	1059357677
+ 595 014c 9C87233F 		.word	1059293084
+ 596 0150 5186223F 		.word	1059227217
+ 597 0154 637F213F 		.word	1059159907
+ 598 0158 3B72203F 		.word	1059091003
+ 599 015c 205E1F3F 		.word	1059020320
+ 600 0160 6C421E3F 		.word	1058947692
+ 601 0164 861E1D3F 		.word	1058872966
+ 602 0168 C7F11B3F 		.word	1058795975
+ 603 016c 88BB1A3F 		.word	1058716552
+ 604 0170 0F7B193F 		.word	1058634511
+ 605 0174 C72F183F 		.word	1058549703
+ 606 0178 06D9163F 		.word	1058461958
+ 607 017c 2576153F 		.word	1058371109
+ 608 0180 7D06143F 		.word	1058276989
+ 609 0184 6589123F 		.word	1058179429
+ 610 0188 37FE103F 		.word	1058078263
+ 611 018c 5A640F3F 		.word	1057973338
+ 612 0190 17BB0D3F 		.word	1057864471
+ 613              		.text
+ 614              	.Letext0:
+ 615              		.file 2 "C:/Freescale/CW MCU v10.6/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
 DEFINED SYMBOLS
                             *ABS*:00000000 ServoMapping.c
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:25     .text.getRadiusRoot:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:30     .text.getRadiusRoot:00000000 getRadiusRoot
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:117    .text.getRadiusRoot:00000068 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:127    .text.getRadius:00000000 $t
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:132    .text.getRadius:00000000 getRadius
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:235    .text.getRadius:00000074 $d
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:252    .data.mapArray:00000000 mapArray
-C:\Users\BENTR_~1\AppData\Local\Temp\ccEjWOxm.s:248    .data.mapArray:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:25     .text.getRadiusRoot:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:30     .text.getRadiusRoot:00000000 getRadiusRoot
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:136    .text.getRadiusRoot:0000007c $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:147    .text.getRadius:00000000 $t
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:152    .text.getRadius:00000000 getRadius
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:278    .text.getRadius:00000094 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:511    .data.mapArrayOld:00000000 mapArrayOld
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:298    .data.mapArrayRight:00000000 mapArrayRight
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:405    .data.mapArrayLeft:00000000 mapArrayLeft
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:294    .data.mapArrayRight:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:401    .data.mapArrayLeft:00000000 $d
+C:\Users\BENTR_~1\AppData\Local\Temp\cc4eJLoc.s:508    .data.mapArrayOld:00000000 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
 __aeabi_fcmplt
-__aeabi_fcmpgt
 __aeabi_fsub
 __aeabi_fmul
 __aeabi_fdiv
 __aeabi_fadd
 __aeabi_f2uiz
+__aeabi_fcmpgt

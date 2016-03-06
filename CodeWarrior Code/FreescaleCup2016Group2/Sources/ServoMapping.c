@@ -4,6 +4,31 @@
  *  Created on: April 17, 2015
  *  Author: Miroslav Dobrev
  *  
+ #include <stdio.h>
+#include <math.h>
+
+float i=0;
+int j=0;
+
+float polynomial_right (float x){
+	return -19.517*pow(x,3)+18.875*pow(x,2)-6.9362*x+1.5246;
+}
+float polynomial_left(float x){
+	return 9.5582*pow(x,3)-4.2093*pow(x,2)-1.9232*x+1.4343;
+}
+
+int main(void) {
+	// your code goes here
+	
+	for(i=0.05;i<=0.4;i+=0.00347){
+		printf("%f,",polynomial_left(i));
+		printf("\n");
+		j++;
+	}
+	return 0;
+}
+}
+ 
  *  Handles the mapping between servoValue and steering radius.
  */
 
@@ -11,39 +36,220 @@
 
 #define MAP_ARRAY_SIZE	101
 
-#define SERVO_VALUE_MIN		0.04f	// Minimum servoValue that is mapped
-#define SERVO_VALUE_MAX		0.36f	// Max servoValue that is mapped
+#define SERVO_VALUE_MIN		0.05f	// Minimum servoValue that is mapped
+#define SERVO_VALUE_MAX		0.40f	// Max servoValue that is mapped
 #define STEP_RECIPROCAL	  (MAP_ARRAY_SIZE-1)/(SERVO_VALUE_MAX - SERVO_VALUE_MIN)	// 1/servoValueStep	
 
-float getRadiusRoot(float servoValue)
-{	
-	if(servoValue < 0.0f)
-	{
-		servoValue = (-servoValue);
-	}
-		
-	if(servoValue < SERVO_VALUE_MIN)
-	{
-		return 100000.0f;		// Huge radius - practically moving straight.
-	}
-	else if(servoValue > SERVO_VALUE_MAX)
-	{
-		return mapArray[MAP_ARRAY_SIZE - 1];
-	}
-	
-	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
-	
-	return mapArray[i];
-}
+float mapArrayLeft[MAP_ARRAY_SIZE]={
+1.328812,
+1.320893,
+1.312910,
+1.304865,
+1.296761,
+1.288599,
+1.280382,
+1.272113,
+1.263794,
+1.255427,
+1.247015,
+1.238560,
+1.230065,
+1.221531,
+1.212962,
+1.204359,
+1.195726,
+1.187064,
+1.178375,
+1.169664,
+1.160931,
+1.152179,
+1.143410,
+1.134627,
+1.125833,
+1.117029,
+1.108218,
+1.099403,
+1.090586,
+1.081769,
+1.072954,
+1.064145,
+1.055343,
+1.046551,
+1.037771,
+1.029006,
+1.020257,
+1.011528,
+1.002822,
+0.994139,
+0.985483,
+0.976855,
+0.968260,
+0.959698,
+0.951172,
+0.942685,
+0.934238,
+0.925836,
+0.917478,
+0.909170,
+0.900911,
+0.892706,
+0.884556,
+0.876464,
+0.868432,
+0.860462,
+0.852558,
+0.844720,
+0.836953,
+0.829258,
+0.821637,
+0.814093,
+0.806628,
+0.799246,
+0.791947,
+0.784735,
+0.777611,
+0.770579,
+0.763641,
+0.756799,
+0.750055,
+0.743412,
+0.736873,
+0.730439,
+0.724113,
+0.717898,
+0.711796,
+0.705809,
+0.699939,
+0.694190,
+0.688563,
+0.683061,
+0.677686,
+0.672441,
+0.667327,
+0.662349,
+0.657507,
+0.652804,
+0.648243,
+0.643826,
+0.639556,
+0.635434,
+0.631463,
+0.627646,
+0.623985,
+0.620483,
+0.617141,
+0.613962,
+0.610949,
+0.608104,
+0.605430
+};
 
-float getRadius(float servoValue)
-{
-	float radiusRoot = getRadiusRoot(servoValue);
-	
-	return radiusRoot*radiusRoot;
-}
+float mapArrayRight[MAP_ARRAY_SIZE]={
+1.222538,
+1.204702,
+1.187246,
+1.170163,
+1.153450,
+1.137102,
+1.121113,
+1.105479,
+1.090194,
+1.075255,
+1.060655,
+1.046391,
+1.032457,
+1.018848,
+1.005559,
+0.992587,
+0.979924,
+0.967568,
+0.955512,
+0.943753,
+0.932284,
+0.921102,
+0.910201,
+0.899576,
+0.889223,
+0.879137,
+0.869312,
+0.859744,
+0.850428,
+0.841359,
+0.832532,
+0.823943,
+0.815585,
+0.807456,
+0.799549,
+0.791859,
+0.784383,
+0.777114,
+0.770048,
+0.763181,
+0.756506,
+0.750020,
+0.743718,
+0.737594,
+0.731643,
+0.725862,
+0.720244,
+0.714785,
+0.709480,
+0.704325,
+0.699314,
+0.694442,
+0.689705,
+0.685097,
+0.680614,
+0.676251,
+0.672003,
+0.667865,
+0.663832,
+0.659899,
+0.656062,
+0.652315,
+0.648654,
+0.645073,
+0.641568,
+0.638134,
+0.634766,
+0.631460,
+0.628209,
+0.625010,
+0.621857,
+0.618746,
+0.615672,
+0.612629,
+0.609613,
+0.606619,
+0.603642,
+0.600678,
+0.597721,
+0.594766,
+0.591808,
+0.588844,
+0.585867,
+0.582872,
+0.579856,
+0.576813,
+0.573738,
+0.570626,
+0.567473,
+0.564273,
+0.561022,
+0.557714,
+0.554345,
+0.550910,
+0.547404,
+0.543823,
+0.540160,
+0.536412,
+0.532573,
+0.528639,
+0.524604
+};
 
-float mapArray[MAP_ARRAY_SIZE] = {
+//old mapping changed on 16/2/16
+float mapArrayOld[MAP_ARRAY_SIZE] = {
 		1.645865	,
 		1.614463	,
 		1.583798	,
@@ -147,3 +353,38 @@ float mapArray[MAP_ARRAY_SIZE] = {
 		0.553636
 };
 
+float getRadiusRoot(float servoValue)
+{	
+
+	if(servoValue < SERVO_VALUE_MIN){
+	return 100000.0f;		// Huge radius - practically moving straight.
+	}
+	
+	uint8_t i = (uint8_t)((servoValue - SERVO_VALUE_MIN)*STEP_RECIPROCAL + 0.5f);
+
+	if(servoValue < 0.0f){ //if turning right
+		if(servoValue > SERVO_VALUE_MAX){
+			return mapArrayRight[MAP_ARRAY_SIZE - 1];
+		}
+		else{
+			return mapArrayRight[i];
+		}
+	}
+	
+	else{ //if turning left
+		if(servoValue > SERVO_VALUE_MAX){
+			return mapArrayLeft[MAP_ARRAY_SIZE - 1];
+		}
+		else{
+			return mapArrayLeft[i];
+		}
+	}
+	
+}
+
+float getRadius(float servoValue)
+{
+	float radiusRoot = getRadiusRoot(servoValue);
+	
+	return radiusRoot*radiusRoot;
+}

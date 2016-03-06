@@ -2,8 +2,7 @@
 if (exist('bt','var'))
     fclose(bt);
     clear bt;
-end
-clear all;
+end;
 close all;
 clc;
 %-----------------------------%
@@ -50,11 +49,12 @@ while(strcmp(variable_string,'EXIT')==0)
 
     
         for n = 1:1
+            fwrite(bt,-128); 
             fwrite(bt,variable_number);
             disp(variable_string);
             pause(1);
             fwrite(bt,value);
-            disp(value)
+            disp(value);
             pause(1);
         end
     end

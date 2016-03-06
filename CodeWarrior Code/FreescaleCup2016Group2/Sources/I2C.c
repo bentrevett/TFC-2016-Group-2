@@ -6,7 +6,7 @@ void Init_I2C(void)
  SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;
  PORTE_PCR24 = PORT_PCR_MUX(5);
  PORTE_PCR25 = PORT_PCR_MUX(5);
- I2C0_F = 0x14;
+ I2C0_F = 0x14; //24,000,000 Hz / 80 = 300 kHz (0x14 = 80 on the SCL divider, MUL = 0, ref manual page 706)
  I2C0_C1 = I2C_C1_IICEN_MASK;
 }
 /* Inicia Transmissao I2C
